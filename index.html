@@ -27,7 +27,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      border-radius: 0px !important; /* Mantenemos bordes cuadrados pero ultra refinados */
+      border-radius: 0px !important; /* Bordes cuadrados refinados */
     }
 
     body {
@@ -108,43 +108,45 @@
 
     .cover-box {
       width: 100%;
-      max-width: 720px;
+      max-width: 780px;
       border: 1px solid var(--border-apple);
       background: var(--bg-card);
-      padding: 4rem 3rem;
+      padding: 4rem 3.5rem;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1.75rem;
       box-shadow: var(--apple-shadow);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .armando-hero-wrapper {
       position: relative;
       display: inline-block;
+      width: 100%;
       margin-bottom: 0.5rem;
     }
 
+    /* IMAGEN DE ARMANDO ENORME Y HEROICA */
     .armando-photo-hero-large {
       width: 100%;
-      max-width: 440px;
-      max-height: 340px;
+      max-width: 580px;
+      max-height: 460px;
       object-fit: contain;
       background: transparent;
-      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.06));
+      filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.08));
     }
 
     .cover-subtitle {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 500;
       color: var(--text-main);
-      max-width: 580px;
+      max-width: 620px;
       letter-spacing: -0.02em;
       line-height: 1.4;
     }
 
+    /* MATRIZ DE TRANSFORMACIÓN ESTILO APPLE */
     .transformation-box {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -157,6 +159,7 @@
     @media (max-width: 640px) {
       .cover-box { padding: 2.5rem 1.5rem; }
       .transformation-box { grid-template-columns: 1fr; }
+      .armando-photo-hero-large { max-width: 340px; }
     }
 
     .t-card {
@@ -194,8 +197,8 @@
       background: var(--accent-black);
       color: #ffffff;
       border: 1px solid var(--accent-black);
-      padding: 1.35rem 2.5rem;
-      font-size: 1.05rem;
+      padding: 1.4rem 2.5rem;
+      font-size: 1.1rem;
       font-weight: 600;
       letter-spacing: -0.01em;
       cursor: pointer;
@@ -402,10 +405,10 @@
 
   <div id="toast">✅ Acción realizada correctamente</div>
 
-  <!-- PANTALLA 1: PORTADA ESTILO APPLE -->
+  <!-- PANTALLA 1: PORTADA ESTILO APPLE CON IMAGEN GIGANTE DE ARMANDO -->
   <div id="coverScreen">
     <div class="cover-box">
-      <!-- FOTOGRAFÍA HERO DE ARMANDO -->
+      <!-- FOTOGRAFÍA HERO GIGANTE DE ARMANDO -->
       <div class="armando-hero-wrapper">
         <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
       </div>
@@ -414,7 +417,6 @@
         Responde a todas las opiniones de tus clientes en Google Maps automáticamente.
       </p>
 
-      <!-- TRANSFORMACIÓN ANTES VS DESPUÉS DE DISEÑO REFINADO -->
       <div class="transformation-box">
         <div class="t-card">
           <div class="t-title-before">❌ ANTES DE USAR ARMANDO</div>
