@@ -19,6 +19,8 @@
       --accent-black: #000000;
       --accent-hover: #27272a;
       --accent-success: #16a34a;
+      --accent-danger: #dc2626;
+      --accent-warning: #d97706;
     }
 
     * {
@@ -41,7 +43,34 @@
       line-height: 1.5;
     }
 
-    /* TOAST NOTIFICATION SYSTEM */
+    /* BARRA SUPERIOR VISIBLE TODO EL TIEMPO */
+    .top-api-bar {
+      width: 100%;
+      background: var(--text-main);
+      color: var(--bg-main);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .api-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.65rem;
+      border: 1px solid var(--border-subtle);
+    }
+    .status-ok { background: #16a34a; color: #ffffff; border-color: #22c55e; }
+    .status-demo { background: #d97706; color: #ffffff; border-color: #f59e0b; }
+    .status-error { background: #dc2626; color: #ffffff; border-color: #ef4444; }
+
     #toast {
       position: fixed;
       bottom: 2rem;
@@ -55,13 +84,12 @@
       text-transform: uppercase;
       display: none;
       z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    /* PANTALLA 1: PORTADA LIMPIA Y ELEGANTE */
+    /* PANTALLA 1: PORTADA LIMPIA */
     #coverScreen {
       width: 100%;
-      min-height: 100vh;
+      min-height: 90vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -120,12 +148,9 @@
       letter-spacing: 0.08em;
       cursor: pointer;
       width: 100%;
-      transition: background 0.15s ease, transform 0.15s ease;
+      transition: background 0.15s ease;
     }
-    .enter-btn:hover {
-      background: var(--accent-hover);
-      transform: translateY(-2px);
-    }
+    .enter-btn:hover { background: var(--accent-hover); }
 
     /* PANTALLA 2: LA APLICACIÓN DE RESEÑAS */
     #appScreen {
@@ -205,7 +230,14 @@
     }
     .btn-secondary:hover { background: var(--bg-surface); }
 
-    /* FILTROS Y CONTROLES INTELIGENTES */
+    /* PANEL SUPER VISIBLE DE CLAVES */
+    .key-selector-panel {
+      border: 2px solid var(--border-main);
+      background: var(--bg-surface);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
     .controls-bar {
       display: flex;
       justify-content: space-between;
@@ -239,7 +271,6 @@
       color: var(--bg-main);
     }
 
-    /* LISTADO DE RESEÑAS */
     .result-item {
       border: 1px solid var(--border-main);
       background: var(--bg-surface);
@@ -292,6 +323,15 @@
 </head>
 <body>
 
+  <!-- BARRA DE ESTADO VISIBLE TODO EL TIEMPO -->
+  <div class="top-api-bar">
+    <div>
+      <span>ESTADO DE CONEXIÓN IA:</span>
+      <span class="api-status-badge status-demo" id="topStatusBadge">🟡 MODO DIRECTO (SIN CLAVE)</span>
+    </div>
+    <button class="btn-secondary" style="background:#ffffff; color:#000000;" onclick="testConnectionNow()">🧪 COMPROBAR CONEXIÓN AHORA</button>
+  </div>
+
   <div id="toast">✅ Acción realizada correctamente</div>
 
   <!-- PANTALLA 1: PORTADA LIMPIA -->
@@ -316,6 +356,36 @@
       </div>
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
     </header>
+
+    <!-- SECTOR SUPER VISIBLE DE CLAVES Y PROVEEDORES -->
+    <div class="key-selector-panel">
+      <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:0.9rem; text-transform:uppercase; margin-bottom:0.75rem;">
+        🔑 Configuración de Clave API (Elige tu proveedor)
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="providerSelect">Proveedor de Inteligencia</label>
+          <select id="providerSelect" onchange="onProviderChange()">
+            <option value="gemini">🔷 Google Gemini (100% Gratis - Recomendado)</option>
+            <option value="openai">🟢 OpenAI (gpt-4o-mini - Ultra Económico)</option>
+            <option value="gcloud">☁️ Google Cloud Vertex AI</option>
+            <option value="demo">⚡ Modo Directo Rápido (Sin Clave)</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="apiKeyInput"><span id="keyLabelText">Clave API de Gemini</span></label>
+          <input type="password" id="apiKeyInput" placeholder="Pega tu clave aquí..." oninput="updateLiveStatus()">
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+        <span style="font-size:0.775rem; color:var(--text-muted);" id="keyHintText">
+          Si no tienes clave, el Modo Directo Rápido funciona inmediatamente sin tarjeta.
+        </span>
+        <button class="btn-secondary" onclick="saveApiKey()">💾 Guardar Clave</button>
+      </div>
+    </div>
 
     <!-- Formulario para ingresar cualquier URL -->
     <div class="card">
@@ -346,7 +416,7 @@
         </div>
       </div>
 
-      <!-- BUSCADOR Y FILTROS POR ESTRELLAS -->
+      <!-- BUSCADOR Y FILTROS -->
       <div style="display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center;">
         <input type="text" id="searchInput" placeholder="🔍 Buscar por cliente o palabra clave..." style="max-width: 320px; padding: 0.6rem 0.8rem; font-size: 0.85rem;" oninput="applyFilters()">
         
@@ -366,11 +436,97 @@
     const coverScreen = document.getElementById('coverScreen');
     const appScreen = document.getElementById('appScreen');
     const toast = document.getElementById('toast');
+    const topStatusBadge = document.getElementById('topStatusBadge');
+    const providerSelect = document.getElementById('providerSelect');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const keyLabelText = document.getElementById('keyLabelText');
+    const keyHintText = document.getElementById('keyHintText');
+
+    providerSelect.value = localStorage.getItem('ai_provider') || 'gemini';
+    apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
+
+    function onProviderChange() {
+      const p = providerSelect.value;
+      if (p === 'openai') keyLabelText.textContent = 'Clave API de OpenAI (sk-...)';
+      else if (p === 'gemini') keyLabelText.textContent = 'Clave API de Google Gemini';
+      else if (p === 'gcloud') keyLabelText.textContent = 'Clave API de Google Cloud';
+      else keyLabelText.textContent = 'Modo Directo Rápido';
+      updateLiveStatus();
+    }
+
+    function updateLiveStatus() {
+      const p = providerSelect.value;
+      const key = apiKeyInput.value.trim();
+
+      if (p === 'demo') {
+        topStatusBadge.className = 'api-status-badge status-demo';
+        topStatusBadge.textContent = '🟡 MODO DIRECTO (SIN CLAVE)';
+      } else if (key.length > 10) {
+        topStatusBadge.className = 'api-status-badge status-ok';
+        topStatusBadge.textContent = `🟢 CLAVE CONECTADA (${p.toUpperCase()})`;
+      } else {
+        topStatusBadge.className = 'api-status-badge status-error';
+        topStatusBadge.textContent = `🔴 INGRESA TU CLAVE DE ${p.toUpperCase()}`;
+      }
+    }
+
+    onProviderChange();
 
     function showToast(msg) {
       toast.textContent = msg;
       toast.style.display = 'block';
       setTimeout(() => { toast.style.display = 'none'; }, 2000);
+    }
+
+    function saveApiKey() {
+      localStorage.setItem('ai_provider', providerSelect.value);
+      localStorage.setItem('ai_api_key', apiKeyInput.value.trim());
+      updateLiveStatus();
+      showToast('✅ Clave guardada correctamente');
+    }
+
+    async function testConnectionNow() {
+      const p = providerSelect.value;
+      const key = apiKeyInput.value.trim();
+
+      if (p === 'demo') {
+        alert('Estás en Modo Directo Rápido. No necesitas comprobar ninguna clave.');
+        return;
+      }
+      if (!key) {
+        alert('Escribe o pega tu clave de API primero.');
+        return;
+      }
+
+      showToast('🧪 Probando conexión directa...');
+
+      try {
+        if (p === 'openai') {
+          const res = await fetch('https://api.openai.com/v1/models', { headers: { 'Authorization': `Bearer ${key}` } });
+          if (res.ok) {
+            topStatusBadge.className = 'api-status-badge status-ok';
+            topStatusBadge.textContent = '🟢 OPENAI FUNCIONANDO OK';
+            alert('✅ CONEXIÓN CORRECTA: Tu clave de OpenAI funciona perfectamente.');
+          } else {
+            topStatusBadge.className = 'api-status-badge status-error';
+            topStatusBadge.textContent = '🔴 CLAVE OPENAI RECHAZADA';
+            alert('❌ ERROR: Tu clave de OpenAI no es válida o está caducada.');
+          }
+        } else {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+          if (res.ok) {
+            topStatusBadge.className = 'api-status-badge status-ok';
+            topStatusBadge.textContent = '🟢 GEMINI / CLOUD FUNCIONANDO OK';
+            alert('✅ CONEXIÓN CORRECTA: Tu clave de Google funciona perfectamente.');
+          } else {
+            topStatusBadge.className = 'api-status-badge status-error';
+            topStatusBadge.textContent = '🔴 CLAVE GOOGLE RECHAZADA';
+            alert('❌ ERROR: Tu clave de Google no es válida.');
+          }
+        }
+      } catch (err) {
+        alert('❌ Error de conexión a internet.');
+      }
     }
 
     function enterApp() {
@@ -404,6 +560,8 @@
 
     async function fetchReviews() {
       const url = mapsUrlInput.value.trim();
+      const apiKey = apiKeyInput.value.trim();
+      const provider = providerSelect.value;
 
       loader.style.display = 'inline-block';
       btnText.textContent = 'Procesando reseñas...';
@@ -412,7 +570,7 @@
         const response = await fetch('/api/extract', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: url })
+          body: JSON.stringify({ url: url, apiKey: apiKey, provider: provider })
         });
 
         const data = await response.json();
