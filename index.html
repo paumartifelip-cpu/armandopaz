@@ -86,7 +86,7 @@
       z-index: 1000;
     }
 
-    /* PANTALLA 1: PORTADA LIMPIA */
+    /* PANTALLA 1: PORTADA LIMPIA CON FOTO DE ARMANDO */
     #coverScreen {
       width: 100%;
       min-height: 90vh;
@@ -94,7 +94,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2rem 1.5rem;
+      padding: 2.5rem 1.5rem;
       background: var(--bg-main);
     }
 
@@ -103,12 +103,21 @@
       max-width: 620px;
       border: 2px solid var(--border-main);
       background: var(--bg-main);
-      padding: 4rem 2.5rem;
+      padding: 3.5rem 2.5rem;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.75rem;
+      gap: 1.5rem;
+    }
+
+    .armando-photo {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border: 2px solid var(--border-main);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 0.25rem;
     }
 
     .badge {
@@ -334,12 +343,15 @@
 
   <div id="toast">✅ Acción realizada correctamente</div>
 
-  <!-- PANTALLA 1: PORTADA LIMPIA -->
+  <!-- PANTALLA 1: PORTADA LIMPIA CON LA FOTO DE ARMANDO -->
   <div id="coverScreen">
     <div class="cover-box">
+      <!-- FOTOGRAFÍA DE ARMANDO -->
+      <img src="armando.png" alt="Armando Paz" class="armando-photo">
+      
       <span class="badge">ARMANDO PAZ AI</span>
       <h1 class="cover-title">Armando Paz</h1>
-      <p class="cover-subtitle">El asistente para responder a todas las opiniones de tu negocio en Google Maps.</p>
+      <p class="cover-subtitle">El pacificador inteligente para responder a todas las opiniones de tu negocio en Google Maps.</p>
       
       <button class="enter-btn" onclick="enterApp()">
         ENTRAR A LA APLICACIÓN →
@@ -350,9 +362,12 @@
   <!-- PANTALLA 2: LA APLICACIÓN -->
   <div id="appScreen">
     <header>
-      <div>
-        <span class="badge" style="margin-bottom:0.25rem;">ARMANDO PAZ</span>
-        <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; text-transform:uppercase;">Opiniones del Negocio</h2>
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <img src="armando.png" alt="Armando Paz" style="width:45px; height:45px; object-fit:cover; border:1px solid var(--border-main);">
+        <div>
+          <span class="badge" style="margin-bottom:0.15rem;">ARMANDO PAZ</span>
+          <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.3rem; text-transform:uppercase;">Opiniones del Negocio</h2>
+        </div>
       </div>
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
     </header>
