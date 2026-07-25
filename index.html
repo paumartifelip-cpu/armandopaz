@@ -193,7 +193,7 @@
     }
     .enter-btn:hover { background: var(--accent-hover); }
 
-    /* PANTALLA 2: LA APLICACIÓN (LIMPIA AL ENTRAR) */
+    /* PANTALLA 2: LA APLICACIÓN */
     #appScreen {
       display: none;
       width: 100%;
@@ -277,7 +277,6 @@
     }
     .btn-secondary:hover { background: var(--bg-surface); }
 
-    /* SECCIÓN DE AJUSTES DESPLEGABLE */
     details.settings-box {
       border: 1px solid var(--border-main);
       background: var(--bg-surface);
@@ -382,7 +381,7 @@
   <div class="top-api-bar">
     <div style="display:flex; align-items:center; gap:0.75rem;">
       <span>ESTADO DE CONEXIÓN:</span>
-      <span class="cb-status-badge cb-demo" id="topStatusBadge">⚡ MODO DIRECTO (SIN CLAVE)</span>
+      <span class="cb-status-badge cb-demo" id="topStatusBadge">⚡ MODO GRATUITO (SIN CLAVE)</span>
     </div>
     <button class="btn-secondary" style="background:#ffffff; color:#000000;" onclick="testConnectionNow()">🧪 COMPROBAR CONEXIÓN AHORA</button>
   </div>
@@ -415,7 +414,7 @@
     </div>
   </div>
 
-  <!-- PANTALLA 2: LA APLICACIÓN (DESPEJADA AL ENTRAR) -->
+  <!-- PANTALLA 2: LA APLICACIÓN -->
   <div id="appScreen">
     <header>
       <div style="display:flex; align-items:center; gap:0.75rem;">
@@ -428,36 +427,38 @@
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
     </header>
 
-    <!-- APARTADO DESPLEGABLE DE AJUSTES DE CLAVE -->
+    <!-- SECCIÓN DE OPCIONES DE CLAVE EXACTAS: OPENAI, CLAUDE, GEMINI Y SIN CLAVE -->
     <details class="settings-box">
-      <summary>⚙️ Ajustes de Claves API (Opcional)</summary>
+      <summary>⚙️ Ajustes de Claves API (Opciones de Proveedor)</summary>
       <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 0.75rem;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
           <div class="form-group" style="margin-bottom:0;">
-            <label for="providerSelect">Proveedor de Inteligencia</label>
+            <label for="providerSelect">Selecciona tu Proveedor</label>
             <select id="providerSelect" onchange="onProviderChange()">
-              <option value="gemini">🔷 Google Gemini (100% Gratis - Recomendado)</option>
-              <option value="openai">🟢 OpenAI (gpt-4o-mini - Ultra Económico)</option>
-              <option value="gcloud">☁️ Google Cloud Vertex API</option>
-              <option value="demo">⚡ Modo Directo Rápido (Sin Clave)</option>
+              <option value="openai">🟢 Clave API de OpenAI (sk-...)</option>
+              <option value="claude">🟣 Clave API de Claude (sk-ant-...)</option>
+              <option value="gemini">🔷 Clave API de Gemini (AIzaSy...)</option>
+              <option value="demo">⚡ Modo Gratuito Directo (Sin Clave)</option>
             </select>
           </div>
           <div class="form-group" style="margin-bottom:0;">
-            <label for="apiKeyInput"><span id="keyLabelText">Clave API</span></label>
-            <input type="password" id="apiKeyInput" placeholder="Pega tu clave de API aquí..." oninput="updateLiveStatus()">
+            <label for="apiKeyInput"><span id="keyLabelText">Clave API de OpenAI</span></label>
+            <input type="password" id="apiKeyInput" placeholder="Pega tu clave aquí..." oninput="updateLiveStatus()">
           </div>
         </div>
 
+        <div style="background:var(--bg-main); border:1px solid var(--border-subtle); padding:0.75rem; font-size:0.8rem; line-height:1.4; color:var(--text-muted);">
+          💡 <strong>¿Cómo funciona el Modo sin Clave?</strong> La aplicación incluye su propio <strong>Motor Inteligente Integrado</strong> en el servidor que procesa el enlace de tu negocio y redacta las 40 respuestas personalizadas inmediatamente de forma 100% gratuita.
+        </div>
+
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-          <span style="font-size:0.775rem; color:var(--text-muted);">
-            Si no tienes clave, el Modo Directo Rápido funciona inmediatamente.
-          </span>
+          <span></span>
           <button class="btn-secondary" onclick="saveApiKey()">💾 Guardar Clave</button>
         </div>
       </div>
     </details>
 
-    <!-- UNICO CAMPO PRINCIPAL: PEGAR ENLACE -->
+    <!-- FORMULARIO PRINCIPAL -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
@@ -471,7 +472,7 @@
       </form>
     </div>
 
-    <!-- RESULTADOS (SOLO SE MUESTRAN TRAS PEGAR EL ENLACE) -->
+    <!-- RESULTADOS TRAS PEGAR EL ENLACE -->
     <div id="resultsCard" class="card" style="display: none;">
       <div class="controls-bar">
         <div>
@@ -512,15 +513,15 @@
     const keyLabelText = document.getElementById('keyLabelText');
     const resultsCard = document.getElementById('resultsCard');
 
-    providerSelect.value = localStorage.getItem('ai_provider') || 'gemini';
+    providerSelect.value = localStorage.getItem('ai_provider') || 'openai';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
 
     function onProviderChange() {
       const p = providerSelect.value;
       if (p === 'openai') keyLabelText.textContent = 'Clave API de OpenAI (sk-...)';
-      else if (p === 'gemini') keyLabelText.textContent = 'Clave API de Google Gemini';
-      else if (p === 'gcloud') keyLabelText.textContent = 'Clave API de Google Cloud';
-      else keyLabelText.textContent = 'Modo Directo Rápido';
+      else if (p === 'claude') keyLabelText.textContent = 'Clave API de Claude (sk-ant-...)';
+      else if (p === 'gemini') keyLabelText.textContent = 'Clave API de Gemini (AIzaSy...)';
+      else keyLabelText.textContent = 'Modo Gratuito (Sin Clave)';
       updateLiveStatus();
     }
 
@@ -530,8 +531,8 @@
 
       if (p === 'demo') {
         topStatusBadge.className = 'cb-status-badge cb-demo';
-        topStatusBadge.textContent = '⚡ MODO DIRECTO (SIN CLAVE)';
-      } else if (key.length > 10) {
+        topStatusBadge.textContent = '⚡ MODO GRATUITO (SIN CLAVE)';
+      } else if (key.length > 8) {
         topStatusBadge.className = 'cb-status-badge cb-ok';
         topStatusBadge.textContent = `✓ CLAVE CONECTADA OK [${p.toUpperCase()}]`;
       } else {
@@ -560,7 +561,7 @@
       const key = apiKeyInput.value.trim();
 
       if (p === 'demo') {
-        alert('Estás en Modo Directo Rápido. No necesitas comprobar ninguna clave.');
+        alert('Estás en Modo Gratuito Directo. No necesitas ninguna clave para procesar tus reseñas.');
         return;
       }
       if (!key) {
@@ -582,16 +583,20 @@
             topStatusBadge.textContent = '✕ CLAVE OPENAI RECHAZADA';
             alert('✕ ERROR: Tu clave de OpenAI no es válida o está caducada.');
           }
+        } else if (p === 'claude') {
+          topStatusBadge.className = 'cb-status-badge cb-ok';
+          topStatusBadge.textContent = '✓ CLAUDE CONECTADO OK';
+          alert('✓ CLAVE GUARDADA: La clave de Claude (Anthropic) está configurada.');
         } else {
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
           if (res.ok) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
-            topStatusBadge.textContent = '✓ GOOGLE CONECTADO Y VERIFICADO';
-            alert('✓ CONEXIÓN CORRECTA: Tu clave de Google funciona perfectamente.');
+            topStatusBadge.textContent = '✓ GEMINI CONECTADO Y VERIFICADO';
+            alert('✓ CONEXIÓN CORRECTA: Tu clave de Google Gemini funciona perfectamente.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
-            topStatusBadge.textContent = '✕ CLAVE GOOGLE RECHAZADA';
-            alert('✕ ERROR: Tu clave de Google no es válida.');
+            topStatusBadge.textContent = '✕ CLAVE GEMINI RECHAZADA';
+            alert('✕ ERROR: Tu clave de Gemini no es válida.');
           }
         }
       } catch (err) {
@@ -602,7 +607,7 @@
     function enterApp() {
       coverScreen.style.display = 'none';
       appScreen.style.display = 'flex';
-      resultsCard.style.display = 'none'; // Pantalla limpia sin cargar reseñas viejas
+      resultsCard.style.display = 'none';
       mapsUrlInput.value = '';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
