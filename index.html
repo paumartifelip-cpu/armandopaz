@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Armando Paz - Responder Opiniones de Google Maps</title>
   
-  <meta name="description" content="Armando Paz - La herramienta para responder automáticamente a las reseñas de tu negocio en Google Maps.">
+  <meta name="description" content="Armando Paz - La herramienta para responder automáticamente a las reseñas reales de tu negocio en Google Maps.">
   <meta property="og:title" content="Armando Paz - Responder Opiniones de Google Maps">
   <meta property="og:description" content="Responde a las opiniones de tus clientes en Google Maps automáticamente.">
   <meta property="og:type" content="website">
@@ -348,7 +348,7 @@
       color: var(--text-main);
     }
 
-    input, select {
+    input, select, textarea {
       background: var(--bg-main);
       border: 1px solid var(--border-apple);
       padding: 1rem;
@@ -358,7 +358,7 @@
       width: 100%;
     }
 
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--accent-black);
     }
@@ -540,7 +540,7 @@
 </head>
 <body>
 
-  <!-- MODAL DE ALTA GAMA TIPO APPLE -->
+  <!-- MODAL DE NOTIFICACIÓN TIPO APPLE -->
   <div id="appleModalOverlay" onclick="if(event.target===this) closeAppleModal()">
     <div class="apple-modal-card">
       <div class="apple-modal-icon" id="appleModalIcon">✅</div>
@@ -642,10 +642,17 @@
     <!-- FORMULARIO PRINCIPAL -->
     <div class="card">
       <form id="urlForm">
+        <div class="form-group">
+          <label for="bizNameInput">🏢 Nombre de tu Negocio</label>
+          <input type="text" id="bizNameInput" placeholder="Ejemplo: Bar Pepe / El Güero Alteño" required>
+        </div>
+
         <div class="form-grid">
           <div class="form-group">
-            <label for="mapsUrl">📍 Pega aquí el enlace de Google Maps de tu negocio</label>
-            <input type="text" id="mapsUrl" placeholder="https://www.google.com/maps/place/... o nombre del negocio" required>
+            <label for="reviewsInput">📋 Pega aquí la reseña o reseñas reales de tus clientes (una por línea o copiadas de Google)</label>
+            <textarea id="reviewsInput" rows="4" placeholder="Ejemplo:
+Paco: Excelente servicio y muy rápido.
+Marta: Tardaron 40 minutos y la comida estaba fría." required></textarea>
           </div>
 
           <div class="form-group">
@@ -661,7 +668,7 @@
 
         <button type="submit" class="btn" id="submitBtn">
           <span class="loader" id="loader"></span>
-          <span id="btnText">🚀 EXTRAER RESEÑAS Y GENERAR RESPUESTAS</span>
+          <span id="btnText">🚀 GENERAR RESPUESTAS ARMANDO PAZ PARA TUS RESEÑAS REALES</span>
         </button>
       </form>
     </div>
@@ -677,7 +684,7 @@
             🏢 Nombre del Negocio
           </h2>
         </div>
-        <span class="cb-status-badge cb-ok" style="background:#0071e3;" id="realCountBadge">📌 RESEÑAS OBTENIDAS: 0</span>
+        <span class="cb-status-badge cb-ok" style="background:#0071e3;" id="realCountBadge">📌 RESEÑAS REALES RESPONDIDAS: 0</span>
       </div>
 
       <div class="metrics-grid">
@@ -698,7 +705,7 @@
       <div class="controls-bar">
         <div>
           <h3 style="font-size: 1.05rem; font-weight:700;">
-            📋 <span id="totalCountDisplay">0</span> RESEÑAS DISPONIBLES
+            📋 <span id="totalCountDisplay">0</span> RESEÑAS REALES RESPONDIDAS
           </h3>
         </div>
 
@@ -739,6 +746,8 @@
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const bizTitleDisplay = document.getElementById('bizTitleDisplay');
     const realCountBadge = document.getElementById('realCountBadge');
+    const bizNameInput = document.getElementById('bizNameInput');
+    const reviewsInput = document.getElementById('reviewsInput');
 
     const appleModalOverlay = document.getElementById('appleModalOverlay');
     const appleModalIcon = document.getElementById('appleModalIcon');
@@ -815,7 +824,7 @@
     onProviderChange();
 
     function onToneChange() {
-      if (resultsCard.style.display !== 'none' && mapsUrlInput.value.trim().length > 3 && !isProcessing) {
+      if (resultsCard.style.display !== 'none' && reviewsInput.value.trim().length > 3 && !isProcessing) {
         fetchReviews();
       }
     }
@@ -946,7 +955,8 @@
       coverScreen.style.display = 'none';
       appScreen.style.display = 'flex';
       resultsCard.style.display = 'none';
-      mapsUrlInput.value = '';
+      bizNameInput.value = '';
+      reviewsInput.value = '';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -957,7 +967,6 @@
     }
 
     const urlForm = document.getElementById('urlForm');
-    const mapsUrlInput = document.getElementById('mapsUrl');
     const loader = document.getElementById('loader');
     const btnText = document.getElementById('btnText');
     const resultsList = document.getElementById('resultsList');
@@ -974,18 +983,24 @@
     });
 
     async function fetchReviews() {
-      const inputVal = mapsUrlInput.value.trim();
+      const bizName = bizNameInput.value.trim();
+      const userReviewsText = reviewsInput.value.trim();
       const apiKey = apiKeyInput.value.trim();
       const provider = providerSelect.value;
       const tone = toneSelect.value;
 
-      if (!inputVal) {
-        showAppleAlert('📍', 'Dirección Necesaria', 'Por favor pega el enlace de Google Maps o escribe el nombre de tu negocio.');
+      if (!bizName) {
+        showAppleAlert('🏢', 'Nombre Requerido', 'Por favor escribe el nombre de tu negocio.');
+        return;
+      }
+
+      if (!userReviewsText) {
+        showAppleAlert('📋', 'Reseñas Requeridas', 'Por favor pega la reseña o reseñas reales de tus clientes.');
         return;
       }
 
       if (!apiKey) {
-        showAppleAlert('🔑', 'Clave Requerida', 'Por favor pega tu Clave API en la casilla superior para consultar.');
+        showAppleAlert('🔑', 'Clave Requerida', 'Por favor pega tu Clave API en la casilla superior.');
         return;
       }
 
@@ -998,13 +1013,12 @@
 
       submitBtn.disabled = true;
       loader.style.display = 'inline-block';
-      btnText.textContent = 'Procesando reseñas y generando respuestas...';
+      btnText.textContent = 'Generando respuestas de Armando Paz para tus reseñas reales...';
 
-      const bizName = extractBusinessNameClient(inputVal);
       bizTitleDisplay.textContent = '🏢 ' + bizName;
 
       try {
-        let reviews = await callAiApiDirect(inputVal, bizName, apiKey, provider, tone);
+        let reviews = await callAiApiDirect(userReviewsText, bizName, apiKey, provider, tone);
         
         reviews.sort((a, b) => {
           const numA = parseInt(a.rating) || 5;
@@ -1014,7 +1028,7 @@
 
         allResults = reviews;
         totalCountDisplay.textContent = allResults.length;
-        realCountBadge.textContent = `📌 RESEÑAS PROCESADAS: ${allResults.length}`;
+        realCountBadge.textContent = `📌 RESEÑAS REALES PROCESADAS: ${allResults.length}`;
         resultsCard.style.display = 'block';
         applyFilters();
 
@@ -1025,30 +1039,13 @@
         isProcessing = false;
         submitBtn.disabled = false;
         loader.style.display = 'none';
-        btnText.textContent = '🚀 EXTRAER RESEÑAS Y GENERAR RESPUESTAS';
+        btnText.textContent = '🚀 GENERAR RESPUESTAS ARMANDO PAZ PARA TUS RESEÑAS REALES';
       }
     }
 
-    function extractBusinessNameClient(url) {
-      if (!url) return "Tu Negocio";
-      try {
-        if (url.includes('/place/')) {
-          const clean = url.replace(/([@?].*)/, '');
-          const match = clean.match(/\/place\/([^/]+)/);
-          if (match) {
-            const decoded = decodeURIComponent(match[1]).replace(/\+/g, ' ').replace(/_/g, ' ');
-            const name = decoded.replace(/[\d+]+/g, ' ').trim();
-            if (name.length > 1) return name;
-          }
-        }
-      } catch (e) {}
-
-      const cleanRaw = url.replace(/https?:\/\/[^\s]+/g, '').replace(/[^\w\s]/g, ' ').trim();
-      return cleanRaw.length > 1 ? cleanRaw : "Tu Negocio";
-    }
-
-    async function callAiApiDirect(url, bizName, apiKey, provider, tone) {
-      const prompt = `Devuelve unicamente un array JSON valido con reseñas para el negocio "${bizName}" (${url}). Tono deseado de respuesta: "${tone}". Estructura JSON requerida: [{"reviewer":"Nombre del cliente","rating":"5 estrellas","review":"Comentario del cliente","response":"Respuesta amigable de Armando Paz"}]`;
+    /* GENERACIÓN DE RESPUESTAS EXCLUSIVA PARA LAS RESEÑAS REALES PEGRADAS POR EL USUARIO */
+    async function callAiApiDirect(userReviewsText, bizName, apiKey, provider, tone) {
+      const prompt = `Negocio: "${bizName}". A continuacion se presentan las RESEÑAS REALES ingresadas por el usuario:\n"""\n${userReviewsText}\n"""\n\nTu UNICA tarea es responder a CADA UNA de estas reseñas reales. Asigna la valoracion (1 a 5 estrellas) correspondiente a cada una y genera la respuesta diplomatica de Armando Paz segun el tono "${tone}". Devuelve UNICAMENTE un array JSON en formato: [{"reviewer":"Nombre del cliente o Cliente #1","rating":"1 estrella","review":"Texto exacto de la reseña","response":"Respuesta amigable de Armando Paz"}]`;
 
       let rawContent = "";
 
@@ -1062,7 +1059,7 @@
           body: JSON.stringify({
             model: 'gpt-4o-mini',
             messages: [
-              { role: 'system', content: 'Eres un formateador JSON estricto. Responde UNICAMENTE con un array JSON de reseñas. No incluyas ningun texto de introduccion, disculpa ni explicacion.' },
+              { role: 'system', content: 'Eres un formateador JSON estricto. Responde UNICAMENTE con un array JSON de las respuestas. No inventes reseñas adicionales que el usuario no haya pegado.' },
               { role: 'user', content: prompt }
             ]
           })
@@ -1101,10 +1098,10 @@
         rawContent = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
 
-      return safeParseOrGenerate(rawContent, bizName, tone);
+      return parseUserPastedReviews(rawContent, userReviewsText, bizName, tone);
     }
 
-    function safeParseOrGenerate(content, bizName, tone) {
+    function parseUserPastedReviews(content, userReviewsText, bizName, tone) {
       if (content && typeof content === 'string') {
         try {
           const jsonMatch = content.match(/\[[\s\S]*\]/);
@@ -1115,34 +1112,27 @@
             }
           }
         } catch (e) {
-          console.warn('Fallback al motor secundario:', e);
+          console.warn('Fallback:', e);
         }
       }
 
-      return [
-        {
-          reviewer: "Carlos Mendoza",
-          rating: "1 estrella",
-          review: `Tardaron demasiado en atendernos en ${bizName} y el servicio no estuvo a la altura.`,
-          response: tone === "professional" 
-            ? `Estimado Carlos, de parte de la dirección de ${bizName} le ofrecemos una disculpa. Nos tomamos muy en serio su testimonio para corregirlo.`
-            : `Hola Carlos, lamento sinceramente la espera en ${bizName}. Por favor escríbenos por privado para solucionarlo hoy mismo.`
-        },
-        {
-          reviewer: "María José R.",
-          rating: "5 estrellas",
-          review: `¡Atención excelente en ${bizName}! Muy buena calidad y ambiente muy agradable.`,
-          response: tone === "friendly"
-            ? `¡Muchas gracias María José! Nos alegra un montón que hayas disfrutado en ${bizName}. ¡Te esperamos pronto!`
-            : `Estimada María José, agradecemos mucho su recomendación sobre ${bizName}. Quedamos a su disposición.`
-        },
-        {
-          reviewer: "Juan Pablo Torres",
-          rating: "4 estrellas",
-          review: `Buena experiencia general en ${bizName}. El servicio fue rápido y atento.`,
-          response: `¡Gracias Juan Pablo! Valoramos tu opinión sobre ${bizName} y seguimos trabajando para darte siempre la mejor calidad.`
-        }
-      ];
+      // PARSER SECUNDARIO GARANTIZADO DE RESEÑAS PEGRADAS
+      const lines = userReviewsText.split('\n').filter(l => l.trim().length > 3);
+      return lines.map((line, idx) => {
+        const parts = line.split(':');
+        const name = parts.length > 1 ? parts[0].trim() : `Cliente #${idx+1}`;
+        const revText = parts.length > 1 ? parts.slice(1).join(':').trim() : line.trim();
+        const isBad = revText.toLowerCase().includes('tard') || revText.toLowerCase().includes('mal') || revText.toLowerCase().includes('espera');
+
+        return {
+          reviewer: name,
+          rating: isBad ? "1 estrella" : "5 estrellas",
+          review: revText,
+          response: isBad 
+            ? `Hola ${name}, lamento sinceramente la mala experiencia en ${bizName}. Nos tomamos muy en serio tu comentario para solucionarlo de inmediato.`
+            : `¡Muchas gracias ${name}! Nos alegra saber que tuviste una experiencia estupenda en ${bizName}. ¡Te esperamos pronto!`
+        };
+      });
     }
 
     function setFilter(type, btn) {
