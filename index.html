@@ -7,7 +7,7 @@
   <!-- Google Fonts: Space Grotesk & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-main: #ffffff;
@@ -18,14 +18,6 @@
       --text-muted: #52525b;
       --accent-black: #000000;
       --accent-hover: #27272a;
-      
-      /* PALETA ACCESIBLE PARA DALTÓNICOS (Alto contraste + Formas) */
-      --cb-ok-bg: #000000;
-      --cb-ok-text: #ffffff;
-      --cb-demo-bg: #e0f2fe;
-      --cb-demo-text: #0369a1;
-      --cb-err-bg: #ffffff;
-      --cb-err-text: #000000;
     }
 
     * {
@@ -110,7 +102,7 @@
       border: 2px solid #ffffff;
     }
 
-    /* PANTALLA 1: PORTADA LIMPIA CON IMAGEN COMPLETA DE ARMANDO */
+    /* PANTALLA 1: PORTADA SUPER LIMPIA CON IMAGEN GRANDE */
     #coverScreen {
       width: 100%;
       min-height: 90vh;
@@ -118,16 +110,16 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2.5rem 1.5rem;
+      padding: 2rem 1.5rem;
       background: var(--bg-main);
     }
 
     .cover-box {
       width: 100%;
-      max-width: 650px;
+      max-width: 680px;
       border: 2px solid var(--border-main);
       background: var(--bg-main);
-      padding: 3rem 2rem;
+      padding: 3.5rem 2.5rem;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -135,30 +127,19 @@
       gap: 1.5rem;
     }
 
-    /* IMAGEN COMPLETA SIN RECORTAR (OBJECT-FIT: CONTAIN) */
-    .armando-photo-full {
+    /* IMAGEN DE ARMANDO MÁS GRANDE */
+    .armando-photo-hero {
       width: auto;
-      max-width: 280px;
-      max-height: 240px;
-      object-fit: contain; /* Muestra la imagen entera sin recortar */
+      max-width: 380px;
+      max-height: 320px;
+      object-fit: contain;
       background: transparent;
-      margin-bottom: 0.5rem;
-    }
-
-    .badge {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      background: var(--text-main);
-      color: var(--bg-main);
-      padding: 0.3rem 0.75rem;
+      margin-bottom: 0.25rem;
     }
 
     .cover-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 3.5rem;
+      font-size: 3.75rem;
       font-weight: 700;
       letter-spacing: -0.03em;
       text-transform: uppercase;
@@ -166,17 +147,18 @@
     }
 
     .cover-subtitle {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--text-muted);
+      max-width: 540px;
     }
 
     .enter-btn {
       background: var(--accent-black);
       color: var(--bg-main);
       border: 2px solid var(--border-main);
-      padding: 1.25rem 2rem;
+      padding: 1.35rem 2rem;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -265,7 +247,6 @@
     }
     .btn-secondary:hover { background: var(--bg-surface); }
 
-    /* PANEL ACCESIBLE DE CLAVES */
     .key-selector-panel {
       border: 2px solid var(--border-main);
       background: var(--bg-surface);
@@ -362,7 +343,6 @@
   <div class="top-api-bar">
     <div style="display:flex; align-items:center; gap:0.75rem;">
       <span>ESTADO DE CONEXIÓN:</span>
-      <!-- INDICADOR CLARO CON TEXTO E ICONOS -->
       <span class="cb-status-badge cb-demo" id="topStatusBadge">⚡ MODO DIRECTO (SIN CLAVE)</span>
     </div>
     <button class="btn-secondary" style="background:#ffffff; color:#000000;" onclick="testConnectionNow()">🧪 COMPROBAR CONEXIÓN AHORA</button>
@@ -370,13 +350,12 @@
 
   <div id="toast">✅ Acción realizada correctamente</div>
 
-  <!-- PANTALLA 1: PORTADA LIMPIA CON IMAGEN COMPLETA DE ARMANDO -->
+  <!-- PANTALLA 1: PORTADA SUPER LIMPIA CON FOTO GRANDE -->
   <div id="coverScreen">
     <div class="cover-box">
-      <!-- FOTOGRAFÍA ENTERA DE ARMANDO SIN RECORTAR -->
-      <img src="armando.png" alt="Armando Paz - Imagen Completa" class="armando-photo-full">
+      <!-- FOTOGRAFÍA MÁS GRANDE DE ARMANDO -->
+      <img src="armando.png" alt="Armando Paz" class="armando-photo-hero">
       
-      <span class="badge">ARMANDO PAZ AI</span>
       <h1 class="cover-title">Armando Paz</h1>
       <p class="cover-subtitle">El pacificador inteligente para responder a todas las opiniones de tu negocio en Google Maps.</p>
       
@@ -392,8 +371,8 @@
       <div style="display:flex; align-items:center; gap:0.75rem;">
         <img src="armando.png" alt="Armando Paz" style="height:45px; object-fit:contain;">
         <div>
-          <span class="badge" style="margin-bottom:0.15rem;">ARMANDO PAZ</span>
-          <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.3rem; text-transform:uppercase;">Opiniones del Negocio</h2>
+          <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; text-transform:uppercase;">Armando Paz</h2>
+          <span style="font-size:0.75rem; color:var(--text-muted);">Opiniones del Negocio</span>
         </div>
       </div>
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
@@ -411,7 +390,7 @@
           <select id="providerSelect" onchange="onProviderChange()">
             <option value="gemini">🔷 Google Gemini (100% Gratis - Recomendado)</option>
             <option value="openai">🟢 OpenAI (gpt-4o-mini - Ultra Económico)</option>
-            <option value="gcloud">☁️ Google Cloud Vertex AI</option>
+            <option value="gcloud">☁️ Google Cloud Vertex API</option>
             <option value="demo">⚡ Modo Directo Rápido (Sin Clave)</option>
           </select>
         </div>
@@ -482,7 +461,6 @@
     const providerSelect = document.getElementById('providerSelect');
     const apiKeyInput = document.getElementById('apiKeyInput');
     const keyLabelText = document.getElementById('keyLabelText');
-    const keyHintText = document.getElementById('keyHintText');
 
     providerSelect.value = localStorage.getItem('ai_provider') || 'gemini';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
@@ -496,7 +474,6 @@
       updateLiveStatus();
     }
 
-    // INDICADOR ACCESIBLE PARA DALTÓNICOS (Símbolos ✓ / ✕ + Texto de Alto Contraste)
     function updateLiveStatus() {
       const p = providerSelect.value;
       const key = apiKeyInput.value.trim();
