@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armando Paz - Extraer TODAS las Reseñas de Google Maps</title>
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #ffffff;
+      --bg-surface: #fafafa;
+      --border-main: #000000;
+      --border-subtle: #e4e4e7;
+      --text-main: #09090b;
+      --text-muted: #71717a;
+      --accent-black: #000000;
+      --accent-hover: #27272a;
+      --accent-success: #16a34a;
+      --accent-warning: #d97706;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0px !important; /* Bordes estrictamente cuadrados */
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    header {
+      border-bottom: 2px solid var(--border-main);
+      padding-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--text-main);
+      color: var(--bg-main);
+      padding: 0.25rem 0.6rem;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* Card */
+    .card {
+      border: 1px solid var(--border-main);
+      background: var(--bg-main);
+      padding: 2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    input, select {
+      background: var(--bg-main);
+      border: 1px solid var(--border-main);
+      padding: 1rem;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      width: 100%;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--border-main);
+    }
+
+    .quick-links {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .chip-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-main);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .chip-btn:hover {
+      background: var(--accent-black);
+      color: var(--bg-main);
+    }
+
+    .btn {
+      background: var(--accent-black);
+      color: var(--bg-main);
+      border: 1px solid var(--border-main);
+      padding: 1.2rem 1.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      transition: background 0.15s ease;
+    }
+    .btn:hover { background: var(--accent-hover); }
+
+    .btn-secondary {
+      background: var(--bg-main);
+      color: var(--text-main);
+      border: 1px solid var(--border-main);
+      padding: 0.45rem 0.85rem;
+      font-size: 0.775rem;
+      width: auto;
+    }
+    .btn-secondary:hover { background: var(--bg-surface); }
+
+    /* Detected Badge */
+    .detected-bar {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-main);
+      padding: 0.75rem 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Results */
+    .result-item {
+      border: 1px solid var(--border-main);
+      background: var(--bg-surface);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .verification-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border-main);
+      display: inline-block;
+      text-transform: uppercase;
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .review-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      background: var(--bg-main);
+      border: 1px solid var(--border-subtle);
+      padding: 0.75rem;
+    }
+
+    .response-text {
+      background: var(--bg-main);
+      border: 1px solid var(--border-main);
+      padding: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    details {
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    summary {
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .loader {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ffffff;
+      border-top-color: transparent;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <span class="badge">ARMANDO PAZ TOTAL</span>
+      <h1>Armando Paz</h1>
+      <p>Extrae TODAS las opiniones de cualquier negocio en Google Maps y genera sus respuestas de una sola vez.</p>
+    </header>
+
+    <!-- Ajustes Opcionales -->
+    <details>
+      <summary>⚙️ Ajustes de Clave (Opcional)</summary>
+      <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+          <select id="providerSelect">
+            <option value="gemini">Google Gemini (Gratis)</option>
+            <option value="openai">OpenAI (gpt-4o-mini)</option>
+          </select>
+          <input type="password" id="apiKeyInput" placeholder="Pega tu API Key (opcional)...">
+        </div>
+        <button class="btn btn-secondary" onclick="saveApiKey()">Guardar Clave</button>
+      </div>
+    </details>
+
+    <!-- FORMULARIO PRINCIPAL UNIFICADO -->
+    <div class="card">
+      <form id="urlForm">
+        <div class="form-group">
+          <label for="mapsUrl">
+            <span>🔗 Pega el enlace de Google Maps del negocio</span>
+          </label>
+          <input type="url" id="mapsUrl" placeholder="https://www.google.com/maps/place/El+G%C3%BCero+Alte%C3%B1o..." required>
+          
+          <div class="quick-links">
+            <span style="font-size:0.75rem; color:var(--text-muted); align-self:center;">Probar con enlace real:</span>
+            <button type="button" class="chip-btn" onclick="loadSample('guero')">📌 El Güero Alteño (Zapopan)</button>
+            <button type="button" class="chip-btn" onclick="loadSample('shawarma')">📌 Casa Shawarma (Guadalajara)</button>
+          </div>
+        </div>
+
+        <div class="detected-bar" id="detectedBar">
+          📍 Negocio Encontrado: <strong id="detectedBizTitle">...</strong>
+        </div>
+
+        <button type="submit" class="btn" id="submitBtn">
+          <span class="loader" id="loader"></span>
+          <span id="btnText">🚀 EXTRAER ABSOLUTAMENTE TODAS LAS RESEÑAS</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- RESULTADOS COMPLETOS SIN LÍMITES -->
+    <div id="resultsCard" class="card" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-main); padding-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; text-transform: uppercase;">
+            📋 TODAS LAS RESEÑAS ENCONTRADAS (<span id="totalCountDisplay">0</span>) PARA <span id="bizTitleDisplay">...</span>
+          </h2>
+          <span style="font-size: 0.8rem; color: var(--text-muted);" id="sourceDisplay">...</span>
+        </div>
+        <button class="btn btn-secondary" id="copyAllBtn">📋 Copiar TODAS en Lote</button>
+      </div>
+
+      <div id="resultsList"></div>
+    </div>
+  </div>
+
+  <script>
+    const mapsUrlInput = document.getElementById('mapsUrl');
+    const detectedBar = document.getElementById('detectedBar');
+    const detectedBizTitle = document.getElementById('detectedBizTitle');
+
+    mapsUrlInput.addEventListener('input', () => {
+      const url = mapsUrlInput.value.trim();
+      if (url.includes('google.com/maps') || url.includes('maps.app.goo.gl')) {
+        let extracted = "Negocio en Google Maps";
+        const match = url.match(/\/place\/([^\/@]+)/);
+        if (match && match[1]) {
+          extracted = decodeURIComponent(match[1].replace(/\+/g, ' '));
+        }
+        detectedBizTitle.textContent = extracted;
+        detectedBar.style.display = 'block';
+      } else {
+        detectedBar.style.display = 'none';
+      }
+    });
+
+    function loadSample(type) {
+      if (type === 'guero') {
+        mapsUrlInput.value = "https://www.google.com/maps/place/El+G%C3%BCero+Alte%C3%B1o+Cd.+Granja/@20.684961,-103.4621614,15z/";
+      } else {
+        mapsUrlInput.value = "https://www.google.com/maps/place/CASA+SHAWARMA/@20.6734371,-103.3719049,17z/";
+      }
+      mapsUrlInput.dispatchEvent(new Event('input'));
+    }
+
+    const providerSelect = document.getElementById('providerSelect');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+
+    providerSelect.value = localStorage.getItem('ai_provider') || 'gemini';
+    apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
+
+    function saveApiKey() {
+      localStorage.setItem('ai_provider', providerSelect.value);
+      localStorage.setItem('ai_api_key', apiKeyInput.value.trim());
+      alert('✅ Clave guardada correctamente.');
+    }
+
+    const urlForm = document.getElementById('urlForm');
+    const loader = document.getElementById('loader');
+    const btnText = document.getElementById('btnText');
+    const resultsCard = document.getElementById('resultsCard');
+    const resultsList = document.getElementById('resultsList');
+    const bizTitleDisplay = document.getElementById('bizTitleDisplay');
+    const totalCountDisplay = document.getElementById('totalCountDisplay');
+    const sourceDisplay = document.getElementById('sourceDisplay');
+
+    let currentResults = [];
+
+    urlForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const url = mapsUrlInput.value.trim();
+      const apiKey = apiKeyInput.value.trim();
+      const provider = providerSelect.value;
+
+      loader.style.display = 'inline-block';
+      btnText.textContent = 'Extrayendo TODAS las reseñas del negocio...';
+
+      try {
+        const response = await fetch('/api/extract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: url, apiKey: apiKey, provider: provider })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Error procesando enlace');
+
+        bizTitleDisplay.textContent = data.business;
+        totalCountDisplay.textContent = data.reviews ? data.reviews.length : 0;
+        sourceDisplay.textContent = 'Estado: ' + (data.source || 'Modo Extracción Total');
+        currentResults = data.reviews || [];
+        renderResults(currentResults);
+      } catch (err) {
+        alert('Error extrayendo reseñas: ' + err.message);
+      } finally {
+        loader.style.display = 'none';
+        btnText.textContent = '🚀 EXTRAER ABSOLUTAMENTE TODAS LAS RESEÑAS';
+      }
+    });
+
+    function renderResults(items) {
+      resultsCard.style.display = 'block';
+
+      resultsList.innerHTML = items.map((item, idx) => `
+        <div class="result-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <span style="font-family:'Space Grotesk',sans-serif; font-weight:700;">👤 RESEÑA #${idx+1}: ${escapeHtml(item.reviewer)} (${escapeHtml(item.rating)})</span>
+            <span class="verification-badge">RESEÑA COMPLETA VERIFICADA</span>
+          </div>
+          <div class="review-text">"${escapeHtml(item.review)}"</div>
+          <div class="response-text" id="resp_${idx}">${escapeHtml(item.response)}</div>
+          <button class="btn btn-secondary" style="font-size:0.75rem;" onclick="copySingle(${idx}, this)">📋 COPIAR ESTA RESPUESTA</button>
+        </div>
+      `).join('');
+    }
+
+    function copySingle(idx, btn) {
+      const text = document.getElementById(`resp_${idx}`).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✅ ¡COPIADO!';
+        setTimeout(() => { btn.textContent = '📋 COPIAR ESTA RESPUESTA'; }, 1500);
+      });
+    }
+
+    document.getElementById('copyAllBtn').addEventListener('click', () => {
+      const fullText = currentResults.map(i => `[${i.reviewer}]\n${i.response}\n`).join('\n');
+      navigator.clipboard.writeText(fullText).then(() => {
+        const btn = document.getElementById('copyAllBtn');
+        btn.textContent = '✅ ¡TODAS COPIADAS!';
+        setTimeout(() => { btn.textContent = '📋 Copiar TODAS en Lote'; }, 2000);
+      });
+    });
+
+    function escapeHtml(text) {
+      return text ? text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") : '';
+    }
+  </script>
+</body>
+</html>
