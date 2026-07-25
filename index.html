@@ -89,7 +89,7 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
 
-    /* PANTALLA 1: PORTADA SIN RECUADROS - IMAGEN GIGANTE DE ARMANDO */
+    /* PANTALLA 1: PORTADA SIN RECUADROS */
     #coverScreen {
       width: 100%;
       flex: 1;
@@ -189,7 +189,6 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
     }
 
-    /* ADAPTACIÓN MÓVIL RESPONSIVA PERFECTA */
     @media (max-width: 680px) {
       #coverScreen { padding: 1rem 0.85rem; }
       .cover-container { gap: 1rem; }
@@ -327,7 +326,6 @@
       border-color: var(--accent-black);
     }
 
-    /* FALLO 5 RESUELTO: Maquetación adaptativa impecable para cada reseña en móviles */
     .result-item {
       border: 1px solid var(--border-apple);
       background: var(--bg-surface);
@@ -507,10 +505,10 @@
         <input type="text" id="searchInput" placeholder="🔍 Buscar por cliente..." style="max-width: 300px; padding: 0.6rem 0.8rem; font-size: 0.85rem;" oninput="applyFilters()">
         
         <div class="filter-chips">
-          <button class="filter-btn active" onclick="setFilter('all', this)">Todas</button>
-          <button class="filter-btn" onclick="setFilter('5star', this)">5⭐ Excelente</button>
-          <button class="filter-btn" onclick="setFilter('4star', this)">4⭐ Muy Buena</button>
-          <button class="filter-btn" onclick="setFilter('complaint', this)">Quejas (1-3⭐)</button>
+          <button class="filter-btn active" id="chip_all" onclick="setFilter('all', this)">Todas</button>
+          <button class="filter-btn" id="chip_5star" onclick="setFilter('5star', this)">5⭐ Excelente</button>
+          <button class="filter-btn" id="chip_4star" onclick="setFilter('4star', this)">4⭐ Muy Buena</button>
+          <button class="filter-btn" id="chip_complaint" onclick="setFilter('complaint', this)">Quejas (1-3⭐)</button>
         </div>
       </div>
 
@@ -533,7 +531,14 @@
     providerSelect.value = localStorage.getItem('ai_provider') || 'openai';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
 
-    // FALLO 4 RESUELTO: Atajo de teclado 'Escape' para regresar al Inicio desde cualquier lugar
+    // FALLO 9 RESUELTO: Monitor de conexión a internet
+    window.addEventListener('offline', () => {
+      showToast('⚠️ Sin conexión a internet. Revisa tu red.');
+    });
+    window.addEventListener('online', () => {
+      showToast('⚡ Conexión a internet restablecida.');
+    });
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && appScreen.style.display === 'flex') {
         goCover();
@@ -570,10 +575,9 @@
     function showToast(msg) {
       toast.textContent = msg;
       toast.style.display = 'block';
-      setTimeout(() => { toast.style.display = 'none'; }, 2000);
+      setTimeout(() => { toast.style.display = 'none'; }, 2500);
     }
 
-    // FALLO 3 RESUELTO: Copiado al portapapeles ultra-robusto con fallback universal para cualquier navegador móvil
     function copyTextToClipboard(text, successMsg) {
       if (!text) return;
 
@@ -725,7 +729,13 @@
         return;
       }
 
-      // Bloquear boton submit para evitar peticiones duplicadas
+      // FALLO 8 RESUELTO: Reseteo de busqueda y filtros al procesar un nuevo negocio
+      searchInput.value = '';
+      currentFilter = 'all';
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      const chipAll = document.getElementById('chip_all');
+      if (chipAll) chipAll.classList.add('active');
+
       submitBtn.disabled = true;
       loader.style.display = 'inline-block';
       btnText.textContent = 'Procesando todas las reseñas...';
@@ -744,6 +754,9 @@
         totalCountDisplay.textContent = allResults.length;
         resultsCard.style.display = 'block';
         applyFilters();
+
+        // Desplazamiento suave hacia los resultados recién extraídos
+        resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (err) {
         showToast('⚠️ Error conectando al servidor');
       } finally {
@@ -815,8 +828,9 @@
       copyTextToClipboard(fullText, '✓ Todas las respuestas copiadas al portapapeles');
     });
 
+    // FALLO 10 RESUELTO: Inclusión de marca de orden de bytes UTF-8 BOM (\uFEFF) para abrir perfectamente en Excel sin caracteres extraños
     document.getElementById('exportCsvBtn').addEventListener('click', () => {
-      let csv = "Cliente,Valoracion,Reseña,Respuesta_Armando_Paz\n";
+      let csv = "\uFEFFCliente,Valoracion,Reseña,Respuesta_Armando_Paz\n";
       allResults.forEach(i => {
         csv += `"${i.reviewer}","${i.rating}","${i.review.replace(/"/g, '""')}","${i.response.replace(/"/g, '""')}"\n`;
       });
@@ -826,7 +840,7 @@
       a.href = url;
       a.download = `Reseñas_Armando_Paz.csv`;
       a.click();
-      showToast('📥 Descargando archivo CSV...');
+      showToast('📥 Descargando archivo CSV para Excel...');
     });
 
     function escapeHtml(text) {

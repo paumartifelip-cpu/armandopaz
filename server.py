@@ -4,6 +4,7 @@ import json
 import urllib.request
 import urllib.parse
 import re
+import socket
 
 PORT = 8080
 
@@ -24,9 +25,12 @@ class RobustReviewAppHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 content_length = int(self.headers.get('Content-Length', 0))
                 post_data = self.rfile.read(content_length) if content_length > 0 else b'{}'
-                data = json.loads(post_data.decode('utf-8'))
                 
-                maps_url = data.get('url', '').strip()
+                # FALLO 7 RESUELTO: Descodificación segura de Unicode y sanitización de comillas/espacios
+                raw_str = post_data.decode('utf-8', errors='ignore')
+                data = json.loads(raw_str)
+                
+                maps_url = data.get('url', '').strip().strip('"').strip("'")
                 api_key = data.get('apiKey', '').strip()
                 provider = data.get('provider', 'demo')
 
@@ -44,7 +48,6 @@ class RobustReviewAppHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({'error': 'Endpoint no encontrado'}).encode('utf-8'))
 
     def extract_business_name(self, url):
-        """FALLO 1 RESUELTO: Soporta enlaces cortos de móviles (maps.app.goo.gl), URLs con parámetros y nombres en bruto."""
         if not url:
             return "Tu Negocio en Google Maps"
         
@@ -114,7 +117,6 @@ class RobustReviewAppHandler(http.server.SimpleHTTPRequestHandler):
 
         formatted = [{"reviewer": c[0], "rating": c[1], "review": c[2], "response": c[3]} for c in dataset]
 
-        # FALLO 2 RESUELTO: Control de errores específico para cada proveedor de API
         if api_key and len(api_key) > 8 and provider != 'demo':
             try:
                 prompt = f"""Analiza el negocio "{biz_name}" ({url}). Devuelve 40 reseñas en JSON: [{"reviewer":"","rating":"5 estrellas","review":"","response":""}]"""
@@ -155,8 +157,7 @@ class RobustReviewAppHandler(http.server.SimpleHTTPRequestHandler):
                     json_match = re.search(r'\[.*\]', content, re.DOTALL)
                     parsed = json.loads(json_match.group(0) if json_match else content)
                     return {"business": biz_name, "reviews": parsed, "total": len(parsed), "source": "Google Gemini Real"}
-            except Exception as e:
-                # Si falla la clave o la API externa, responde usando el motor inteligente para no interrumpir el servicio al cliente
+            except Exception:
                 pass
 
         return {"business": biz_name, "reviews": formatted, "total": len(formatted), "source": "Motor Inteligente Integrado (Sin Clave)"}
@@ -176,8 +177,18 @@ class RobustReviewAppHandler(http.server.SimpleHTTPRequestHandler):
             "source": "Modo de Respaldo"
         }
 
+# FALLO 6 RESUELTO: Inicio ultraseguro de servidor con reutilización de socket para evitar colisiones de puerto
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+    def server_bind(self):
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+        except (AttributeError, OSError):
+            pass
+        super().server_bind()
+
 if __name__ == '__main__':
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), RobustReviewAppHandler) as httpd:
+    with ReusableTCPServer(("", PORT), RobustReviewAppHandler) as httpd:
         print(f"Servidor Robusto iniciado en http://localhost:{PORT}")
         httpd.serve_forever()
