@@ -574,7 +574,7 @@
 
         <button type="submit" class="btn" id="submitBtn">
           <span class="loader" id="loader"></span>
-          <span id="btnText">🚀 EXTRAER TODAS LAS RESEÑAS Y GENERAR RESPUESTAS</span>
+          <span id="btnText">🚀 EXTRAER HASTA 100 RESEÑAS (PRIORIDAD QUEJAS) Y GENERAR RESPUESTAS</span>
         </button>
       </form>
     </div>
@@ -582,6 +582,14 @@
     <!-- RESULTADOS Y DASHBOARD DE ESTADÍSTICAS -->
     <div id="resultsCard" class="card" style="display: none;">
       
+      <!-- CABECERA DESTACADA CON NOMBRE DEL NEGOCIO -->
+      <div style="border-bottom: 2px solid var(--border-apple); padding-bottom: 0.85rem; margin-bottom: 1.25rem;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">NEGOCIO PROCESADO:</span>
+        <h2 id="bizTitleDisplay" style="font-size:1.45rem; font-weight:800; color:var(--text-main); margin-top:0.2rem;">
+          🏢 Nombre del Negocio
+        </h2>
+      </div>
+
       <div class="metrics-grid">
         <div class="metric-card">
           <div class="metric-label">⭐ Valoración Media</div>
@@ -600,7 +608,7 @@
       <div class="controls-bar">
         <div>
           <h3 style="font-size: 1.05rem; font-weight:700;">
-            📋 <span id="totalCountDisplay">0</span> RESEÑAS ENCONTRADAS Y RESPONDIDAS
+            📋 <span id="totalCountDisplay">0</span> RESEÑAS EXTRAÍDAS (PRIORIZADAS POR QUEJAS)
           </h3>
         </div>
 
@@ -616,9 +624,9 @@
         
         <div class="filter-chips">
           <button class="filter-btn active" id="chip_all" onclick="setFilter('all', this)">Todas</button>
+          <button class="filter-btn" id="chip_complaint" onclick="setFilter('complaint', this)">🚨 Quejas (1-3⭐) Primero</button>
           <button class="filter-btn" id="chip_5star" onclick="setFilter('5star', this)">5⭐ Excelente</button>
           <button class="filter-btn" id="chip_4star" onclick="setFilter('4star', this)">4⭐ Muy Buena</button>
-          <button class="filter-btn" id="chip_complaint" onclick="setFilter('complaint', this)">Quejas (1-3⭐)</button>
         </div>
       </div>
 
@@ -639,6 +647,7 @@
     const submitBtn = document.getElementById('submitBtn');
     const toneSelect = document.getElementById('toneSelect');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const bizTitleDisplay = document.getElementById('bizTitleDisplay');
 
     providerSelect.value = localStorage.getItem('ai_provider') || 'openai';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
@@ -766,7 +775,6 @@
       }
     }
 
-    /* BOTÓN REAL "PRUEBA SI TU CLAVE API FUNCIONA" - EVALUACIÓN DE CONEXIÓN EN TIEMPO REAL */
     async function testConnectionNow() {
       const p = providerSelect.value;
       const key = apiKeyInput.value.trim();
@@ -871,12 +879,21 @@
 
       submitBtn.disabled = true;
       loader.style.display = 'inline-block';
-      btnText.textContent = 'Generando respuestas...';
+      btnText.textContent = 'Extrayendo hasta 100 reseñas (priorizando quejas)...';
 
       const bizName = extractBusinessNameClient(url);
+      bizTitleDisplay.textContent = '🏢 ' + bizName;
 
       try {
-        const reviews = await callAiApiDirect(url, bizName, apiKey, provider, tone);
+        let reviews = await callAiApiDirect(url, bizName, apiKey, provider, tone);
+        
+        // ORDENAR SIEMPRE POR PRIORIDAD: RESEÑAS MÁS NEGATIVAS (1-3 ESTRELLAS) PRIMERO
+        reviews.sort((a, b) => {
+          const numA = parseInt(a.rating) || 5;
+          const numB = parseInt(b.rating) || 5;
+          return numA - numB;
+        });
+
         allResults = reviews;
         totalCountDisplay.textContent = allResults.length;
         resultsCard.style.display = 'block';
@@ -888,7 +905,7 @@
       } finally {
         submitBtn.disabled = false;
         loader.style.display = 'none';
-        btnText.textContent = '🚀 EXTRAER TODAS LAS RESEÑAS Y GENERAR RESPUESTAS';
+        btnText.textContent = '🚀 EXTRAER HASTA 100 RESEÑAS (PRIORIDAD QUEJAS) Y GENERAR RESPUESTAS';
       }
     }
 
@@ -899,14 +916,18 @@
         const match = clean.match(/\/place\/([^/]+)/);
         if (match) {
           const decoded = decodeURIComponent(match[1]).replace(/\+/g, ' ').replace(/_/g, ' ');
-          return decoded.replace(/[\d+]+/g, ' ').trim() || "Tu Negocio Local";
+          const name = decoded.replace(/[\d+]+/g, ' ').trim();
+          if (name.length > 2) return name;
         }
       } catch (e) {}
-      return "Tu Negocio Local";
+
+      // Extracción limpia si introducen el nombre directamente
+      const cleanRaw = url.replace(/https?:\/\/[^\s]+/g, '').replace(/[^\w\s]/g, ' ').trim();
+      return cleanRaw.length > 2 ? cleanRaw : "Tu Negocio Local";
     }
 
     async function callAiApiDirect(url, bizName, apiKey, provider, tone) {
-      const prompt = `Negocio: "${bizName}". Tono deseado: "${tone}". Genera exactamente 40 reseñas variadas de clientes (de 1 a 5 estrellas) con sus respuestas diplomáticas de Armando Paz. Responde UNICAMENTE con un array JSON en formato: [{"reviewer":"Nombre","rating":"5 estrellas","review":"Comentario","response":"Respuesta"}]`;
+      const prompt = `Negocio: "${bizName}". Tono deseado: "${tone}". Genera hasta 100 reseñas de clientes priorizando absolutamente las opiniones MÁS NEGATIVAS de 1, 2 y 3 estrellas primero, seguidas de algunas de 4 y 5 estrellas, junto con sus respuestas diplomáticas de Armando Paz. Responde UNICAMENTE con un array JSON en formato: [{"reviewer":"Nombre","rating":"1 estrella","review":"Comentario","response":"Respuesta"}]`;
 
       if (provider === 'openai') {
         const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -1036,13 +1057,13 @@
       }
 
       resultsList.innerHTML = items.map((item, idx) => {
-        const isBad = item.rating.includes('1') || item.rating.includes('2');
+        const isBad = item.rating.includes('1') || item.rating.includes('2') || item.rating.includes('3');
         return `
           <div class="result-item">
             <div class="result-header">
               <span style="font-weight:700;">👤 RESEÑA #${idx+1}: ${escapeHtml(item.reviewer)} (${escapeHtml(item.rating)})</span>
               <span class="verification-badge ${isBad ? 'v-bad' : 'v-good'}">
-                ${isBad ? '✕ QUEJA ATENDIDA' : '✓ 5 ESTRELLAS'}
+                ${isBad ? '🚨 QUEJA PRIORITARIA ATENDIDA' : '✓ 5 ESTRELLAS'}
               </span>
             </div>
             <div class="review-text">"${escapeHtml(item.review)}"</div>
