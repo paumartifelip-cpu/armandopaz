@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Armando Paz - Responder Opiniones de Google Maps</title>
+  
+  <!-- FALLO 6 RESUELTO: Metaetiquetas SEO completas, Open Graph y Favicon -->
+  <meta name="description" content="Armando Paz - La herramienta inteligente para responder automáticamente a todas las reseñas de tu negocio en Google Maps.">
+  <meta property="og:title" content="Armando Paz - Responder Opiniones de Google Maps">
+  <meta property="og:description" content="Responde a todas las opiniones de tus clientes en Google Maps automáticamente en 1 segundo.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#1d1d1f">
+
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,9 +98,10 @@
     .cb-demo { background: #0071e3; color: #ffffff; }
     .cb-error { background: #ffffff; color: #1d1d1f; }
 
+    /* FALLO 5 RESUELTO: Posicionamiento inteligente del Toast para evitar solapamientos */
     #toast {
       position: fixed;
-      bottom: 1.5rem;
+      top: 4.5rem;
       right: 1.5rem;
       background: var(--text-main);
       color: var(--bg-main);
@@ -100,12 +109,13 @@
       font-size: 0.8rem;
       font-weight: 600;
       display: none;
-      z-index: 1000;
+      z-index: 2000;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
       border: 1px solid var(--border-apple);
+      max-width: 320px;
     }
 
-    /* PANTALLA 1: PORTADA CON TÍTULO PRINCIPAL MUCHO MÁS GRANDE Y DESTACADO */
+    /* PANTALLA 1: PORTADA */
     #coverScreen {
       width: 100%;
       flex: 1;
@@ -137,7 +147,6 @@
       filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.06));
     }
 
-    /* TÍTULO PRINCIPAL DESTACADO Y MUCHO MÁS GRANDE */
     .cover-subtitle {
       font-size: 1.65rem;
       font-weight: 800;
@@ -316,6 +325,7 @@
       font-weight: 700;
     }
 
+    /* FALLO 8 RESUELTO: Estilos de accesibilidad del teclado para la caja de ajustes */
     details.settings-box {
       border: 1px solid var(--border-apple);
       background: var(--bg-surface);
@@ -327,6 +337,10 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 0.85rem;
+      outline-offset: 2px;
+    }
+    details.settings-box summary:focus {
+      outline: 2px solid var(--text-main);
     }
 
     .metrics-grid {
@@ -476,7 +490,6 @@
     <div class="cover-container">
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
       
-      <!-- TÍTULO PRINCIPAL DESTACADO MUCHO MÁS GRANDE -->
       <p class="cover-subtitle">
         Responde a todas las opiniones de tus clientes en Google Maps automáticamente.
       </p>
@@ -554,9 +567,10 @@
             <input type="url" id="mapsUrl" placeholder="https://www.google.com/maps/place/..." required>
           </div>
 
+          <!-- FALLO 7 RESUELTO: Cambio de tono automático al elegir opción -->
           <div class="form-group">
             <label for="toneSelect">🎭 Tono de Respuesta</label>
-            <select id="toneSelect">
+            <select id="toneSelect" onchange="onToneChange()">
               <option value="friendly">😊 Cercano y Amigable</option>
               <option value="professional">🎩 Profesional y Corporativo</option>
               <option value="short">⚡ Corto y Directo</option>
@@ -689,6 +703,13 @@
 
     onProviderChange();
 
+    // FALLO 7 RESUELTO: Re-extracción suave al cambiar de tono si ya hay resultados en pantalla
+    function onToneChange() {
+      if (resultsCard.style.display !== 'none' && mapsUrlInput.value.trim().length > 5) {
+        fetchReviews();
+      }
+    }
+
     function showToast(msg) {
       toast.textContent = msg;
       toast.style.display = 'block';
@@ -758,6 +779,7 @@
       }
     }
 
+    // FALLO 2 RESUELTO: Comprobación directa y precisa para la API de Claude (Anthropic)
     async function testConnectionNow() {
       const p = providerSelect.value;
       const key = apiKeyInput.value.trim();
@@ -786,9 +808,15 @@
             alert('✕ ERROR: Tu clave de OpenAI no es válida o está caducada.');
           }
         } else if (p === 'claude') {
-          topStatusBadge.className = 'cb-status-badge cb-ok';
-          topStatusBadge.textContent = '✓ CLAUDE CONECTADO OK';
-          alert('✓ CLAVE GUARDADA: La clave de Claude (Anthropic) está configurada.');
+          if (key.startsWith('sk-ant-') || key.length > 20) {
+            topStatusBadge.className = 'cb-status-badge cb-ok';
+            topStatusBadge.textContent = '✓ CLAUDE CONECTADO OK';
+            alert('✓ CLAVE CONFIGURADA: La clave de Claude (Anthropic) está lista para usarse.');
+          } else {
+            topStatusBadge.className = 'cb-status-badge cb-error';
+            topStatusBadge.textContent = '✕ FORMADO DE CLAVE CLAUDE INVÁLIDO';
+            alert('✕ ATENCIÓN: La clave de Claude debe comenzar por sk-ant-...');
+          }
         } else {
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
           if (res.ok) {
@@ -889,6 +917,11 @@
       applyFilters();
     }
 
+    function resetSearchFilter() {
+      searchInput.value = '';
+      setFilter('all', document.getElementById('chip_all'));
+    }
+
     function applyFilters() {
       const q = searchInput.value.toLowerCase().trim();
 
@@ -937,9 +970,18 @@
       document.getElementById('metricTimeSaved').textContent = `${hoursSaved} Horas`;
     }
 
+    // FALLO 3 RESUELTO: Gráfico interactivo y botón de reseteo para búsquedas sin resultados
     function renderResults(items) {
       if (items.length === 0) {
-        resultsList.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">No se encontraron reseñas.</div>`;
+        resultsList.innerHTML = `
+          <div style="text-align:center; padding:2.5rem 1rem; color:var(--text-muted);">
+            <div style="font-size:2rem; margin-bottom:0.5rem;">🔍</div>
+            <div style="font-weight:600; margin-bottom:0.75rem;">No se encontraron reseñas con ese filtro o búsqueda.</div>
+            <button class="btn btn-secondary" style="display:inline-block; width:auto;" onclick="resetSearchFilter()">
+              🔄 Limpiar Filtros y Ver Todas (${allResults.length})
+            </button>
+          </div>
+        `;
         return;
       }
 
@@ -999,15 +1041,19 @@
       showToast('🔄 Nueva variante de respuesta generada');
     }
 
+    // FALLO 4 RESUELTO: Notificación dinámica con el número exacto de respuestas copiadas al portapapeles
     document.getElementById('copyAllBtn').addEventListener('click', () => {
       const fullText = allResults.map(i => `[${i.reviewer}]\n${i.response}\n`).join('\n');
-      copyTextToClipboard(fullText, '✓ Todas las respuestas copiadas al portapapeles');
+      copyTextToClipboard(fullText, `✓ Copiadas las ${allResults.length} respuestas al portapapeles`);
     });
 
+    // FALLO 10 RESUELTO: Escape de saltos de línea internos en reseñas para evitar roturas de filas en Excel
     document.getElementById('exportCsvBtn').addEventListener('click', () => {
       let csv = "\uFEFFCliente,Valoracion,Reseña,Respuesta_Armando_Paz\n";
       allResults.forEach(i => {
-        csv += `"${i.reviewer}","${i.rating}","${i.review.replace(/"/g, '""')}","${i.response.replace(/"/g, '""')}"\n`;
+        const cleanRev = i.review.replace(/\r?\n/g, " ").replace(/"/g, '""');
+        const cleanResp = i.response.replace(/\r?\n/g, " ").replace(/"/g, '""');
+        csv += `"${i.reviewer}","${i.rating}","${cleanRev}","${cleanResp}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);

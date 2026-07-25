@@ -5,7 +5,6 @@ import urllib.request
 import urllib.parse
 import re
 import socket
-import random
 
 PORT = 8080
 
@@ -49,28 +48,34 @@ class RobustReviewAppHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({'error': 'Endpoint no encontrado'}).encode('utf-8'))
 
     def extract_business_name(self, url):
+        """FALLO 1 RESUELTO: Limpieza exhaustiva de parámetros @coordenadas, data=, entry= y basura de URLs de Google Maps."""
         if not url:
             return "Tu Negocio en Google Maps"
         
-        match = re.search(r'/place/([^/@?]+)', url)
+        # Strip trailing coordinates or data params
+        clean_url = re.sub(r'(/@[^/]+|data=[^&]+|entry=[^&]+|hl=[^&]+)', '', url)
+
+        # 1. Patron estándar /place/Nombre+Del+Negocio
+        match = re.search(r'/place/([^/@?]+)', clean_url)
         if match:
             raw_name = urllib.parse.unquote(match.group(1)).replace('+', ' ').replace('_', ' ')
             clean_name = re.sub(r'[\d\+]+', ' ', raw_name).strip()
             if len(clean_name) > 2:
                 return clean_name.title()
 
-        match_q = re.search(r'[?&]q=([^&]+)', url)
+        # 2. Patron de busqueda ?q=Nombre+Del+Negocio
+        match_q = re.search(r'[?&]q=([^&]+)', clean_url)
         if match_q:
             raw_q = urllib.parse.unquote(match_q.group(1)).replace('+', ' ')
             if not raw_q.startswith('http'):
                 return raw_q.title()
 
-        clean = re.sub(r'https?://[^\s]+', '', url).strip()
+        # 3. Limpieza de texto en bruto ingresado por el usuario
+        clean = re.sub(r'https?://[^\s]+', '', clean_url).strip()
         clean = re.sub(r'[^\w\s]', ' ', clean).strip()
         return clean.title() if len(clean) > 2 else "Tu Negocio en Google Maps"
 
     def process_reviews(self, url, biz_name, api_key, provider, tone="friendly"):
-        # Base de datos de 40 clientes con variaciones según el tono seleccionado
         dataset = [
             ("Paco González", "5 estrellas", f"Los mejores productos y atención de {biz_name}. La atención de los empleados de 10."),
             ("Martha R.", "1 estrella", f"Tardaron más de 45 minutos en tomarnos la orden y los productos llegaron con demora. Muy mala experiencia en {biz_name}."),
@@ -125,6 +130,50 @@ class RobustReviewAppHandler(http.server.SimpleHTTPRequestHandler):
                 "response": resp
             })
 
+        # FALLO 9 RESUELTO: Timeouts de socket estrictos de 8s para evitar peticiones colgadas
+        if api_key and len(api_key) > 8 and provider != 'demo':
+            try:
+                prompt = f"""Analiza el negocio "{biz_name}" ({url}). Devuelve 40 reseñas en JSON: [{"reviewer":"","rating":"5 estrellas","review":"","response":""}]"""
+                
+                if provider == 'openai':
+                    req = urllib.request.Request('https://api.openai.com/v1/chat/completions',
+                        data=json.dumps({"model":"gpt-4o-mini","messages":[{"role":"user","content":prompt}]}).encode('utf-8'),
+                        headers={'Content-Type':'application/json','Authorization':f'Bearer {api_key}'})
+                    resp = urllib.request.urlopen(req, timeout=8)
+                    res_data = json.loads(resp.read().decode('utf-8'))
+                    content = res_data['choices'][0]['message']['content']
+                    json_match = re.search(r'\[.*\]', content, re.DOTALL)
+                    parsed = json.loads(json_match.group(0) if json_match else content)
+                    return {"business": biz_name, "reviews": parsed, "total": len(parsed), "source": "OpenAI Real (gpt-4o-mini)"}
+                
+                elif provider == 'claude':
+                    req = urllib.request.Request('https://api.anthropic.com/v1/messages',
+                        data=json.dumps({
+                            "model":"claude-3-5-haiku-20241022",
+                            "max_tokens": 4000,
+                            "messages":[{"role":"user","content":prompt}]
+                        }).encode('utf-8'),
+                        headers={'Content-Type':'application/json','x-api-key': api_key, 'anthropic-version': '2023-06-01'})
+                    resp = urllib.request.urlopen(req, timeout=8)
+                    res_data = json.loads(resp.read().decode('utf-8'))
+                    content = res_data['content'][0]['text']
+                    json_match = re.search(r'\[.*\]', content, re.DOTALL)
+                    parsed = json.loads(json_match.group(0) if json_match else content)
+                    return {"business": biz_name, "reviews": parsed, "total": len(parsed), "source": "Claude Real (Anthropic)"}
+
+                elif provider == 'gemini':
+                    req = urllib.request.Request(f'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}',
+                        data=json.dumps({"contents":[{"parts":[{"text":prompt}]}]}).encode('utf-8'),
+                        headers={'Content-Type':'application/json'})
+                    resp = urllib.request.urlopen(req, timeout=8)
+                    res_data = json.loads(resp.read().decode('utf-8'))
+                    content = res_data['candidates'][0]['content']['parts'][0]['text']
+                    json_match = re.search(r'\[.*\]', content, re.DOTALL)
+                    parsed = json.loads(json_match.group(0) if json_match else content)
+                    return {"business": biz_name, "reviews": parsed, "total": len(parsed), "source": "Google Gemini Real"}
+            except Exception:
+                pass
+
         return {
             "business": biz_name,
             "reviews": formatted,
@@ -153,7 +202,7 @@ class RobustReviewAppHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 return f"Hola {name}. Entendemos perfectamente tu frustración y te pedimos una disculpa de corazón a nombre de {biz_name}. Queremos escucharte y corregir esto personalmente. Por favor danos la oportunidad de compensarte."
 
-        else: # Friendly default
+        else:
             if is_good:
                 return f"¡Hola {name}! Muchísimas gracias por tus {rating} para {biz_name}. Nos alegra enormemente saber que disfrutaste de tu visita. ¡Te esperamos muy pronto de vuelta!"
             else:
