@@ -101,7 +101,7 @@
       border: 2px solid #ffffff;
     }
 
-    /* PANTALLA 1: PORTADA SUPER CLARA CON TRANSFORMACIÓN */
+    /* PANTALLA 1: PORTADA PRINCIPAL */
     #coverScreen {
       width: 100%;
       min-height: 90vh;
@@ -134,7 +134,6 @@
       background: transparent;
     }
 
-    /* BLOQUE DE TRANSFORMACIÓN ANTES VS DESPUÉS */
     .transformation-box {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -194,14 +193,14 @@
     }
     .enter-btn:hover { background: var(--accent-hover); }
 
-    /* PANTALLA 2: LA APLICACIÓN DE RESEÑAS */
+    /* PANTALLA 2: LA APLICACIÓN (LIMPIA AL ENTRAR) */
     #appScreen {
       display: none;
       width: 100%;
-      max-width: 920px;
+      max-width: 850px;
       padding: 2.5rem 1.5rem;
       flex-direction: column;
-      gap: 1.75rem;
+      gap: 1.5rem;
     }
 
     header {
@@ -213,20 +212,20 @@
     }
 
     .card {
-      border: 1px solid var(--border-main);
+      border: 2px solid var(--border-main);
       background: var(--bg-main);
-      padding: 1.75rem;
+      padding: 2rem;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
-      margin-bottom: 1rem;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
     }
 
     label {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -236,20 +235,25 @@
     input, select {
       background: var(--bg-main);
       border: 1px solid var(--border-main);
-      padding: 0.9rem 1rem;
+      padding: 1.1rem;
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 1rem;
       width: 100%;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--border-main);
     }
 
     .btn {
       background: var(--accent-black);
       color: var(--bg-main);
       border: 1px solid var(--border-main);
-      padding: 1.1rem 1.4rem;
+      padding: 1.2rem 1.5rem;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -273,11 +277,20 @@
     }
     .btn-secondary:hover { background: var(--bg-surface); }
 
-    .key-selector-panel {
-      border: 2px solid var(--border-main);
+    /* SECCIÓN DE AJUSTES DESPLEGABLE */
+    details.settings-box {
+      border: 1px solid var(--border-main);
       background: var(--bg-surface);
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    details.settings-box summary {
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
     }
 
     .controls-bar {
@@ -376,17 +389,15 @@
 
   <div id="toast">✅ Acción realizada correctamente</div>
 
-  <!-- PANTALLA 1: PORTADA SUPER CLARA Y DIRECTA CON TRANSFORMACIÓN -->
+  <!-- PANTALLA 1: PORTADA PRINCIPAL -->
   <div id="coverScreen">
     <div class="cover-box">
-      <!-- FOTOGRAFÍA PRINCIPAL QUE INCLUYE EL LOGO -->
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
       
       <p style="font-size: 1.2rem; font-weight: 700; text-transform: uppercase; color: var(--text-main);">
         Responde a todas las opiniones de tus clientes en Google Maps automáticamente.
       </p>
 
-      <!-- TRANSFORMACIÓN ANTES VS DESPUÉS EN ESPAÑOL CLARO -->
       <div class="transformation-box">
         <div class="t-card">
           <div class="t-title-before">❌ ANTES DE USAR ARMANDO</div>
@@ -404,7 +415,7 @@
     </div>
   </div>
 
-  <!-- PANTALLA 2: LA APLICACIÓN -->
+  <!-- PANTALLA 2: LA APLICACIÓN (DESPEJADA AL ENTRAR) -->
   <div id="appScreen">
     <header>
       <div style="display:flex; align-items:center; gap:0.75rem;">
@@ -417,56 +428,55 @@
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
     </header>
 
-    <!-- PANEL ACCESIBLE DE CLAVES -->
-    <div class="key-selector-panel">
-      <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:0.9rem; text-transform:uppercase; margin-bottom:0.75rem;">
-        🔑 Configuración de Clave API (Elige tu proveedor)
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
-        <div class="form-group" style="margin-bottom:0;">
-          <label for="providerSelect">Proveedor de Inteligencia</label>
-          <select id="providerSelect" onchange="onProviderChange()">
-            <option value="gemini">🔷 Google Gemini (100% Gratis - Recomendado)</option>
-            <option value="openai">🟢 OpenAI (gpt-4o-mini - Ultra Económico)</option>
-            <option value="gcloud">☁️ Google Cloud Vertex API</option>
-            <option value="demo">⚡ Modo Directo Rápido (Sin Clave)</option>
-          </select>
+    <!-- APARTADO DESPLEGABLE DE AJUSTES DE CLAVE -->
+    <details class="settings-box">
+      <summary>⚙️ Ajustes de Claves API (Opcional)</summary>
+      <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="providerSelect">Proveedor de Inteligencia</label>
+            <select id="providerSelect" onchange="onProviderChange()">
+              <option value="gemini">🔷 Google Gemini (100% Gratis - Recomendado)</option>
+              <option value="openai">🟢 OpenAI (gpt-4o-mini - Ultra Económico)</option>
+              <option value="gcloud">☁️ Google Cloud Vertex API</option>
+              <option value="demo">⚡ Modo Directo Rápido (Sin Clave)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="apiKeyInput"><span id="keyLabelText">Clave API</span></label>
+            <input type="password" id="apiKeyInput" placeholder="Pega tu clave de API aquí..." oninput="updateLiveStatus()">
+          </div>
         </div>
-        <div class="form-group" style="margin-bottom:0;">
-          <label for="apiKeyInput"><span id="keyLabelText">Clave API de Gemini</span></label>
-          <input type="password" id="apiKeyInput" placeholder="Pega tu clave aquí..." oninput="updateLiveStatus()">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <span style="font-size:0.775rem; color:var(--text-muted);">
+            Si no tienes clave, el Modo Directo Rápido funciona inmediatamente.
+          </span>
+          <button class="btn-secondary" onclick="saveApiKey()">💾 Guardar Clave</button>
         </div>
       </div>
+    </details>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-        <span style="font-size:0.775rem; color:var(--text-muted);" id="keyHintText">
-          Si no tienes clave, el Modo Directo Rápido funciona inmediatamente sin tarjeta.
-        </span>
-        <button class="btn-secondary" onclick="saveApiKey()">💾 Guardar Clave</button>
-      </div>
-    </div>
-
-    <!-- Formulario para ingresar cualquier URL -->
+    <!-- UNICO CAMPO PRINCIPAL: PEGAR ENLACE -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
-          <label for="mapsUrl">Enlace de Google Maps del negocio</label>
-          <input type="url" id="mapsUrl" value="https://www.google.com/maps/place/El+G%C3%BCero+Alte%C3%B1o+Cd.+Granja/@20.684961,-103.4621614,15z/" required>
+          <label for="mapsUrl">📍 Pega aquí el enlace de Google Maps de tu negocio</label>
+          <input type="url" id="mapsUrl" placeholder="https://www.google.com/maps/place/..." required>
         </div>
         <button type="submit" class="btn">
           <span class="loader" id="loader"></span>
-          <span id="btnText">⚡ PROCESAR OTRO ENLACE</span>
+          <span id="btnText">🚀 EXTRAER TODAS LAS RESEÑAS Y GENERAR RESPUESTAS</span>
         </button>
       </form>
     </div>
 
-    <!-- LISTADO COMPLETO Y CONTROLES -->
-    <div id="resultsCard" class="card">
+    <!-- RESULTADOS (SOLO SE MUESTRAN TRAS PEGAR EL ENLACE) -->
+    <div id="resultsCard" class="card" style="display: none;">
       <div class="controls-bar">
         <div>
           <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; text-transform: uppercase;">
-            📋 <span id="totalCountDisplay">40</span> RESEÑAS ENCONTRADAS
+            📋 <span id="totalCountDisplay">0</span> RESEÑAS ENCONTRADAS Y RESPONDIDAS
           </h3>
         </div>
 
@@ -478,10 +488,10 @@
 
       <!-- BUSCADOR Y FILTROS -->
       <div style="display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center;">
-        <input type="text" id="searchInput" placeholder="🔍 Buscar por cliente o palabra clave..." style="max-width: 320px; padding: 0.6rem 0.8rem; font-size: 0.85rem;" oninput="applyFilters()">
+        <input type="text" id="searchInput" placeholder="🔍 Buscar por cliente..." style="max-width: 300px; padding: 0.6rem 0.8rem; font-size: 0.85rem;" oninput="applyFilters()">
         
         <div class="filter-chips">
-          <button class="filter-btn active" onclick="setFilter('all', this)">Todas (40)</button>
+          <button class="filter-btn active" onclick="setFilter('all', this)">Todas</button>
           <button class="filter-btn" onclick="setFilter('5star', this)">5⭐ Excelente</button>
           <button class="filter-btn" onclick="setFilter('4star', this)">4⭐ Muy Buena</button>
           <button class="filter-btn" onclick="setFilter('complaint', this)">Quejas (1-3⭐)</button>
@@ -500,6 +510,7 @@
     const providerSelect = document.getElementById('providerSelect');
     const apiKeyInput = document.getElementById('apiKeyInput');
     const keyLabelText = document.getElementById('keyLabelText');
+    const resultsCard = document.getElementById('resultsCard');
 
     providerSelect.value = localStorage.getItem('ai_provider') || 'gemini';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
@@ -591,8 +602,9 @@
     function enterApp() {
       coverScreen.style.display = 'none';
       appScreen.style.display = 'flex';
+      resultsCard.style.display = 'none'; // Pantalla limpia sin cargar reseñas viejas
+      mapsUrlInput.value = '';
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      fetchReviews();
     }
 
     function goCover() {
@@ -622,8 +634,13 @@
       const apiKey = apiKeyInput.value.trim();
       const provider = providerSelect.value;
 
+      if (!url) {
+        alert('Por favor pega la dirección web de tu negocio en Google Maps.');
+        return;
+      }
+
       loader.style.display = 'inline-block';
-      btnText.textContent = 'Procesando reseñas...';
+      btnText.textContent = 'Procesando todas las reseñas...';
 
       try {
         const response = await fetch('/api/extract', {
@@ -637,12 +654,13 @@
 
         allResults = data.reviews || [];
         totalCountDisplay.textContent = allResults.length;
+        resultsCard.style.display = 'block';
         applyFilters();
       } catch (err) {
         showToast('⚠️ Error conectando al servidor');
       } finally {
         loader.style.display = 'none';
-        btnText.textContent = '⚡ PROCESAR OTRO ENLACE';
+        btnText.textContent = '🚀 EXTRAER TODAS LAS RESEÑAS Y GENERAR RESPUESTAS';
       }
     }
 
@@ -674,7 +692,7 @@
 
     function renderResults(items) {
       if (items.length === 0) {
-        resultsList.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">No se encontraron reseñas con ese filtro.</div>`;
+        resultsList.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">No se encontraron reseñas.</div>`;
         return;
       }
 
@@ -708,7 +726,7 @@
     document.getElementById('copyAllBtn').addEventListener('click', () => {
       const fullText = allResults.map(i => `[${i.reviewer}]\n${i.response}\n`).join('\n');
       navigator.clipboard.writeText(fullText).then(() => {
-        showToast('✓ 40 Respuestas copiadas al portapapeles');
+        showToast('✓ Todas las respuestas copiadas');
       });
     });
 
