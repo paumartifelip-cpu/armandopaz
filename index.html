@@ -24,7 +24,6 @@
       --top-bar-text: #ffffff;
     }
 
-    /* MODO OSCURO (MEJORA 5) */
     body.dark-mode {
       --bg-main: #000000;
       --bg-surface: #1c1c1e;
@@ -60,7 +59,6 @@
       flex-direction: column;
     }
 
-    /* BARRA SUPERIOR COMPACTA CON SELECTOR DE MODO OSCURO */
     .top-api-bar {
       width: 100%;
       background: var(--top-bar-bg);
@@ -241,6 +239,19 @@
       box-shadow: var(--apple-shadow);
     }
 
+    /* FALLO 1 RESUELTO: Adaptación vertical en móviles para la cuadrícula del formulario */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
     .form-group {
       display: flex;
       flex-direction: column;
@@ -318,7 +329,6 @@
       font-size: 0.85rem;
     }
 
-    /* MEJORA 2: DASHBOARD DE ESTADÍSTICAS Y TIEMPO AHORRADO */
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -446,7 +456,7 @@
 </head>
 <body>
 
-  <!-- BARRA DE ESTADO Y CAMBIO DE MODO OSCURO (MEJORA 5) -->
+  <!-- BARRA DE ESTADO -->
   <div class="top-api-bar">
     <div style="display:flex; align-items:center; gap:0.6rem;">
       <span>ESTADO:</span>
@@ -534,16 +544,15 @@
       </div>
     </details>
 
-    <!-- FORMULARIO PRINCIPAL Y SELECTOR DE TONO (MEJORA 1) -->
+    <!-- FORMULARIO PRINCIPAL -->
     <div class="card">
       <form id="urlForm">
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.75rem;" class="form-grid">
+        <div class="form-grid">
           <div class="form-group">
             <label for="mapsUrl">📍 Pega aquí el enlace de Google Maps de tu negocio</label>
             <input type="url" id="mapsUrl" placeholder="https://www.google.com/maps/place/..." required>
           </div>
 
-          <!-- MEJORA 1: SELECTOR DE TONO DE RESPUESTA -->
           <div class="form-group">
             <label for="toneSelect">🎭 Tono de Respuesta</label>
             <select id="toneSelect">
@@ -565,7 +574,7 @@
     <!-- RESULTADOS Y DASHBOARD DE ESTADÍSTICAS -->
     <div id="resultsCard" class="card" style="display: none;">
       
-      <!-- MEJORA 2: DASHBOARD DE ESTADÍSTICAS Y TIEMPO AHORRADO -->
+      <!-- DASHBOARD DINÁMICO DE ESTADÍSTICAS Y TIEMPO AHORRADO -->
       <div class="metrics-grid">
         <div class="metric-card">
           <div class="metric-label">⭐ Valoración Media</div>
@@ -577,7 +586,7 @@
         </div>
         <div class="metric-card">
           <div class="metric-label">⏱️ Tiempo Ahorrado Hoy</div>
-          <div class="metric-val" style="color:#008855;" id="metricTimeSaved">2.5 Horas</div>
+          <div class="metric-val" style="color:#008855;" id="metricTimeSaved">2.7 Horas</div>
         </div>
       </div>
 
@@ -627,7 +636,6 @@
     providerSelect.value = localStorage.getItem('ai_provider') || 'openai';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
 
-    // MEJORA 5: MODO OSCURO PERSISTENTE EN LOCALSTORAGE
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark-mode');
       themeToggleBtn.textContent = '☀️ MODO CLARO';
@@ -881,6 +889,7 @@
       applyFilters();
     }
 
+    // FALLO 3 RESUELTO: Cálculo dinámico real de estadísticas en vivo según el filtro activo
     function applyFilters() {
       const q = searchInput.value.toLowerCase().trim();
 
@@ -897,7 +906,36 @@
         return matchesSearch && matchesRating;
       });
 
+      updateMetrics(filtered);
       renderResults(filtered);
+    }
+
+    function updateMetrics(items) {
+      if (items.length === 0) {
+        document.getElementById('metricRating').textContent = '0.0 / 5.0';
+        document.getElementById('metricSatisfaction').textContent = '0% Positivas';
+        document.getElementById('metricTimeSaved').textContent = '0.0 Horas';
+        return;
+      }
+
+      let totalStars = 0;
+      let positiveCount = 0;
+
+      items.forEach(i => {
+        if (i.rating.includes('5')) { totalStars += 5; positiveCount++; }
+        else if (i.rating.includes('4')) { totalStars += 4; positiveCount++; }
+        else if (i.rating.includes('3')) { totalStars += 3; }
+        else if (i.rating.includes('2')) { totalStars += 2; }
+        else { totalStars += 1; }
+      });
+
+      const avg = (totalStars / items.length).toFixed(1);
+      const satPercent = Math.round((positiveCount / items.length) * 100);
+      const hoursSaved = ((items.length * 4) / 60).toFixed(1);
+
+      document.getElementById('metricRating').textContent = `${avg} / 5.0`;
+      document.getElementById('metricSatisfaction').textContent = `${satPercent}% Positivas`;
+      document.getElementById('metricTimeSaved').textContent = `${hoursSaved} Horas`;
     }
 
     function renderResults(items) {
@@ -919,7 +957,6 @@
             <div class="review-text">"${escapeHtml(item.review)}"</div>
             <div class="response-text" id="resp_${idx}">${escapeHtml(item.response)}</div>
             
-            <!-- ACCIONES DE RESPUESTA: COPIAR, WHATSAPP (MEJORA 3) Y REGENERAR VARIANT (MEJORA 4) -->
             <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
               <button class="btn btn-secondary" style="font-size:0.75rem;" onclick="copySingle(${idx}, this)">📋 Copiar Respuesta</button>
               <button class="btn btn-secondary btn-whatsapp" style="font-size:0.75rem;" onclick="sendWhatsApp(${idx})">📲 Enviar por WhatsApp</button>
@@ -937,14 +974,15 @@
       setTimeout(() => { btn.textContent = '📋 Copiar Respuesta'; }, 1500);
     }
 
-    // MEJORA 3: ENVIAR RESPUESTA POR WHATSAPP CON 1 CLIC
+    // FALLO 2 RESUELTO: Codificación limpia para enviar por WhatsApp sin rotura de línea ni parámetros corruptos
     function sendWhatsApp(idx) {
+      const item = allResults[idx];
       const respText = document.getElementById(`resp_${idx}`).textContent;
-      const waUrl = `https://wa.me/?text=${encodeURIComponent(respText)}`;
+      const formattedMessage = `📲 *Respuesta de Armando Paz para ${item.reviewer}*:\n\n"${respText}"`;
+      const waUrl = `https://wa.me/?text=${encodeURIComponent(formattedMessage)}`;
       window.open(waUrl, '_blank');
     }
 
-    // MEJORA 4: REGENERAR VARIANTE INDIVIDUAL DE RESPUESTA
     function regenerateVariant(idx) {
       const item = allResults[idx];
       if (!item) return;
