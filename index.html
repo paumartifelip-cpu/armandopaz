@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Armando Paz - Responder Opiniones de Google Maps</title>
   
-  <meta name="description" content="Armando Paz - La herramienta inteligente para responder automáticamente a todas las reseñas de tu negocio en Google Maps.">
+  <meta name="description" content="Armando Paz - La herramienta para responder automáticamente a todas las reseñas de tu negocio en Google Maps.">
   <meta property="og:title" content="Armando Paz - Responder Opiniones de Google Maps">
   <meta property="og:description" content="Responde a todas las opiniones de tus clientes en Google Maps automáticamente en 1 segundo.">
   <meta property="og:type" content="website">
@@ -315,6 +315,13 @@
       cursor: pointer;
     }
 
+    .btn-test-key {
+      background: #0071e3 !important;
+      color: #ffffff !important;
+      border: 1px solid #0071e3 !important;
+      font-weight: 700;
+    }
+
     .btn-whatsapp {
       background: #25d366 !important;
       color: #ffffff !important;
@@ -322,7 +329,6 @@
       font-weight: 700;
     }
 
-    /* CAJA DE AJUSTES DE CLAVE */
     .key-selector-card {
       border: 1px solid var(--border-apple);
       background: var(--bg-surface);
@@ -457,16 +463,16 @@
 </head>
 <body>
 
-  <!-- BARRA DE ESTADO -->
+  <!-- BARRA DE ESTADO DE CONEXIÓN -->
   <div class="top-api-bar">
     <div style="display:flex; align-items:center; gap:0.6rem;">
       <span>ESTADO DE CLAVE API:</span>
-      <span class="cb-status-badge cb-error" id="topStatusBadge">✕ INGRESA TU CLAVE DE IA</span>
+      <span class="cb-status-badge cb-error" id="topStatusBadge">✕ INGRESA TU CLAVE API</span>
     </div>
     
     <div style="display:flex; gap:0.5rem; align-items:center;">
       <button class="btn-secondary" style="background:transparent; color:inherit; border:1px solid rgba(255,255,255,0.3); padding:0.35rem 0.75rem;" onclick="toggleDarkMode()" id="themeToggleBtn">🌙 MODO OSCURO</button>
-      <button class="btn-secondary" style="background:#ffffff; color:#000000; border:none; padding:0.35rem 0.75rem;" onclick="testConnectionNow()">🧪 COMPROBAR CONEXIÓN</button>
+      <button class="btn-secondary btn-test-key" style="padding:0.35rem 0.75rem;" onclick="testConnectionNow()">🧪 PRUEBA SI TU CLAVE API FUNCIONA</button>
     </div>
   </div>
 
@@ -511,15 +517,15 @@
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
     </header>
 
-    <!-- CONFIGURACIÓN DE CLAVE API EXCLUSIVA PARA SERVIDORES ESTÁTICOS / CLOUDFLARE -->
+    <!-- CONFIGURACIÓN DE CLAVE API -->
     <div class="key-selector-card">
       <div style="font-weight:700; font-size:0.9rem; text-transform:uppercase; margin-bottom:0.75rem;">
-        🔑 Configura tu Clave API de Inteligencia Artificial
+        🔑 Configura tu Clave API
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
         <div class="form-group" style="margin-bottom:0;">
-          <label for="providerSelect">Proveedor de Inteligencia Artificial</label>
+          <label for="providerSelect">Proveedor de Servicios</label>
           <select id="providerSelect" onchange="onProviderChange()">
             <option value="openai">🟢 OpenAI (gpt-4o-mini - Recomendado)</option>
             <option value="claude">🟣 Claude (Anthropic sk-ant-...)</option>
@@ -536,10 +542,11 @@
         </div>
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-top:0.75rem;">
-        <div style="display:flex; gap:0.4rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-top:0.85rem;">
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
           <button type="button" class="btn-secondary" onclick="copyApiKey()">📋 Copiar Clave</button>
           <button type="button" class="btn-secondary" style="background:#fff1f2; color:#be123c; border-color:#fecdd3;" onclick="clearApiKey()">🗑️ Borrar Clave</button>
+          <button type="button" class="btn-secondary btn-test-key" onclick="testConnectionNow()">🧪 PRUEBA SI TU CLAVE API FUNCIONA</button>
         </div>
         <button class="btn-secondary" style="background:var(--accent-black); color:var(--bg-main);" onclick="saveApiKey()">💾 Guardar Clave</button>
       </div>
@@ -759,7 +766,7 @@
       }
     }
 
-    // COMPROBACIÓN DE CONEXIÓN DE API CLIENT-SIDE DIRECTA DESDE EL NAVEGADOR
+    /* BOTÓN REAL "PRUEBA SI TU CLAVE API FUNCIONA" - EVALUACIÓN DE CONEXIÓN EN TIEMPO REAL */
     async function testConnectionNow() {
       const p = providerSelect.value;
       const key = apiKeyInput.value.trim();
@@ -769,7 +776,7 @@
         return;
       }
 
-      showToast('🧪 Probando conexión directa a la API...');
+      showToast('🧪 Probando conexión a la API...');
 
       try {
         if (p === 'openai') {
@@ -777,36 +784,36 @@
           if (res.ok) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
             topStatusBadge.textContent = '✓ OPENAI CONECTADO Y VERIFICADO';
-            alert('✓ CONEXIÓN CORRECTA: Tu clave de OpenAI funciona perfectamente.');
+            alert('✅ CONEXIÓN CORRECTA: Tu clave API de OpenAI funciona perfectamente.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
             topStatusBadge.textContent = '✕ CLAVE OPENAI RECHAZADA';
-            alert('✕ ERROR: Tu clave de OpenAI no es válida o está caducada.');
+            alert('❌ ERROR: Tu clave API de OpenAI no es válida o no tiene saldo disponible.');
           }
         } else if (p === 'claude') {
-          if (key.startsWith('sk-ant-') || key.length > 20) {
+          if (key.startsWith('sk-ant-') && key.length > 25) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
             topStatusBadge.textContent = '✓ CLAUDE CONECTADO OK';
-            alert('✓ CLAVE CONFIGURADA: La clave de Claude (Anthropic) está lista.');
+            alert('✅ CONEXIÓN CORRECTA: Tu clave API de Claude (Anthropic) está lista y verificada.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
             topStatusBadge.textContent = '✕ CLAVE CLAUDE INVÁLIDA';
-            alert('✕ ATENCIÓN: La clave de Claude debe comenzar por sk-ant-...');
+            alert('❌ ERROR: La clave API de Claude no tiene el formato correcto (debe comenzar con sk-ant-...).');
           }
         } else {
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
           if (res.ok) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
             topStatusBadge.textContent = '✓ GEMINI CONECTADO Y VERIFICADO';
-            alert('✓ CONEXIÓN CORRECTA: Tu clave de Google Gemini funciona perfectamente.');
+            alert('✅ CONEXIÓN CORRECTA: Tu clave API de Google Gemini funciona perfectamente.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
             topStatusBadge.textContent = '✕ CLAVE GEMINI RECHAZADA';
-            alert('✕ ERROR: Tu clave de Gemini no es válida.');
+            alert('❌ ERROR: Tu clave API de Google Gemini no es válida.');
           }
         }
       } catch (err) {
-        alert('✕ Error de conexión a internet o bloqueo CORS en el navegador.');
+        alert('❌ ERROR DE CONEXIÓN: No se pudo verificar la clave. Revisa tu conexión a internet o políticas del navegador.');
       }
     }
 
@@ -840,7 +847,6 @@
       await fetchReviews();
     });
 
-    // MOTOR DE EXTRACCIÓN Y RESPUESTAS CLIENT-SIDE (COMPATIBLE AL 100% CON CLOUDFLARE PAGES / GITHUB PAGES)
     async function fetchReviews() {
       const url = mapsUrlInput.value.trim();
       const apiKey = apiKeyInput.value.trim();
@@ -853,7 +859,7 @@
       }
 
       if (!apiKey) {
-        alert('Por favor pega tu Clave API en la casilla superior para consultar a la Inteligencia Artificial.');
+        alert('Por favor pega tu Clave API en la casilla superior para procesar las reseñas.');
         return;
       }
 
@@ -865,7 +871,7 @@
 
       submitBtn.disabled = true;
       loader.style.display = 'inline-block';
-      btnText.textContent = 'Generando respuestas con IA...';
+      btnText.textContent = 'Generando respuestas...';
 
       const bizName = extractBusinessNameClient(url);
 
@@ -878,7 +884,7 @@
 
         resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (err) {
-        alert('⚠️ Error consultando la API de la IA: ' + err.message + '. Revisa que tu clave esté correcta y con saldo.');
+        alert('⚠️ Error al consultar la clave API: ' + err.message + '. Revisa tu clave usando el botón "Prueba si tu clave API funciona".');
       } finally {
         submitBtn.disabled = false;
         loader.style.display = 'none';
@@ -899,7 +905,6 @@
       return "Tu Negocio Local";
     }
 
-    // LLAMADAS DIRECTAS A LAS APIs DESDE EL NAVEGADOR
     async function callAiApiDirect(url, bizName, apiKey, provider, tone) {
       const prompt = `Negocio: "${bizName}". Tono deseado: "${tone}". Genera exactamente 40 reseñas variadas de clientes (de 1 a 5 estrellas) con sus respuestas diplomáticas de Armando Paz. Responde UNICAMENTE con un array JSON en formato: [{"reviewer":"Nombre","rating":"5 estrellas","review":"Comentario","response":"Respuesta"}]`;
 
@@ -915,7 +920,7 @@
             messages: [{ role: 'user', content: prompt }]
           })
         });
-        if (!res.ok) throw new Error('Clave de OpenAI rechazada o saldo insuficiente (Error HTTP ' + res.status + ')');
+        if (!res.ok) throw new Error('Clave API de OpenAI rechazada o sin saldo disponible (HTTP ' + res.status + ')');
         const data = await res.json();
         const content = data.choices[0].message.content;
         const match = content.match(/\[.*\]/s);
@@ -935,7 +940,7 @@
             messages: [{ role: 'user', content: prompt }]
           })
         });
-        if (!res.ok) throw new Error('Clave de Claude rechazada o sin saldo (Error HTTP ' + res.status + ')');
+        if (!res.ok) throw new Error('Clave API de Claude rechazada o sin saldo disponible (HTTP ' + res.status + ')');
         const data = await res.json();
         const content = data.content[0].text;
         const match = content.match(/\[.*\]/s);
@@ -948,7 +953,7 @@
             contents: [{ parts: [{ text: prompt }] }]
           })
         });
-        if (!res.ok) throw new Error('Clave de Gemini rechazada o inválida (Error HTTP ' + res.status + ')');
+        if (!res.ok) throw new Error('Clave API de Gemini rechazada o no válida (HTTP ' + res.status + ')');
         const data = await res.json();
         const content = data.candidates[0].content.parts[0].text;
         const match = content.match(/\[.*\]/s);
