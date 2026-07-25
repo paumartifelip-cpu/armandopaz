@@ -112,7 +112,7 @@
       max-width: 320px;
     }
 
-    /* MODAL DE NOTIFICACIÓN DE ALTA GAMA ESTILO APPLE (REEMPLAZO TOTAL DE ALERTAS) */
+    /* MODAL DE NOTIFICACIÓN TIPO APPLE */
     #appleModalOverlay {
       display: none;
       position: fixed;
@@ -745,6 +745,8 @@
     const appleModalTitle = document.getElementById('appleModalTitle');
     const appleModalMsg = document.getElementById('appleModalMsg');
 
+    let isProcessing = false;
+
     providerSelect.value = localStorage.getItem('ai_provider') || 'openai';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
 
@@ -753,7 +755,6 @@
       themeToggleBtn.textContent = '☀️ MODO CLARO';
     }
 
-    /* REEMPLAZO PREMIUM ESTILO APPLE PARA ALERTAS DEL NAVEGADOR */
     function showAppleAlert(icon, title, message) {
       appleModalIcon.textContent = icon;
       appleModalTitle.textContent = title;
@@ -814,7 +815,7 @@
     onProviderChange();
 
     function onToneChange() {
-      if (resultsCard.style.display !== 'none' && mapsUrlInput.value.trim().length > 3) {
+      if (resultsCard.style.display !== 'none' && mapsUrlInput.value.trim().length > 3 && !isProcessing) {
         fetchReviews();
       }
     }
@@ -828,11 +829,15 @@
     function copyTextToClipboard(text, successMsg) {
       if (!text) return;
 
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(() => {
-          showToast(successMsg);
-        }).catch(() => fallbackCopy(text, successMsg));
-      } else {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(() => {
+            showToast(successMsg);
+          }).catch(() => fallbackCopy(text, successMsg));
+        } else {
+          fallbackCopy(text, successMsg);
+        }
+      } catch (err) {
         fallbackCopy(text, successMsg);
       }
     }
@@ -887,7 +892,6 @@
       }
     }
 
-    /* COMPROBACIÓN CON NOTIFICACIÓN ELEGANTE ESTILO APPLE SIN ALERTAS REAS DE NAVEGADOR */
     async function testConnectionNow() {
       const p = providerSelect.value;
       const key = apiKeyInput.value.trim();
@@ -965,6 +969,7 @@
 
     urlForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (isProcessing) return;
       await fetchReviews();
     });
 
@@ -984,6 +989,7 @@
         return;
       }
 
+      isProcessing = true;
       searchInput.value = '';
       currentFilter = 'all';
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1014,8 +1020,9 @@
 
         resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (err) {
-        showAppleAlert('⚠️', 'Error de Consulta', 'No se pudo procesar la solicitud: ' + err.message);
+        showAppleAlert('⚠️', 'Error de Consulta', 'No se pudo procesar la solicitud: ' + (err.message || 'Error desconocido'));
       } finally {
+        isProcessing = false;
         submitBtn.disabled = false;
         loader.style.display = 'none';
         btnText.textContent = '🚀 EXTRAER RESEÑAS Y GENERAR RESPUESTAS';
@@ -1062,7 +1069,7 @@
         });
         if (!res.ok) throw new Error('Clave API de OpenAI rechazada o sin saldo disponible (HTTP ' + res.status + ')');
         const data = await res.json();
-        rawContent = data.choices[0].message.content;
+        rawContent = data?.choices?.[0]?.message?.content || "";
       } else if (provider === 'claude') {
         const res = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
@@ -1080,7 +1087,7 @@
         });
         if (!res.ok) throw new Error('Clave API de Claude rechazada o sin saldo disponible (HTTP ' + res.status + ')');
         const data = await res.json();
-        rawContent = data.content[0].text;
+        rawContent = data?.content?.[0]?.text || "";
       } else {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
           method: 'POST',
@@ -1091,23 +1098,25 @@
         });
         if (!res.ok) throw new Error('Clave API de Gemini rechazada o no válida (HTTP ' + res.status + ')');
         const data = await res.json();
-        rawContent = data.candidates[0].content.parts[0].text;
+        rawContent = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
 
       return safeParseOrGenerate(rawContent, bizName, tone);
     }
 
     function safeParseOrGenerate(content, bizName, tone) {
-      try {
-        const jsonMatch = content.match(/\[[\s\S]*\]/);
-        if (jsonMatch) {
-          const parsed = JSON.parse(jsonMatch[0]);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed;
+      if (content && typeof content === 'string') {
+        try {
+          const jsonMatch = content.match(/\[[\s\S]*\]/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              return parsed;
+            }
           }
+        } catch (e) {
+          console.warn('Fallback al motor secundario:', e);
         }
-      } catch (e) {
-        console.warn('El JSON no vino perfectamente formateado, usando motor secundario:', e);
       }
 
       return [
@@ -1243,8 +1252,8 @@
     function sendWhatsApp(idx) {
       const item = allResults[idx];
       const respText = document.getElementById(`resp_${idx}`).textContent;
-      const formattedMessage = `📲 *Respuesta de Armando Paz para ${item.reviewer}*:\n\n"${respText}"`;
-      const waUrl = `https://wa.me/?text=${encodeURIComponent(formattedMessage)}`;
+      const formattedMessage = `📲 *Respuesta de Armando Paz para ${encodeURIComponent(item.reviewer)}*:\n\n"${encodeURIComponent(respText)}"`;
+      const waUrl = `https://wa.me/?text=${formattedMessage}`;
       window.open(waUrl, '_blank');
     }
 
@@ -1274,8 +1283,8 @@
     document.getElementById('exportCsvBtn').addEventListener('click', () => {
       let csv = "\uFEFFCliente,Valoracion,Reseña,Respuesta_Armando_Paz\n";
       allResults.forEach(i => {
-        const cleanRev = i.review.replace(/\r?\n/g, " ").replace(/"/g, '""');
-        const cleanResp = i.response.replace(/\r?\n/g, " ").replace(/"/g, '""');
+        const cleanRev = (i.review || "").replace(/\r?\n/g, " ").replace(/"/g, '""');
+        const cleanResp = (i.response || "").replace(/\r?\n/g, " ").replace(/"/g, '""');
         csv += `"${i.reviewer}","${i.rating}","${cleanRev}","${cleanResp}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
