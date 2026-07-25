@@ -427,7 +427,7 @@
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
     </header>
 
-    <!-- SECCIÓN DE OPCIONES DE CLAVE EXACTAS: OPENAI, CLAUDE, GEMINI Y SIN CLAVE -->
+    <!-- SECCIÓN DE AJUSTES DE CLAVE CON BOTONES DE COPIAR, BORRAR Y VER CLAVE -->
     <details class="settings-box">
       <summary>⚙️ Ajustes de Claves API (Opciones de Proveedor)</summary>
       <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 0.75rem;">
@@ -441,18 +441,22 @@
               <option value="demo">⚡ Modo Gratuito Directo (Sin Clave)</option>
             </select>
           </div>
+          
           <div class="form-group" style="margin-bottom:0;">
-            <label for="apiKeyInput"><span id="keyLabelText">Clave API de OpenAI</span></label>
-            <input type="password" id="apiKeyInput" placeholder="Pega tu clave aquí..." oninput="updateLiveStatus()">
+            <label for="apiKeyInput"><span id="keyLabelText">Clave API</span></label>
+            <div style="display:flex; gap:0.25rem;">
+              <input type="password" id="apiKeyInput" placeholder="Pega tu clave aquí..." oninput="updateLiveStatus()">
+              <button type="button" class="btn-secondary" onclick="toggleKeyVisibility()" title="Mostrar u Ocultar Clave" id="eyeBtn">👁️</button>
+            </div>
           </div>
         </div>
 
-        <div style="background:var(--bg-main); border:1px solid var(--border-subtle); padding:0.75rem; font-size:0.8rem; line-height:1.4; color:var(--text-muted);">
-          💡 <strong>¿Cómo funciona el Modo sin Clave?</strong> La aplicación incluye su propio <strong>Motor Inteligente Integrado</strong> en el servidor que procesa el enlace de tu negocio y redacta las 40 respuestas personalizadas inmediatamente de forma 100% gratuita.
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-          <span></span>
+        <!-- BOTONES DE ACCIÓN PARA LA CLAVE (COPIAR Y BORRAR) -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; background:var(--bg-main); border:1px solid var(--border-subtle); padding:0.6rem 0.85rem;">
+          <div style="display:flex; gap:0.4rem;">
+            <button type="button" class="btn-secondary" onclick="copyApiKey()">📋 Copiar Clave</button>
+            <button type="button" class="btn-secondary" style="background:#fee2e2; color:#b91c1c; border-color:#fca5a5;" onclick="clearApiKey()">🗑️ Borrar Clave</button>
+          </div>
           <button class="btn-secondary" onclick="saveApiKey()">💾 Guardar Clave</button>
         </div>
       </div>
@@ -472,7 +476,7 @@
       </form>
     </div>
 
-    <!-- RESULTADOS TRAS PEGAR EL ENLACE -->
+    <!-- RESULTADOS -->
     <div id="resultsCard" class="card" style="display: none;">
       <div class="controls-bar">
         <div>
@@ -512,6 +516,7 @@
     const apiKeyInput = document.getElementById('apiKeyInput');
     const keyLabelText = document.getElementById('keyLabelText');
     const resultsCard = document.getElementById('resultsCard');
+    const eyeBtn = document.getElementById('eyeBtn');
 
     providerSelect.value = localStorage.getItem('ai_provider') || 'openai';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
@@ -554,6 +559,38 @@
       localStorage.setItem('ai_api_key', apiKeyInput.value.trim());
       updateLiveStatus();
       showToast('✅ Clave guardada correctamente');
+    }
+
+    // ACCIÓN 1: COPIAR CLAVE AL PORTAPAPELES
+    function copyApiKey() {
+      const key = apiKeyInput.value.trim();
+      if (!key) {
+        showToast('⚠️ No hay ninguna clave escrita para copiar');
+        return;
+      }
+      navigator.clipboard.writeText(key).then(() => {
+        showToast('📋 Clave copiada al portapapeles');
+      });
+    }
+
+    // ACCIÓN 2: BORRAR CLAVE COMPLETAMENTE
+    function clearApiKey() {
+      apiKeyInput.value = '';
+      localStorage.removeItem('ai_api_key');
+      providerSelect.value = 'demo';
+      updateLiveStatus();
+      showToast('🗑️ Clave eliminada. Modo Gratuito activado.');
+    }
+
+    // ACCIÓN 3: MOSTRAR U OCULTAR CLAVE (VER CONTRASEÑA)
+    function toggleKeyVisibility() {
+      if (apiKeyInput.type === 'password') {
+        apiKeyInput.type = 'text';
+        eyeBtn.textContent = '🔒';
+      } else {
+        apiKeyInput.type = 'password';
+        eyeBtn.textContent = '👁️';
+      }
     }
 
     async function testConnectionNow() {
