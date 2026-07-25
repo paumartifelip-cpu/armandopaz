@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Armando Paz - Asistente de Reseñas</title>
+  <title>Armando Paz - Responder Opiniones de Google Maps</title>
   <!-- Google Fonts: Space Grotesk & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      border-radius: 0px !important; /* Bordes strictly cuadrados */
+      border-radius: 0px !important; /* Bordes estrictamente cuadrados */
     }
 
     body {
@@ -101,7 +101,7 @@
       border: 2px solid #ffffff;
     }
 
-    /* PANTALLA 1: PORTADA CON IMAGEN GIGANTE SIN TEXTO REPETIDO */
+    /* PANTALLA 1: PORTADA SUPER CLARA CON TRANSFORMACIÓN */
     #coverScreen {
       width: 100%;
       min-height: 90vh;
@@ -109,7 +109,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2rem 1.5rem;
+      padding: 2.5rem 1.5rem;
       background: var(--bg-main);
     }
 
@@ -126,19 +126,56 @@
       gap: 1.5rem;
     }
 
-    /* IMAGEN GIGANTE QUE INCLUYE EL LOGOTIPO */
     .armando-photo-hero-large {
       width: 100%;
-      max-width: 480px;
-      max-height: 380px;
+      max-width: 460px;
+      max-height: 360px;
       object-fit: contain;
       background: transparent;
     }
 
-    .cover-subtitle {
-      font-size: 1.15rem;
+    /* BLOQUE DE TRANSFORMACIÓN ANTES VS DESPUÉS */
+    .transformation-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+      text-align: left;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .transformation-box { grid-template-columns: 1fr; }
+    }
+
+    .t-card {
+      border: 1px solid var(--border-main);
+      padding: 1.1rem;
+      background: var(--bg-surface);
+    }
+
+    .t-title-before {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #b91c1c;
+      margin-bottom: 0.35rem;
+    }
+
+    .t-title-after {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #15803d;
+      margin-bottom: 0.35rem;
+    }
+
+    .t-card p {
+      font-size: 0.825rem;
       color: var(--text-muted);
-      max-width: 540px;
+      line-height: 1.45;
     }
 
     .enter-btn {
@@ -339,13 +376,27 @@
 
   <div id="toast">✅ Acción realizada correctamente</div>
 
-  <!-- PANTALLA 1: PORTADA CON IMAGEN GIGANTE (SIN TEXTO DE TÍTULO REPETIDO) -->
+  <!-- PANTALLA 1: PORTADA SUPER CLARA Y DIRECTA CON TRANSFORMACIÓN -->
   <div id="coverScreen">
     <div class="cover-box">
-      <!-- FOTOGRAFÍA GIGANTE QUE YA CONTIENE EL LOGO Y NOMBRE ARMANDO PAZ -->
+      <!-- FOTOGRAFÍA PRINCIPAL QUE INCLUYE EL LOGO -->
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
       
-      <p class="cover-subtitle">El pacificador inteligente para responder a todas las opiniones de tu negocio en Google Maps.</p>
+      <p style="font-size: 1.2rem; font-weight: 700; text-transform: uppercase; color: var(--text-main);">
+        Responde a todas las opiniones de tus clientes en Google Maps automáticamente.
+      </p>
+
+      <!-- TRANSFORMACIÓN ANTES VS DESPUÉS EN ESPAÑOL CLARO -->
+      <div class="transformation-box">
+        <div class="t-card">
+          <div class="t-title-before">❌ ANTES DE USAR ARMANDO</div>
+          <p>Malas opiniones de 1 estrella que dañan la imagen de tu negocio, te quitan clientes y te hacen perder horas pensando qué responder.</p>
+        </div>
+        <div class="t-card">
+          <div class="t-title-after">✅ DESPUÉS DE USAR ARMANDO</div>
+          <p>Respuestas amables y profesionales que calman clientes molestos, atraen a más vecinos y se redactan solas en 1 segundo.</p>
+        </div>
+      </div>
       
       <button class="enter-btn" onclick="enterApp()">
         ENTRAR A LA APLICACIÓN →
@@ -360,7 +411,7 @@
         <img src="armando.png" alt="Armando Paz" style="height:45px; object-fit:contain;">
         <div>
           <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; text-transform:uppercase;">Armando Paz</h2>
-          <span style="font-size:0.75rem; color:var(--text-muted);">Opiniones del Negocio</span>
+          <span style="font-size:0.75rem; color:var(--text-muted);">Responder Reseñas de Google Maps</span>
         </div>
       </div>
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
