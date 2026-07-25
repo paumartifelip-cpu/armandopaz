@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Armando Paz - Extraer TODAS las Reseñas de Google Maps</title>
+  <title>Armando Paz - Inicio</title>
   <!-- Google Fonts: Space Grotesk & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-main: #ffffff;
@@ -19,7 +19,6 @@
       --accent-black: #000000;
       --accent-hover: #27272a;
       --accent-success: #16a34a;
-      --accent-warning: #d97706;
     }
 
     * {
@@ -43,19 +42,31 @@
 
     .container {
       width: 100%;
-      max-width: 900px;
+      max-width: 850px;
       display: flex;
       flex-direction: column;
-      gap: 1.75rem;
+      gap: 2rem;
     }
 
-    header {
-      border-bottom: 2px solid var(--border-main);
-      padding-bottom: 1.5rem;
+    /* PANTALLA DE INICIO (LANDING HERO) */
+    #homeScreen {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .hero-box {
+      border: 2px solid var(--border-main);
+      background: var(--bg-main);
+      padding: 3rem 2rem;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
     }
 
-    .badge {
+    .hero-badge {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.75rem;
       font-weight: 700;
@@ -63,26 +74,65 @@
       text-transform: uppercase;
       background: var(--text-main);
       color: var(--bg-main);
-      padding: 0.25rem 0.6rem;
-      display: inline-block;
+      padding: 0.3rem 0.75rem;
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 650px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+      margin-top: 1rem;
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2.25rem; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .feature-card {
+      border: 1px solid var(--border-main);
+      background: var(--bg-surface);
+      padding: 1.25rem;
+    }
+
+    .feature-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
       margin-bottom: 0.5rem;
     }
 
-    h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      margin-bottom: 0.25rem;
-    }
-
-    header p {
+    .feature-card p {
+      font-size: 0.825rem;
       color: var(--text-muted);
-      font-size: 1.05rem;
+      line-height: 1.45;
     }
 
-    /* Card */
+    /* PANTALLA DE APLICACIÓN (FORMULARIO) */
+    #appScreen {
+      display: none;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
     .card {
       border: 1px solid var(--border-main);
       background: var(--bg-main);
@@ -102,9 +152,6 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-main);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
     input, select {
@@ -122,35 +169,13 @@
       box-shadow: 0 0 0 2px var(--border-main);
     }
 
-    .quick-links {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .chip-btn {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-main);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.35rem 0.7rem;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-    .chip-btn:hover {
-      background: var(--accent-black);
-      color: var(--bg-main);
-    }
-
     .btn {
       background: var(--accent-black);
       color: var(--bg-main);
       border: 1px solid var(--border-main);
       padding: 1.2rem 1.5rem;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -168,13 +193,11 @@
       background: var(--bg-main);
       color: var(--text-main);
       border: 1px solid var(--border-main);
-      padding: 0.45rem 0.85rem;
-      font-size: 0.775rem;
-      width: auto;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
     }
     .btn-secondary:hover { background: var(--bg-surface); }
 
-    /* Detected Badge */
     .detected-bar {
       display: none;
       background: var(--bg-surface);
@@ -255,71 +278,113 @@
 <body>
 
   <div class="container">
-    <header>
-      <span class="badge">ARMANDO PAZ TOTAL</span>
-      <h1>Armando Paz</h1>
-      <p>Extrae TODAS las opiniones de cualquier negocio en Google Maps y genera sus respuestas de una sola vez.</p>
-    </header>
 
-    <!-- Ajustes Opcionales -->
-    <details>
-      <summary>⚙️ Ajustes de Clave (Opcional)</summary>
-      <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-          <select id="providerSelect">
-            <option value="gemini">Google Gemini (Gratis)</option>
-            <option value="openai">OpenAI (gpt-4o-mini)</option>
-          </select>
-          <input type="password" id="apiKeyInput" placeholder="Pega tu API Key (opcional)...">
-        </div>
-        <button class="btn btn-secondary" onclick="saveApiKey()">Guardar Clave</button>
-      </div>
-    </details>
-
-    <!-- FORMULARIO PRINCIPAL UNIFICADO -->
-    <div class="card">
-      <form id="urlForm">
-        <div class="form-group">
-          <label for="mapsUrl">
-            <span>🔗 Pega el enlace de Google Maps del negocio</span>
-          </label>
-          <input type="url" id="mapsUrl" placeholder="https://www.google.com/maps/place/El+G%C3%BCero+Alte%C3%B1o..." required>
-          
-          <div class="quick-links">
-            <span style="font-size:0.75rem; color:var(--text-muted); align-self:center;">Probar con enlace real:</span>
-            <button type="button" class="chip-btn" onclick="loadSample('guero')">📌 El Güero Alteño (Zapopan)</button>
-            <button type="button" class="chip-btn" onclick="loadSample('shawarma')">📌 Casa Shawarma (Guadalajara)</button>
+    <!-- 01. PANTALLA DE INICIO (HOME / BIENVENIDA) -->
+    <div id="homeScreen">
+      <div class="hero-box">
+        <span class="hero-badge">ARMANDO PAZ AI</span>
+        <h1 class="hero-title">Armando Paz</h1>
+        <p class="hero-subtitle">Responde a todas las opiniones de tus clientes en Google Maps de forma rápida, amable y automática.</p>
+        
+        <div class="features-grid">
+          <div class="feature-card">
+            <h3>🕊️ Tranquiliza Quejas</h3>
+            <p>Responde a opiniones de 1 estrella con amabilidad y educación sin perder el control.</p>
+          </div>
+          <div class="feature-card">
+            <h3>📍 Te Muestra Más</h3>
+            <p>Menciona tu negocio y tu ciudad para destacar más arriba cuando la gente busca cerca.</p>
+          </div>
+          <div class="feature-card">
+            <h3>⚡ Todo en 1 Clic</h3>
+            <p>Ingresa la dirección web de tu negocio y la aplicación procesa todas las reseñas juntas.</p>
           </div>
         </div>
 
-        <div class="detected-bar" id="detectedBar">
-          📍 Negocio Encontrado: <strong id="detectedBizTitle">...</strong>
-        </div>
-
-        <button type="submit" class="btn" id="submitBtn">
-          <span class="loader" id="loader"></span>
-          <span id="btnText">🚀 EXTRAER ABSOLUTAMENTE TODAS LAS RESEÑAS</span>
+        <button class="btn" style="margin-top: 1.5rem; max-width: 450px;" onclick="enterApp()">
+          ENTRAR A LA APLICACIÓN →
         </button>
-      </form>
+      </div>
     </div>
 
-    <!-- RESULTADOS COMPLETOS SIN LÍMITES -->
-    <div id="resultsCard" class="card" style="display: none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-main); padding-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
+    <!-- 02. PANTALLA DE APLICACIÓN (FORMULARIO PRINCIPAL) -->
+    <div id="appScreen">
+      <header style="border-bottom: 2px solid var(--border-main); padding-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; text-transform: uppercase;">
-            📋 TODAS LAS RESEÑAS ENCONTRADAS (<span id="totalCountDisplay">0</span>) PARA <span id="bizTitleDisplay">...</span>
-          </h2>
-          <span style="font-size: 0.8rem; color: var(--text-muted);" id="sourceDisplay">...</span>
+          <span class="hero-badge" style="margin-bottom:0.25rem;">ARMANDO PAZ</span>
+          <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.5rem; text-transform:uppercase;">Extracción de Reseñas</h2>
         </div>
-        <button class="btn btn-secondary" id="copyAllBtn">📋 Copiar TODAS en Lote</button>
+        <button class="btn-secondary" onclick="goHome()">← Volver al Inicio</button>
+      </header>
+
+      <!-- Ajustes Opcionales -->
+      <details>
+        <summary>⚙️ Ajustes de Clave (Opcional)</summary>
+        <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+            <select id="providerSelect">
+              <option value="gemini">Google Gemini (Gratis)</option>
+              <option value="openai">OpenAI (gpt-4o-mini)</option>
+            </select>
+            <input type="password" id="apiKeyInput" placeholder="Pega tu API Key (opcional)...">
+          </div>
+          <button class="btn btn-secondary" onclick="saveApiKey()">Guardar Clave</button>
+        </div>
+      </details>
+
+      <!-- FORMULARIO PRINCIPAL UNIFICADO -->
+      <div class="card">
+        <form id="urlForm">
+          <div class="form-group">
+            <label for="mapsUrl">
+              <span>🔗 Pega el enlace de Google Maps del negocio</span>
+            </label>
+            <input type="url" id="mapsUrl" placeholder="https://www.google.com/maps/place/..." required>
+          </div>
+
+          <div class="detected-bar" id="detectedBar">
+            📍 Negocio Encontrado: <strong id="detectedBizTitle">...</strong>
+          </div>
+
+          <button type="submit" class="btn" id="submitBtn">
+            <span class="loader" id="loader"></span>
+            <span id="btnText">🚀 EXTRAER TODAS LAS RESEÑAS Y GENERAR RESPUESTAS</span>
+          </button>
+        </form>
       </div>
 
-      <div id="resultsList"></div>
+      <!-- RESULTADOS COMPLETOS -->
+      <div id="resultsCard" class="card" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-main); padding-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; text-transform: uppercase;">
+              📋 TODAS LAS RESEÑAS ENCONTRADAS (<span id="totalCountDisplay">0</span>) PARA <span id="bizTitleDisplay">...</span>
+            </h2>
+            <span style="font-size: 0.8rem; color: var(--text-muted);" id="sourceDisplay">...</span>
+          </div>
+          <button class="btn btn-secondary" id="copyAllBtn">📋 Copiar TODAS en Lote</button>
+        </div>
+
+        <div id="resultsList"></div>
+      </div>
     </div>
+
   </div>
 
   <script>
+    const homeScreen = document.getElementById('homeScreen');
+    const appScreen = document.getElementById('appScreen');
+
+    function enterApp() {
+      homeScreen.style.display = 'none';
+      appScreen.style.display = 'flex';
+    }
+
+    function goHome() {
+      appScreen.style.display = 'none';
+      homeScreen.style.display = 'flex';
+    }
+
     const mapsUrlInput = document.getElementById('mapsUrl');
     const detectedBar = document.getElementById('detectedBar');
     const detectedBizTitle = document.getElementById('detectedBizTitle');
@@ -338,15 +403,6 @@
         detectedBar.style.display = 'none';
       }
     });
-
-    function loadSample(type) {
-      if (type === 'guero') {
-        mapsUrlInput.value = "https://www.google.com/maps/place/El+G%C3%BCero+Alte%C3%B1o+Cd.+Granja/@20.684961,-103.4621614,15z/";
-      } else {
-        mapsUrlInput.value = "https://www.google.com/maps/place/CASA+SHAWARMA/@20.6734371,-103.3719049,17z/";
-      }
-      mapsUrlInput.dispatchEvent(new Event('input'));
-    }
 
     const providerSelect = document.getElementById('providerSelect');
     const apiKeyInput = document.getElementById('apiKeyInput');
