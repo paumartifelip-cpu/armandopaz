@@ -7,7 +7,7 @@
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-main: #ffffff;
@@ -105,7 +105,7 @@
       border: 1px solid var(--border-apple);
     }
 
-    /* PANTALLA 1: PORTADA */
+    /* PANTALLA 1: PORTADA CON TÍTULO PRINCIPAL MUCHO MÁS GRANDE Y DESTACADO */
     #coverScreen {
       width: 100%;
       flex: 1;
@@ -131,19 +131,20 @@
       width: 100%;
       max-width: 580px;
       height: auto;
-      max-height: 340px;
+      max-height: 320px;
       object-fit: contain;
       background: transparent;
       filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.06));
     }
 
+    /* TÍTULO PRINCIPAL DESTACADO Y MUCHO MÁS GRANDE */
     .cover-subtitle {
-      font-size: 1.15rem;
-      font-weight: 600;
+      font-size: 1.65rem;
+      font-weight: 800;
       color: var(--text-main);
-      max-width: 620px;
-      letter-spacing: -0.01em;
-      line-height: 1.4;
+      max-width: 720px;
+      letter-spacing: -0.025em;
+      line-height: 1.3;
     }
 
     .transformation-box {
@@ -207,8 +208,8 @@
     @media (max-width: 680px) {
       #coverScreen { padding: 1rem 0.85rem; }
       .cover-container { gap: 1rem; }
-      .armando-photo-hero-large { max-height: 220px; }
-      .cover-subtitle { font-size: 1rem; }
+      .armando-photo-hero-large { max-height: 200px; }
+      .cover-subtitle { font-size: 1.3rem; }
       .transformation-box { grid-template-columns: 1fr; gap: 0.65rem; }
       .enter-btn { padding: 1.1rem 1.5rem; font-size: 1rem; }
     }
@@ -239,7 +240,6 @@
       box-shadow: var(--apple-shadow);
     }
 
-    /* FALLO 1 RESUELTO: Adaptación vertical en móviles para la cuadrícula del formulario */
     .form-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -476,6 +476,7 @@
     <div class="cover-container">
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
       
+      <!-- TÍTULO PRINCIPAL DESTACADO MUCHO MÁS GRANDE -->
       <p class="cover-subtitle">
         Responde a todas las opiniones de tus clientes en Google Maps automáticamente.
       </p>
@@ -574,7 +575,6 @@
     <!-- RESULTADOS Y DASHBOARD DE ESTADÍSTICAS -->
     <div id="resultsCard" class="card" style="display: none;">
       
-      <!-- DASHBOARD DINÁMICO DE ESTADÍSTICAS Y TIEMPO AHORRADO -->
       <div class="metrics-grid">
         <div class="metric-card">
           <div class="metric-label">⭐ Valoración Media</div>
@@ -889,7 +889,6 @@
       applyFilters();
     }
 
-    // FALLO 3 RESUELTO: Cálculo dinámico real de estadísticas en vivo según el filtro activo
     function applyFilters() {
       const q = searchInput.value.toLowerCase().trim();
 
@@ -974,7 +973,6 @@
       setTimeout(() => { btn.textContent = '📋 Copiar Respuesta'; }, 1500);
     }
 
-    // FALLO 2 RESUELTO: Codificación limpia para enviar por WhatsApp sin rotura de línea ni parámetros corruptos
     function sendWhatsApp(idx) {
       const item = allResults[idx];
       const respText = document.getElementById(`resp_${idx}`).textContent;
