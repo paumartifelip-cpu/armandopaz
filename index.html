@@ -112,6 +112,83 @@
       max-width: 320px;
     }
 
+    /* MODAL DE NOTIFICACIÓN DE ALTA GAMA ESTILO APPLE (REEMPLAZO TOTAL DE ALERTAS) */
+    #appleModalOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    #appleModalOverlay.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .apple-modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-apple);
+      width: 90%;
+      max-width: 440px;
+      padding: 2rem 1.75rem 1.5rem 1.75rem;
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+
+    #appleModalOverlay.show .apple-modal-card {
+      transform: scale(1);
+    }
+
+    .apple-modal-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .apple-modal-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .apple-modal-msg {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 1.5rem;
+    }
+
+    .apple-modal-btn {
+      background: var(--accent-black);
+      color: var(--bg-main);
+      border: 1px solid var(--accent-black);
+      padding: 0.9rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s ease;
+    }
+    .apple-modal-btn:hover {
+      background: var(--accent-hover);
+    }
+
     /* PANTALLA 1: PORTADA */
     #coverScreen {
       width: 100%;
@@ -463,6 +540,16 @@
 </head>
 <body>
 
+  <!-- MODAL DE ALTA GAMA TIPO APPLE -->
+  <div id="appleModalOverlay" onclick="if(event.target===this) closeAppleModal()">
+    <div class="apple-modal-card">
+      <div class="apple-modal-icon" id="appleModalIcon">✅</div>
+      <h3 class="apple-modal-title" id="appleModalTitle">Título de Notificación</h3>
+      <p class="apple-modal-msg" id="appleModalMsg">Mensaje detallado...</p>
+      <button class="apple-modal-btn" onclick="closeAppleModal()">ACEPTAR</button>
+    </div>
+  </div>
+
   <!-- BARRA DE ESTADO DE CONEXIÓN -->
   <div class="top-api-bar">
     <div style="display:flex; align-items:center; gap:0.6rem;">
@@ -653,12 +740,29 @@
     const bizTitleDisplay = document.getElementById('bizTitleDisplay');
     const realCountBadge = document.getElementById('realCountBadge');
 
+    const appleModalOverlay = document.getElementById('appleModalOverlay');
+    const appleModalIcon = document.getElementById('appleModalIcon');
+    const appleModalTitle = document.getElementById('appleModalTitle');
+    const appleModalMsg = document.getElementById('appleModalMsg');
+
     providerSelect.value = localStorage.getItem('ai_provider') || 'openai';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
 
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark-mode');
       themeToggleBtn.textContent = '☀️ MODO CLARO';
+    }
+
+    /* REEMPLAZO PREMIUM ESTILO APPLE PARA ALERTAS DEL NAVEGADOR */
+    function showAppleAlert(icon, title, message) {
+      appleModalIcon.textContent = icon;
+      appleModalTitle.textContent = title;
+      appleModalMsg.textContent = message;
+      appleModalOverlay.classList.add('show');
+    }
+
+    function closeAppleModal() {
+      appleModalOverlay.classList.remove('show');
     }
 
     function toggleDarkMode() {
@@ -677,8 +781,12 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && appScreen.style.display === 'flex') {
-        goCover();
+      if (e.key === 'Escape') {
+        if (appleModalOverlay.classList.contains('show')) {
+          closeAppleModal();
+        } else if (appScreen.style.display === 'flex') {
+          goCover();
+        }
       }
     });
 
@@ -779,12 +887,13 @@
       }
     }
 
+    /* COMPROBACIÓN CON NOTIFICACIÓN ELEGANTE ESTILO APPLE SIN ALERTAS REAS DE NAVEGADOR */
     async function testConnectionNow() {
       const p = providerSelect.value;
       const key = apiKeyInput.value.trim();
 
       if (!key) {
-        alert('Por favor pega tu clave de API en el recuadro superior primero.');
+        showAppleAlert('⚠️', 'Falta Clave API', 'Por favor pega tu clave de API en el recuadro superior antes de probar la conexión.');
         return;
       }
 
@@ -796,36 +905,36 @@
           if (res.ok) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
             topStatusBadge.textContent = '✓ OPENAI CONECTADO Y VERIFICADO';
-            alert('✅ CONEXIÓN CORRECTA: Tu clave API de OpenAI funciona perfectamente.');
+            showAppleAlert('✅', 'Conexión Correcta', 'Tu clave API de OpenAI ha sido verificada y funciona perfectamente.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
             topStatusBadge.textContent = '✕ CLAVE OPENAI RECHAZADA';
-            alert('❌ ERROR: Tu clave API de OpenAI no es válida o no tiene saldo disponible.');
+            showAppleAlert('❌', 'Clave Rechazada', 'Tu clave API de OpenAI no es válida o no tiene saldo disponible.');
           }
         } else if (p === 'claude') {
           if (key.startsWith('sk-ant-') && key.length > 25) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
             topStatusBadge.textContent = '✓ CLAUDE CONECTADO OK';
-            alert('✅ CONEXIÓN CORRECTA: Tu clave API de Claude (Anthropic) está lista y verificada.');
+            showAppleAlert('✅', 'Conexión Correcta', 'Tu clave API de Claude (Anthropic) está lista y verificada.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
             topStatusBadge.textContent = '✕ CLAVE CLAUDE INVÁLIDA';
-            alert('❌ ERROR: La clave API de Claude no tiene el formato correcto (debe comenzar con sk-ant-...).');
+            showAppleAlert('❌', 'Formato Inválido', 'La clave API de Claude no tiene el formato correcto (debe comenzar con sk-ant-...).');
           }
         } else {
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
           if (res.ok) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
             topStatusBadge.textContent = '✓ GEMINI CONECTADO Y VERIFICADO';
-            alert('✅ CONEXIÓN CORRECTA: Tu clave API de Google Gemini funciona perfectamente.');
+            showAppleAlert('✅', 'Conexión Correcta', 'Tu clave API de Google Gemini ha sido verificada y funciona perfectamente.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
             topStatusBadge.textContent = '✕ CLAVE GEMINI RECHAZADA';
-            alert('❌ ERROR: Tu clave API de Google Gemini no es válida.');
+            showAppleAlert('❌', 'Clave Rechazada', 'Tu clave API de Google Gemini no es válida.');
           }
         }
       } catch (err) {
-        alert('❌ ERROR DE CONEXIÓN: No se pudo verificar la clave. Revisa tu conexión a internet o políticas del navegador.');
+        showAppleAlert('❌', 'Error de Conexión', 'No se pudo verificar la clave. Revisa tu conexión a internet.');
       }
     }
 
@@ -866,12 +975,12 @@
       const tone = toneSelect.value;
 
       if (!inputVal) {
-        alert('Por favor pega el enlace de Google Maps o escribe el nombre del negocio.');
+        showAppleAlert('📍', 'Dirección Necesaria', 'Por favor pega el enlace de Google Maps o escribe el nombre de tu negocio.');
         return;
       }
 
       if (!apiKey) {
-        alert('Por favor pega tu Clave API en la casilla superior.');
+        showAppleAlert('🔑', 'Clave Requerida', 'Por favor pega tu Clave API en la casilla superior para consultar.');
         return;
       }
 
@@ -891,7 +1000,6 @@
       try {
         let reviews = await callAiApiDirect(inputVal, bizName, apiKey, provider, tone);
         
-        // ORDENAR SIEMPRE POR PRIORIDAD: RESEÑAS MÁS NEGATIVAS PRIMERO
         reviews.sort((a, b) => {
           const numA = parseInt(a.rating) || 5;
           const numB = parseInt(b.rating) || 5;
@@ -906,7 +1014,7 @@
 
         resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (err) {
-        alert('⚠️ Error al procesar: ' + err.message);
+        showAppleAlert('⚠️', 'Error de Consulta', 'No se pudo procesar la solicitud: ' + err.message);
       } finally {
         submitBtn.disabled = false;
         loader.style.display = 'none';
@@ -932,7 +1040,6 @@
       return cleanRaw.length > 1 ? cleanRaw : "Tu Negocio";
     }
 
-    /* PARSER DE ALTA SEGURIDAD QUE NUNCA FALLA ANTE RESPUESTAS NO-JSON DE LAS APIS */
     async function callAiApiDirect(url, bizName, apiKey, provider, tone) {
       const prompt = `Devuelve unicamente un array JSON valido con reseñas para el negocio "${bizName}" (${url}). Tono deseado de respuesta: "${tone}". Estructura JSON requerida: [{"reviewer":"Nombre del cliente","rating":"5 estrellas","review":"Comentario del cliente","response":"Respuesta amigable de Armando Paz"}]`;
 
@@ -987,7 +1094,6 @@
         rawContent = data.candidates[0].content.parts[0].text;
       }
 
-      // EXTRACCIÓN Y PARSEO ROBUSTO A PRUEBA DE FALLOS NO-JSON
       return safeParseOrGenerate(rawContent, bizName, tone);
     }
 
@@ -1004,7 +1110,6 @@
         console.warn('El JSON no vino perfectamente formateado, usando motor secundario:', e);
       }
 
-      // GENERADOR SECUNDARIO 100% GARANTIZADO SI LA IA DEVUELVE TEXTO O DISCULPAS
       return [
         {
           reviewer: "Carlos Mendoza",
