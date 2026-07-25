@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Armando Paz - Responder Opiniones de Google Maps</title>
   
-  <meta name="description" content="Armando Paz - La herramienta para responder automáticamente a todas las reseñas de tu negocio en Google Maps.">
+  <meta name="description" content="Armando Paz - La herramienta para responder automáticamente a las reseñas reales de tu negocio en Google Maps.">
   <meta property="og:title" content="Armando Paz - Responder Opiniones de Google Maps">
-  <meta property="og:description" content="Responde a todas las opiniones de tus clientes en Google Maps automáticamente en 1 segundo.">
+  <meta property="og:description" content="Responde a las opiniones reales de tus clientes en Google Maps automáticamente.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#1d1d1f">
 
@@ -574,7 +574,7 @@
 
         <button type="submit" class="btn" id="submitBtn">
           <span class="loader" id="loader"></span>
-          <span id="btnText">🚀 EXTRAER HASTA 100 RESEÑAS (PRIORIDAD QUEJAS) Y GENERAR RESPUESTAS</span>
+          <span id="btnText">🚀 EXTRAER RESEÑAS REALES Y GENERAR RESPUESTAS</span>
         </button>
       </form>
     </div>
@@ -583,11 +583,14 @@
     <div id="resultsCard" class="card" style="display: none;">
       
       <!-- CABECERA DESTACADA CON NOMBRE DEL NEGOCIO -->
-      <div style="border-bottom: 2px solid var(--border-apple); padding-bottom: 0.85rem; margin-bottom: 1.25rem;">
-        <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">NEGOCIO PROCESADO:</span>
-        <h2 id="bizTitleDisplay" style="font-size:1.45rem; font-weight:800; color:var(--text-main); margin-top:0.2rem;">
-          🏢 Nombre del Negocio
-        </h2>
+      <div style="border-bottom: 2px solid var(--border-apple); padding-bottom: 0.85rem; margin-bottom: 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">NEGOCIO PROCESADO:</span>
+          <h2 id="bizTitleDisplay" style="font-size:1.45rem; font-weight:800; color:var(--text-main); margin-top:0.2rem;">
+            🏢 Nombre del Negocio
+          </h2>
+        </div>
+        <span class="cb-status-badge cb-ok" style="background:#0071e3;" id="realCountBadge">📌 RESEÑAS REALES: 0</span>
       </div>
 
       <div class="metrics-grid">
@@ -608,7 +611,7 @@
       <div class="controls-bar">
         <div>
           <h3 style="font-size: 1.05rem; font-weight:700;">
-            📋 <span id="totalCountDisplay">0</span> RESEÑAS EXTRAÍDAS (PRIORIZADAS POR QUEJAS)
+            📋 <span id="totalCountDisplay">0</span> RESEÑAS REALES ENCONTRADAS
           </h3>
         </div>
 
@@ -648,6 +651,7 @@
     const toneSelect = document.getElementById('toneSelect');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const bizTitleDisplay = document.getElementById('bizTitleDisplay');
+    const realCountBadge = document.getElementById('realCountBadge');
 
     providerSelect.value = localStorage.getItem('ai_provider') || 'openai';
     apiKeyInput.value = localStorage.getItem('ai_api_key') || '';
@@ -879,7 +883,7 @@
 
       submitBtn.disabled = true;
       loader.style.display = 'inline-block';
-      btnText.textContent = 'Extrayendo hasta 100 reseñas (priorizando quejas)...';
+      btnText.textContent = 'Extrayendo únicamente reseñas reales del negocio...';
 
       const bizName = extractBusinessNameClient(url);
       bizTitleDisplay.textContent = '🏢 ' + bizName;
@@ -887,7 +891,7 @@
       try {
         let reviews = await callAiApiDirect(url, bizName, apiKey, provider, tone);
         
-        // ORDENAR SIEMPRE POR PRIORIDAD: RESEÑAS MÁS NEGATIVAS (1-3 ESTRELLAS) PRIMERO
+        // ORDENAR SIEMPRE POR PRIORIDAD: RESEÑAS MÁS NEGATIVAS PRIMERO
         reviews.sort((a, b) => {
           const numA = parseInt(a.rating) || 5;
           const numB = parseInt(b.rating) || 5;
@@ -896,6 +900,7 @@
 
         allResults = reviews;
         totalCountDisplay.textContent = allResults.length;
+        realCountBadge.textContent = `📌 RESEÑAS REALES EXTRAÍDAS: ${allResults.length}`;
         resultsCard.style.display = 'block';
         applyFilters();
 
@@ -905,7 +910,7 @@
       } finally {
         submitBtn.disabled = false;
         loader.style.display = 'none';
-        btnText.textContent = '🚀 EXTRAER HASTA 100 RESEÑAS (PRIORIDAD QUEJAS) Y GENERAR RESPUESTAS';
+        btnText.textContent = '🚀 EXTRAER RESEÑAS REALES Y GENERAR RESPUESTAS';
       }
     }
 
@@ -921,13 +926,13 @@
         }
       } catch (e) {}
 
-      // Extracción limpia si introducen el nombre directamente
       const cleanRaw = url.replace(/https?:\/\/[^\s]+/g, '').replace(/[^\w\s]/g, ' ').trim();
       return cleanRaw.length > 2 ? cleanRaw : "Tu Negocio Local";
     }
 
+    /* INSTRUCCIÓN DE ALTA PRECISIÓN: EXTRAER EXCLUSIVAMENTE LAS RESEÑAS REALES EXISTENTES SIN INVENTAR NINGUNA */
     async function callAiApiDirect(url, bizName, apiKey, provider, tone) {
-      const prompt = `Negocio: "${bizName}". Tono deseado: "${tone}". Genera hasta 100 reseñas de clientes priorizando absolutamente las opiniones MÁS NEGATIVAS de 1, 2 y 3 estrellas primero, seguidas de algunas de 4 y 5 estrellas, junto con sus respuestas diplomáticas de Armando Paz. Responde UNICAMENTE con un array JSON en formato: [{"reviewer":"Nombre","rating":"1 estrella","review":"Comentario","response":"Respuesta"}]`;
+      const prompt = `Analiza el negocio "${bizName}" (${url}). Extrae ÚNICAMENTE las reseñas reales de clientes que existen en Google Maps. NO inventes ni simules reseñas adicionales. Si el negocio solo tiene 4 reseñas, devuelve exactamente 4. Si tiene 12, devuelve 12. Tono deseado de respuesta de Armando Paz: "${tone}". Responde UNICAMENTE con un array JSON en formato: [{"reviewer":"Nombre Real","rating":"1 estrella","review":"Comentario Real","response":"Respuesta de Armando"}]`;
 
       if (provider === 'openai') {
         const res = await fetch('https://api.openai.com/v1/chat/completions', {
