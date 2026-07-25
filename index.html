@@ -7,7 +7,7 @@
   <!-- Google Fonts: Space Grotesk & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-main: #ffffff;
@@ -15,12 +15,17 @@
       --border-main: #000000;
       --border-subtle: #e4e4e7;
       --text-main: #09090b;
-      --text-muted: #71717a;
+      --text-muted: #52525b;
       --accent-black: #000000;
       --accent-hover: #27272a;
-      --accent-success: #16a34a;
-      --accent-danger: #dc2626;
-      --accent-warning: #d97706;
+      
+      /* PALETA ACCESIBLE PARA DALTÓNICOS (Alto contraste + Formas) */
+      --cb-ok-bg: #000000;
+      --cb-ok-text: #ffffff;
+      --cb-demo-bg: #e0f2fe;
+      --cb-demo-text: #0369a1;
+      --cb-err-bg: #ffffff;
+      --cb-err-text: #000000;
     }
 
     * {
@@ -43,33 +48,51 @@
       line-height: 1.5;
     }
 
-    /* BARRA SUPERIOR VISIBLE TODO EL TIEMPO */
+    /* BARRA SUPERIOR ACCESIBLE PARA DALTÓNICOS */
     .top-api-bar {
       width: 100%;
-      background: var(--text-main);
-      color: var(--bg-main);
-      padding: 0.75rem 1.5rem;
+      background: #000000;
+      color: #ffffff;
+      padding: 0.85rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 700;
       text-transform: uppercase;
       gap: 1rem;
       flex-wrap: wrap;
     }
 
-    .api-status-badge {
+    /* INDICADORES CON ICONOS Y TEXTO DE ALTO CONTRASTE */
+    .cb-status-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.25rem 0.65rem;
-      border: 1px solid var(--border-subtle);
+      padding: 0.4rem 0.85rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      border: 2px solid #ffffff;
     }
-    .status-ok { background: #16a34a; color: #ffffff; border-color: #22c55e; }
-    .status-demo { background: #d97706; color: #ffffff; border-color: #f59e0b; }
-    .status-error { background: #dc2626; color: #ffffff; border-color: #ef4444; }
+
+    .cb-ok {
+      background: #000000;
+      color: #ffffff;
+      border-color: #ffffff;
+    }
+
+    .cb-demo {
+      background: #38bdf8;
+      color: #000000;
+      border-color: #ffffff;
+    }
+
+    .cb-error {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+    }
 
     #toast {
       position: fixed;
@@ -84,9 +107,10 @@
       text-transform: uppercase;
       display: none;
       z-index: 1000;
+      border: 2px solid #ffffff;
     }
 
-    /* PANTALLA 1: PORTADA LIMPIA CON FOTO DE ARMANDO */
+    /* PANTALLA 1: PORTADA LIMPIA CON IMAGEN COMPLETA DE ARMANDO */
     #coverScreen {
       width: 100%;
       min-height: 90vh;
@@ -100,10 +124,10 @@
 
     .cover-box {
       width: 100%;
-      max-width: 620px;
+      max-width: 650px;
       border: 2px solid var(--border-main);
       background: var(--bg-main);
-      padding: 3.5rem 2.5rem;
+      padding: 3rem 2rem;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -111,13 +135,14 @@
       gap: 1.5rem;
     }
 
-    .armando-photo {
-      width: 140px;
-      height: 140px;
-      object-fit: cover;
-      border: 2px solid var(--border-main);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      margin-bottom: 0.25rem;
+    /* IMAGEN COMPLETA SIN RECORTAR (OBJECT-FIT: CONTAIN) */
+    .armando-photo-full {
+      width: auto;
+      max-width: 280px;
+      max-height: 240px;
+      object-fit: contain; /* Muestra la imagen entera sin recortar */
+      background: transparent;
+      margin-bottom: 0.5rem;
     }
 
     .badge {
@@ -148,10 +173,10 @@
     .enter-btn {
       background: var(--accent-black);
       color: var(--bg-main);
-      border: 1px solid var(--border-main);
+      border: 2px solid var(--border-main);
       padding: 1.25rem 2rem;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -232,14 +257,15 @@
     .btn-secondary {
       background: var(--bg-main);
       color: var(--text-main);
-      border: 1px solid var(--border-main);
-      padding: 0.45rem 0.85rem;
-      font-size: 0.775rem;
+      border: 2px solid var(--border-main);
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
     }
     .btn-secondary:hover { background: var(--bg-surface); }
 
-    /* PANEL SUPER VISIBLE DE CLAVES */
+    /* PANEL ACCESIBLE DE CLAVES */
     .key-selector-panel {
       border: 2px solid var(--border-main);
       background: var(--bg-surface);
@@ -292,15 +318,15 @@
 
     .verification-badge {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      padding: 0.2rem 0.5rem;
-      border: 1px solid var(--border-main);
+      padding: 0.3rem 0.6rem;
+      border: 2px solid var(--border-main);
       display: inline-block;
       text-transform: uppercase;
     }
-    .v-good { background: #dcfce7; color: #15803d; border-color: #86efac; }
-    .v-bad { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+    .v-good { background: #000000; color: #ffffff; }
+    .v-bad { background: #ffffff; color: #000000; }
 
     .review-text {
       font-size: 0.875rem;
@@ -332,22 +358,23 @@
 </head>
 <body>
 
-  <!-- BARRA DE ESTADO VISIBLE TODO EL TIEMPO -->
+  <!-- BARRA DE ESTADO ACCESIBLE PARA DALTÓNICOS -->
   <div class="top-api-bar">
-    <div>
-      <span>ESTADO DE CONEXIÓN IA:</span>
-      <span class="api-status-badge status-demo" id="topStatusBadge">🟡 MODO DIRECTO (SIN CLAVE)</span>
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+      <span>ESTADO DE CONEXIÓN:</span>
+      <!-- INDICADOR CLARO CON TEXTO E ICONOS -->
+      <span class="cb-status-badge cb-demo" id="topStatusBadge">⚡ MODO DIRECTO (SIN CLAVE)</span>
     </div>
     <button class="btn-secondary" style="background:#ffffff; color:#000000;" onclick="testConnectionNow()">🧪 COMPROBAR CONEXIÓN AHORA</button>
   </div>
 
   <div id="toast">✅ Acción realizada correctamente</div>
 
-  <!-- PANTALLA 1: PORTADA LIMPIA CON LA FOTO DE ARMANDO -->
+  <!-- PANTALLA 1: PORTADA LIMPIA CON IMAGEN COMPLETA DE ARMANDO -->
   <div id="coverScreen">
     <div class="cover-box">
-      <!-- FOTOGRAFÍA DE ARMANDO -->
-      <img src="armando.png" alt="Armando Paz" class="armando-photo">
+      <!-- FOTOGRAFÍA ENTERA DE ARMANDO SIN RECORTAR -->
+      <img src="armando.png" alt="Armando Paz - Imagen Completa" class="armando-photo-full">
       
       <span class="badge">ARMANDO PAZ AI</span>
       <h1 class="cover-title">Armando Paz</h1>
@@ -363,7 +390,7 @@
   <div id="appScreen">
     <header>
       <div style="display:flex; align-items:center; gap:0.75rem;">
-        <img src="armando.png" alt="Armando Paz" style="width:45px; height:45px; object-fit:cover; border:1px solid var(--border-main);">
+        <img src="armando.png" alt="Armando Paz" style="height:45px; object-fit:contain;">
         <div>
           <span class="badge" style="margin-bottom:0.15rem;">ARMANDO PAZ</span>
           <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.3rem; text-transform:uppercase;">Opiniones del Negocio</h2>
@@ -372,7 +399,7 @@
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
     </header>
 
-    <!-- SECTOR SUPER VISIBLE DE CLAVES Y PROVEEDORES -->
+    <!-- PANEL ACCESIBLE DE CLAVES -->
     <div class="key-selector-panel">
       <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:0.9rem; text-transform:uppercase; margin-bottom:0.75rem;">
         🔑 Configuración de Clave API (Elige tu proveedor)
@@ -469,19 +496,20 @@
       updateLiveStatus();
     }
 
+    // INDICADOR ACCESIBLE PARA DALTÓNICOS (Símbolos ✓ / ✕ + Texto de Alto Contraste)
     function updateLiveStatus() {
       const p = providerSelect.value;
       const key = apiKeyInput.value.trim();
 
       if (p === 'demo') {
-        topStatusBadge.className = 'api-status-badge status-demo';
-        topStatusBadge.textContent = '🟡 MODO DIRECTO (SIN CLAVE)';
+        topStatusBadge.className = 'cb-status-badge cb-demo';
+        topStatusBadge.textContent = '⚡ MODO DIRECTO (SIN CLAVE)';
       } else if (key.length > 10) {
-        topStatusBadge.className = 'api-status-badge status-ok';
-        topStatusBadge.textContent = `🟢 CLAVE CONECTADA (${p.toUpperCase()})`;
+        topStatusBadge.className = 'cb-status-badge cb-ok';
+        topStatusBadge.textContent = `✓ CLAVE CONECTADA OK [${p.toUpperCase()}]`;
       } else {
-        topStatusBadge.className = 'api-status-badge status-error';
-        topStatusBadge.textContent = `🔴 INGRESA TU CLAVE DE ${p.toUpperCase()}`;
+        topStatusBadge.className = 'cb-status-badge cb-error';
+        topStatusBadge.textContent = `✕ FALTA INGRESAR CLAVE [${p.toUpperCase()}]`;
       }
     }
 
@@ -519,28 +547,28 @@
         if (p === 'openai') {
           const res = await fetch('https://api.openai.com/v1/models', { headers: { 'Authorization': `Bearer ${key}` } });
           if (res.ok) {
-            topStatusBadge.className = 'api-status-badge status-ok';
-            topStatusBadge.textContent = '🟢 OPENAI FUNCIONANDO OK';
-            alert('✅ CONEXIÓN CORRECTA: Tu clave de OpenAI funciona perfectamente.');
+            topStatusBadge.className = 'cb-status-badge cb-ok';
+            topStatusBadge.textContent = '✓ OPENAI CONECTADO Y VERIFICADO';
+            alert('✓ CONEXIÓN CORRECTA: Tu clave de OpenAI funciona perfectamente.');
           } else {
-            topStatusBadge.className = 'api-status-badge status-error';
-            topStatusBadge.textContent = '🔴 CLAVE OPENAI RECHAZADA';
-            alert('❌ ERROR: Tu clave de OpenAI no es válida o está caducada.');
+            topStatusBadge.className = 'cb-status-badge cb-error';
+            topStatusBadge.textContent = '✕ CLAVE OPENAI RECHAZADA';
+            alert('✕ ERROR: Tu clave de OpenAI no es válida o está caducada.');
           }
         } else {
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
           if (res.ok) {
-            topStatusBadge.className = 'api-status-badge status-ok';
-            topStatusBadge.textContent = '🟢 GEMINI / CLOUD FUNCIONANDO OK';
-            alert('✅ CONEXIÓN CORRECTA: Tu clave de Google funciona perfectamente.');
+            topStatusBadge.className = 'cb-status-badge cb-ok';
+            topStatusBadge.textContent = '✓ GOOGLE CONECTADO Y VERIFICADO';
+            alert('✓ CONEXIÓN CORRECTA: Tu clave de Google funciona perfectamente.');
           } else {
-            topStatusBadge.className = 'api-status-badge status-error';
-            topStatusBadge.textContent = '🔴 CLAVE GOOGLE RECHAZADA';
-            alert('❌ ERROR: Tu clave de Google no es válida.');
+            topStatusBadge.className = 'cb-status-badge cb-error';
+            topStatusBadge.textContent = '✕ CLAVE GOOGLE RECHAZADA';
+            alert('✕ ERROR: Tu clave de Google no es válida.');
           }
         }
       } catch (err) {
-        alert('❌ Error de conexión a internet.');
+        alert('✕ Error de conexión a internet.');
       }
     }
 
@@ -641,7 +669,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
               <span style="font-family:'Space Grotesk',sans-serif; font-weight:700;">👤 RESEÑA #${idx+1}: ${escapeHtml(item.reviewer)} (${escapeHtml(item.rating)})</span>
               <span class="verification-badge ${isBad ? 'v-bad' : 'v-good'}">
-                ${isBad ? '⚠️ QUEJA ATENDIDA' : '✅ 5 ESTRELLAS'}
+                ${isBad ? '✕ QUEJA ATENDIDA' : '✓ 5 ESTRELLAS'}
               </span>
             </div>
             <div class="review-text">"${escapeHtml(item.review)}"</div>
@@ -656,7 +684,7 @@
       const text = document.getElementById(`resp_${idx}`).textContent;
       navigator.clipboard.writeText(text).then(() => {
         btn.textContent = '✅ ¡COPIADO!';
-        showToast('✅ Respuesta copiada al portapapeles');
+        showToast('✓ Respuesta copiada al portapapeles');
         setTimeout(() => { btn.textContent = '📋 COPIAR ESTA RESPUESTA'; }, 1500);
       });
     }
@@ -664,7 +692,7 @@
     document.getElementById('copyAllBtn').addEventListener('click', () => {
       const fullText = allResults.map(i => `[${i.reviewer}]\n${i.response}\n`).join('\n');
       navigator.clipboard.writeText(fullText).then(() => {
-        showToast('✅ 40 Respuestas copiadas al portapapeles');
+        showToast('✓ 40 Respuestas copiadas al portapapeles');
       });
     });
 
