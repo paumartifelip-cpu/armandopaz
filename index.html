@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Armando Paz - El Pacificador de Reseñas</title>
+  <title>Armando Paz - Responder Opiniones de Clientes</title>
   
-  <meta name="description" content="Armando Paz - Le das una mala opinión de tu negocio y te la devuelve convertida en la respuesta perfecta para no perder clientes.">
-  <meta property="og:title" content="Armando Paz - El Pacificador de Reseñas">
-  <meta property="og:description" content="Le das una mala opinión de tu negocio y te la devuelve convertida en la respuesta perfecta para no perder clientes.">
+  <meta name="description" content="Armando Paz - Pegas una mala opinión de tu negocio y te la devuelve convertida en la respuesta perfecta para no perder clientes.">
+  <meta property="og:title" content="Armando Paz - Responder Opiniones">
+  <meta property="og:description" content="Pegas una mala opinión de tu negocio y te la devuelve convertida en la respuesta perfecta para no perder clientes.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#1d1d1f">
 
@@ -180,7 +180,7 @@
       letter-spacing: 0.02em;
     }
 
-    /* PANTALLA 1: PORTADA MINIMALISTA APPLE (1 FRASE + TRANSFORMACIÓN CLARA) */
+    /* PANTALLA 1: PORTADA APPLE (1 FRASE + TRANSFORMACIÓN CLARA) */
     #coverScreen {
       width: 100%;
       flex: 1;
@@ -287,11 +287,11 @@
       .enter-btn { padding: 1rem 1.25rem; font-size: 0.95rem; }
     }
 
-    /* PANTALLA 2: APLICACIÓN ESTILO APPLE CON SELECTOR DE ESTRATEGIAS DE CALMA EN GRID */
+    /* PANTALLA 2: APLICACIÓN 100% CLARA SIN TECNICISMOS */
     #appScreen {
       display: none;
       width: 100%;
-      max-width: 760px;
+      max-width: 680px;
       padding: 1.75rem 1.25rem;
       margin: 0 auto;
       flex-direction: column;
@@ -321,7 +321,7 @@
     }
 
     label {
-      font-size: 0.775rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--text-main);
       letter-spacing: -0.01em;
@@ -342,7 +342,7 @@
       border-color: var(--accent-black);
     }
 
-    /* NUEVO SELECTOR VISUAL DE ESTRATEGIAS DE CALMA (REEMPLAZA EL DESPLEGABLE) */
+    /* TARJETAS DE OPCIONES SENCILLAS SIN TECNICISMOS */
     .calm-strategy-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -463,28 +463,28 @@
   <!-- MODAL TIPO APPLE -->
   <div id="appleModalOverlay" onclick="if(event.target===this) closeAppleModal()">
     <div class="apple-modal-card">
-      <h3 class="apple-modal-title" id="appleModalTitle">Título</h3>
+      <h3 class="apple-modal-title" id="appleModalTitle">Aviso</h3>
       <p class="apple-modal-msg" id="appleModalMsg">Mensaje...</p>
       <button class="apple-modal-btn" onclick="closeAppleModal()">ACEPTAR</button>
     </div>
   </div>
 
-  <!-- BARRA DE ESTADO DE CLAVE API -->
+  <!-- BARRA DE ESTADO DE CLAVE DE ENTRADA -->
   <div class="top-api-bar">
     <div style="display:flex; align-items:center; gap:0.6rem;">
-      <span>CLAVE API:</span>
-      <span class="cb-status-badge cb-error" id="topStatusBadge">FALTA CLAVE</span>
+      <span>TU LLAVE:</span>
+      <span class="cb-status-badge cb-error" id="topStatusBadge">FALTA ESCRIBIR LA LLAVE</span>
     </div>
     
     <div style="display:flex; gap:0.5rem; align-items:center;">
       <button class="btn-secondary" style="background:transparent; color:inherit; border:1px solid rgba(255,255,255,0.3);" onclick="toggleDarkMode()" id="themeToggleBtn">MODO OSCURO</button>
-      <button class="btn-secondary" style="background:#0071e3; color:#fff; border:none;" onclick="testConnectionNow()">PROBAR CLAVE</button>
+      <button class="btn-secondary" style="background:#0071e3; color:#fff; border:none;" onclick="testConnectionNow()">PROBAR SI FUNCIONA</button>
     </div>
   </div>
 
-  <div id="toast">Acción realizada correctamente</div>
+  <div id="toast">Listo</div>
 
-  <!-- PANTALLA 1: PORTADA APPLE (1 FRASE + TRANSFORMACIÓN ENTENDIBLE POR UN NIÑO O UN ABUELO) -->
+  <!-- PANTALLA 1: PORTADA ENTENDIBLE DE UN NIÑO A UN ABUELO -->
   <div id="coverScreen">
     <div class="cover-container">
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
@@ -510,34 +510,34 @@
     </div>
   </div>
 
-  <!-- PANTALLA 2: APLICACIÓN CON MATRIZ VISUAL DE ESTRATEGIAS DE CALMA -->
+  <!-- PANTALLA 2: APLICACIÓN CON LENGUAJE ULTRA SENCILLO SIN TECNICISMOS -->
   <div id="appScreen">
     <header>
       <div style="display:flex; align-items:center; gap:0.65rem;">
         <img src="armando.png" alt="Armando Paz" style="height:34px; object-fit:contain;">
         <div>
           <h2 style="font-size:1.1rem; font-weight:800;">Armando Paz</h2>
-          <span style="font-size:0.725rem; color:var(--text-muted);">Pacificador Estratégico de Reseñas</span>
+          <span style="font-size:0.725rem; color:var(--text-muted);">Respuestas para Opiniones de Clientes</span>
         </div>
       </div>
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
     </header>
 
-    <!-- CLAVE API -->
+    <!-- CASILLA DE LLAVE DE ENTRADA -->
     <div class="key-selector-card">
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
         <div class="form-group" style="margin-bottom:0;">
-          <label for="providerSelect">Proveedor API</label>
+          <label for="providerSelect">¿Qué servicio usas?</label>
           <select id="providerSelect" onchange="onProviderChange()">
-            <option value="openai">OpenAI (gpt-4o-mini)</option>
+            <option value="openai">OpenAI (ChatGPT - Recomendado)</option>
             <option value="claude">Claude (Anthropic)</option>
             <option value="gemini">Google Gemini</option>
           </select>
         </div>
         
         <div class="form-group" style="margin-bottom:0;">
-          <label for="apiKeyInput">Clave API</label>
-          <input type="password" id="apiKeyInput" placeholder="Pega tu clave aquí..." oninput="updateLiveStatus()">
+          <label for="apiKeyInput">Pega tu Llave aquí</label>
+          <input type="password" id="apiKeyInput" placeholder="Pega tu llave aquí (sk-...)" oninput="updateLiveStatus()">
         </div>
       </div>
 
@@ -546,81 +546,81 @@
           <button type="button" class="btn-secondary" onclick="copyApiKey()">Copiar</button>
           <button type="button" class="btn-secondary" style="color:#be123c;" onclick="clearApiKey()">Borrar</button>
         </div>
-        <button class="btn-secondary" style="background:var(--accent-black); color:var(--bg-main);" onclick="saveApiKey()">Guardar Clave</button>
+        <button class="btn-secondary" style="background:var(--accent-black); color:var(--bg-main);" onclick="saveApiKey()">Guardar Llave</button>
       </div>
     </div>
 
-    <!-- FORMULARIO CON ESTRATEGIAS DE CALMA EN MATRIZ VISUAL -->
+    <!-- FORMULARIO 100% CLARO SIN TECNICISMOS -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
-          <label for="bizNameInput">Nombre del Negocio (Opcional)</label>
-          <input type="text" id="bizNameInput" placeholder="Ejemplo: Bar Pepe / Mi Negocio">
+          <label for="bizNameInput">Nombre de tu negocio (Opcional)</label>
+          <input type="text" id="bizNameInput" placeholder="Ejemplo: Bar Pepe / Mi Tienda">
         </div>
 
         <div class="form-group">
-          <label for="reviewsInput">Reseña del Cliente</label>
-          <textarea id="reviewsInput" rows="3" placeholder="Ejemplo: 'Tardaron 40 minutos en atender y la comida llegó fría.'" required></textarea>
+          <label for="reviewsInput">La queja u opinión que te dejó el cliente</label>
+          <textarea id="reviewsInput" rows="3" placeholder="Ejemplo: 'Tardaron mucho en atender y la comida llegó fría.'" required></textarea>
         </div>
 
-        <!-- MATRIZ DE ESTRATEGIAS DE CALMA VISUALES (SIN DESPLEGABLE) -->
+        <!-- OPCIONES EN LENGUAJE COTIDIANO ENTENDIBLE POR CUALQUIERA -->
         <div class="form-group">
-          <label>Selecciona la Estrategia de Calma de Armando Paz</label>
+          <label>¿Qué quieres conseguir con la respuesta?</label>
           <div class="calm-strategy-grid">
             <div class="strategy-card active" onclick="selectStrategy('calm', this)">
-              <div class="strategy-title">Calma Absoluta & Empatía</div>
-              <div class="strategy-desc">Desarma la rabia del cliente con máxima empatía y comprensión sin discutir.</div>
+              <div class="strategy-title">Calmarlo con cariño</div>
+              <div class="strategy-desc">Decirle que lo sentimos mucho y tratarlo con muchísimo respeto para que se tranquilice.</div>
             </div>
             
             <div class="strategy-card" onclick="selectStrategy('return', this)">
-              <div class="strategy-title">Garantía de Retorno</div>
-              <div class="strategy-desc">Invita al cliente a volver con un trato preferencial para recuperar su confianza.</div>
+              <div class="strategy-title">Conseguir que vuelva</div>
+              <div class="strategy-desc">Invitarlo a regresar a tu negocio con una gran sonrisa y una buena bienvenida.</div>
             </div>
 
             <div class="strategy-card" onclick="selectStrategy('attack', this)">
-              <div class="strategy-title">Escudo Ante Reseña Falsa</div>
-              <div class="strategy-desc">Desmonta ataques injustos o falsos con elegancia, firmeza y caballerosidad.</div>
+              <div class="strategy-title">Defenderte si es mentira</div>
+              <div class="strategy-desc">Aclarar las cosas con mucha educación si el cliente inventó la queja o está mintiendo.</div>
             </div>
 
             <div class="strategy-card" onclick="selectStrategy('happy', this)">
-              <div class="strategy-title">Satisfacción & Disculpa</div>
-              <div class="strategy-desc">Acepta el error con humildad y ofrece una solución inmediata al cliente.</div>
+              <div class="strategy-title">Pedir perdón y arreglarlo</div>
+              <div class="strategy-desc">Reconocer si nos equivocamos y ofrecerle una solución rápida para que quede contento.</div>
             </div>
 
             <div class="strategy-card" onclick="selectStrategy('share', this)">
-              <div class="strategy-title">Recomendación & Boca a Boca</div>
-              <div class="strategy-desc">Motiva al cliente contento a compartir su buena experiencia con sus amigos.</div>
+              <div class="strategy-title">Que nos recomiende a sus amigos</div>
+              <div class="strategy-desc">Darle las gracias de corazón para que hable muy bien de tu negocio a sus conocidos.</div>
             </div>
 
             <div class="strategy-card" onclick="selectStrategy('corporate', this)">
-              <div class="strategy-title">Autoridad Corporativa</div>
-              <div class="strategy-desc">Respuesta elegante, formal e impecable de alta jerarquía empresarial.</div>
+              <div class="strategy-title">Respuesta muy seria y educada</div>
+              <div class="strategy-desc">Una respuesta formal, elegante y muy seria como la de una gran empresa.</div>
             </div>
           </div>
         </div>
 
-        <!-- COMPENSACIÓN PACIFICADORA -->
+        <!-- COMPENSACIÓN EN LENGUAJE SENCILLO -->
         <div class="form-group" style="margin-bottom:1.25rem;">
-          <label for="compInput">Compensación Pacificadora Opcional</label>
-          <input type="text" id="compInput" placeholder="Ejemplo: Te invitamos al café en tu próxima visita / 10% de descuento">
+          <label for="compInput">¿Quieres invitarlo a algo? (Opcional)</label>
+          <input type="text" id="compInput" placeholder="Ejemplo: Un café gratis en su próxima visita / Un 10% de descuento">
         </div>
 
         <button type="submit" class="btn" id="submitBtn">
           <span class="loader" id="loader"></span>
-          <span id="btnText">GENERAR RESPUESTA PACIFICADORA</span>
+          <span id="btnText">CREAR LA RESPUESTA PERFECTA</span>
         </button>
       </form>
 
-      <!-- RESULTADO PACIFICADOR -->
+      <!-- RESULTADO CON LENGUAJE SENCILLO -->
       <div id="resultBox" class="result-box" style="display: none;">
         <div>
-          <span class="evaluation-badge" id="evalBadge">ESTRATEGIA APLICADA</span>
+          <span class="evaluation-badge" id="evalBadge">LO QUE HACE ESTA RESPUESTA</span>
           <p id="evalText" style="font-size:0.875rem; font-weight:600; margin-top:0.4rem; color:var(--text-main);"></p>
         </div>
 
         <div>
           <label style="font-size:0.725rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">
-            RESPUESTA DIPLOMÁTICA LISTA PARA ENVIAR (ARMANDO PAZ):
+            RESPUESTA LISTA PARA COPIAR Y PEGAR:
           </label>
           <div class="response-text" id="responseTextDisplay" style="margin-top:0.3rem;"></div>
         </div>
@@ -628,7 +628,7 @@
         <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.35rem;">
           <button class="btn btn-secondary" onclick="copyResultText(this)">Copiar Respuesta</button>
           <button class="btn btn-secondary" style="background:#25d366; color:#fff; border:none;" onclick="sendWhatsAppResult()">Enviar por WhatsApp</button>
-          <button class="btn btn-secondary" onclick="regenerateResultVariant()">Probar Otra Variante</button>
+          <button class="btn btn-secondary" onclick="regenerateResultVariant()">Ver otra versión</button>
         </div>
       </div>
     </div>
@@ -703,10 +703,10 @@
 
       if (key.length > 8) {
         topStatusBadge.className = 'cb-status-badge cb-ok';
-        topStatusBadge.textContent = `${p.toUpperCase()} CONFIGURADA`;
+        topStatusBadge.textContent = `LLAVE LISTA Y GUARDADA`;
       } else {
         topStatusBadge.className = 'cb-status-badge cb-error';
-        topStatusBadge.textContent = `FALTA CLAVE ${p.toUpperCase()}`;
+        topStatusBadge.textContent = `FALTA ESCRIBIR LA LLAVE`;
       }
     }
 
@@ -752,20 +752,20 @@
       localStorage.setItem('ai_provider', providerSelect.value);
       localStorage.setItem('ai_api_key', apiKeyInput.value.trim());
       updateLiveStatus();
-      showToast('Clave guardada correctamente');
+      showToast('Llave guardada correctamente');
     }
 
     function copyApiKey() {
       const key = apiKeyInput.value.trim();
-      if (!key) { showToast('No hay clave escrita'); return; }
-      copyTextToClipboard(key, 'Clave copiada');
+      if (!key) { showToast('No hay llave escrita'); return; }
+      copyTextToClipboard(key, 'Llave copiada');
     }
 
     function clearApiKey() {
       apiKeyInput.value = '';
       localStorage.removeItem('ai_api_key');
       updateLiveStatus();
-      showToast('Clave eliminada');
+      showToast('Llave eliminada');
     }
 
     async function testConnectionNow() {
@@ -773,48 +773,48 @@
       const key = apiKeyInput.value.trim();
 
       if (!key) {
-        showAppleAlert('Falta Clave API', 'Escribe o pega tu clave de API arriba primero.');
+        showAppleAlert('Falta la Llave', 'Escribe tu llave de entrada arriba primero.');
         return;
       }
 
-      showToast('Probando conexión...');
+      showToast('Probando si funciona...');
 
       try {
         if (p === 'openai') {
           const res = await fetch('https://api.openai.com/v1/models', { headers: { 'Authorization': `Bearer ${key}` } });
           if (res.ok) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
-            topStatusBadge.textContent = 'OPENAI CONECTADO';
-            showAppleAlert('Conexión Correcta', 'Tu clave API de OpenAI funciona perfectamente.');
+            topStatusBadge.textContent = 'LLAVE LISTA Y FUNCIONANDO';
+            showAppleAlert('Funciona Perfecto', 'Tu llave está lista para crear respuestas.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
-            topStatusBadge.textContent = 'CLAVE RECHAZADA';
-            showAppleAlert('Clave Rechazada', 'Tu clave de OpenAI no es válida o no tiene saldo.');
+            topStatusBadge.textContent = 'LLAVE NO VÁLIDA';
+            showAppleAlert('Llave No Válida', 'La llave que pusiste no funciona o no tiene saldo.');
           }
         } else if (p === 'claude') {
           if (key.startsWith('sk-ant-') && key.length > 20) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
-            topStatusBadge.textContent = 'CLAUDE CONECTADO';
-            showAppleAlert('Conexión Correcta', 'Tu clave API de Claude está lista.');
+            topStatusBadge.textContent = 'LLAVE LISTA Y FUNCIONANDO';
+            showAppleAlert('Funciona Perfecto', 'Tu llave está lista.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
-            topStatusBadge.textContent = 'CLAVE INVÁLIDA';
-            showAppleAlert('Formato Inválido', 'La clave de Claude debe comenzar con sk-ant-...');
+            topStatusBadge.textContent = 'LLAVE NO VÁLIDA';
+            showAppleAlert('Llave No Válida', 'La llave debe comenzar con sk-ant-...');
           }
         } else {
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
           if (res.ok) {
             topStatusBadge.className = 'cb-status-badge cb-ok';
-            topStatusBadge.textContent = 'GEMINI CONECTADO';
-            showAppleAlert('Conexión Correcta', 'Tu clave API de Google Gemini funciona perfectamente.');
+            topStatusBadge.textContent = 'LLAVE LISTA Y FUNCIONANDO';
+            showAppleAlert('Funciona Perfecto', 'Tu llave funciona perfectamente.');
           } else {
             topStatusBadge.className = 'cb-status-badge cb-error';
-            topStatusBadge.textContent = 'CLAVE RECHAZADA';
-            showAppleAlert('Clave Rechazada', 'Tu clave de Google Gemini no es válida.');
+            topStatusBadge.textContent = 'LLAVE NO VÁLIDA';
+            showAppleAlert('Llave No Válida', 'La llave ingresada no es válida.');
           }
         }
       } catch (err) {
-        showAppleAlert('Error de Conexión', 'No se pudo verificar la clave. Revisa tu internet.');
+        showAppleAlert('Error de Conexión', 'No se pudo revisar la llave. Mira si tienes internet.');
       }
     }
 
@@ -848,19 +848,19 @@
       const compOffer = compInput.value.trim();
 
       if (!reviewText) {
-        showAppleAlert('Reseña Requerida', 'Por favor pega la reseña del cliente.');
+        showAppleAlert('Escribe la Opinión', 'Por favor pega la queja u opinión del cliente.');
         return;
       }
 
       if (!apiKey) {
-        showAppleAlert('Clave Requerida', 'Por favor pega tu Clave API arriba.');
+        showAppleAlert('Falta la Llave', 'Por favor pega tu llave de entrada arriba.');
         return;
       }
 
       isProcessing = true;
       submitBtn.disabled = true;
       loader.style.display = 'inline-block';
-      btnText.textContent = 'Generando respuesta de Armando Paz...';
+      btnText.textContent = 'Creando la respuesta perfecta...';
 
       try {
         const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, strategy, compOffer);
@@ -872,29 +872,29 @@
 
         resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (err) {
-        showAppleAlert('Error al Procesar', 'No se pudo generar la respuesta: ' + err.message);
+        showAppleAlert('No se pudo crear', 'Ocurrió un error: ' + err.message);
       } finally {
         isProcessing = false;
         submitBtn.disabled = false;
         loader.style.display = 'none';
-        btnText.textContent = 'GENERAR RESPUESTA PACIFICADORA';
+        btnText.textContent = 'CREAR LA RESPUESTA PERFECTA';
       }
     }
 
     async function generateDirectResponse(reviewText, bizName, apiKey, provider, strategy, compOffer) {
       let goalDesc = "";
-      if (strategy === "calm") goalDesc = "Calma Absoluta & Empatía Suprema. Desarmar la rabia del cliente molesto con extrema caballerosidad y comprension sin discutir.";
-      else if (strategy === "return") goalDesc = "Garantia de Retorno. Conseguir que el cliente VUELVA invitandolo de nuevo de forma muy calida y ofreciendo una atención o bienvenida especial.";
-      else if (strategy === "happy") goalDesc = "Satisfacción & Disculpa. Dejar al cliente 100% CONTENTO y satisfecho, pidiendo una disculpa impecable si hubo queja y asegurando su plena satisfaccion.";
-      else if (strategy === "share") goalDesc = "Recomendacion & Boca a boca. Lograr que el cliente nos RECOMIENDE y COMPARTA su experiencia con amigos, familiares y en redes sociales.";
-      else if (strategy === "attack") goalDesc = "Escudo ante Reseña Falsa. Neutralizar una RESEÑA FALSA O ATAQUE de la competencia con elegancia, firmeza y total caballerosidad sin entrar en conflicto.";
-      else goalDesc = "Autoridad Corporativa. Dar una imagen 100% PROFESIONAL, formal, corporativa e impecable de maxima autoridad.";
+      if (strategy === "calm") goalDesc = "Calmarlo con cariño. Desarmar la rabia del cliente molesto con extrema educación y comprension sin discutir.";
+      else if (strategy === "return") goalDesc = "Conseguir que vuelva. Invitar al cliente a regresar ofreciendo una gran acogida.";
+      else if (strategy === "happy") goalDesc = "Pedir perdón y arreglarlo. Aceptar si hubo error y ofrecerle una solución rápida para dejarlo contento.";
+      else if (strategy === "share") goalDesc = "Que nos recomiende a sus amigos. Darle las gracias para que hable muy bien de tu negocio a sus conocidos.";
+      else if (strategy === "attack") goalDesc = "Defenderte si es mentira. Aclarar las cosas con mucha educación si el cliente inventó la queja sin pelear.";
+      else goalDesc = "Respuesta muy seria y educada. Dar una imagen formal, elegante y seria de gran empresa.";
 
       if (compOffer) {
-        goalDesc += ` ADEMAS, incluye elegantemente la siguiente compensacion ofrecida por el negocio: "${compOffer}".`;
+        goalDesc += ` ADEMAS, incluye amablemente el siguiente regalo o detalle: "${compOffer}".`;
       }
 
-      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nESTRATEGIA PACIFICADORA: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Da una breve explicacion de 1 frase de la estrategia utilizada ("evaluation").\n2. Escribe la respuesta diplomatica de Armando Paz enfocada 100% en cumplir ese objetivo ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Estrategia breve","response":"Respuesta de Armando Paz"}`;
+      const prompt = `Negocio: "${bizName}". Opinión del cliente:\n"${reviewText}"\n\nOBJETIVO: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Explica en 1 frase muy sencilla qué hace esta respuesta ("evaluation").\n2. Escribe la respuesta amable de Armando Paz para el cliente ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Explicacion sencilla","response":"Respuesta amable de Armando Paz"}`;
 
       let rawContent = "";
 
@@ -908,12 +908,12 @@
           body: JSON.stringify({
             model: 'gpt-4o-mini',
             messages: [
-              { role: 'system', content: 'Eres Armando Paz, el mediador pacificador de negocios locales mas respetado. Responde UNICAMENTE con el objeto JSON pedido.' },
+              { role: 'system', content: 'Eres Armando Paz, la persona amable que ayuda a los negocios a responder opiniones. Responde UNICAMENTE con el objeto JSON pedido.' },
               { role: 'user', content: prompt }
             ]
           })
         });
-        if (!res.ok) throw new Error('Clave API de OpenAI rechazada (HTTP ' + res.status + ')');
+        if (!res.ok) throw new Error('La llave no funciona o no tiene saldo (HTTP ' + res.status + ')');
         const data = await res.json();
         rawContent = data?.choices?.[0]?.message?.content || "";
       } else if (provider === 'claude') {
@@ -931,7 +931,7 @@
             messages: [{ role: 'user', content: prompt }]
           })
         });
-        if (!res.ok) throw new Error('Clave API de Claude rechazada (HTTP ' + res.status + ')');
+        if (!res.ok) throw new Error('La llave de Claude no es válida (HTTP ' + res.status + ')');
         const data = await res.json();
         rawContent = data?.content?.[0]?.text || "";
       } else {
@@ -942,7 +942,7 @@
             contents: [{ parts: [{ text: prompt }] }]
           })
         });
-        if (!res.ok) throw new Error('Clave API de Gemini rechazada (HTTP ' + res.status + ')');
+        if (!res.ok) throw new Error('La llave de Gemini no es válida (HTTP ' + res.status + ')');
         const data = await res.json();
         rawContent = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
@@ -967,18 +967,18 @@
 
       if (strategy === "calm") {
         return {
-          evaluation: "Estrategia de Calma Absoluta & Empatía desarmando la queja",
-          response: `Estimado cliente, en ${bizName} comprendemos perfectamente su malestar y le pedimos disculpas sinceras. Nos tomamos muy en serio su testimonio para corregirlo hoy mismo.${extraComp}`
+          evaluation: "Respuesta para calmar al cliente con mucho cariño y educación",
+          response: `Estimado cliente, en ${bizName} comprendemos perfectamente su malestar y le pedimos disculpas de corazón. Nos tomamos muy en serio su mensaje para que no vuelva a ocurrir.${extraComp}`
         };
       } else if (strategy === "attack") {
         return {
-          evaluation: "Neutralización de ataque con elegancia y firmeza",
-          response: `Estimado visitante, en ${bizName} nos tomamos muy en serio el servicio pero no encontramos registros de su visita. Le invitamos a contactarnos por privado para verificar los detalles.${extraComp}`
+          evaluation: "Respuesta educada para defenderte si la opinión es mentira",
+          response: `Estimado visitante, en ${bizName} cuidamos mucho a nuestros clientes pero no encontramos registro de su visita. Le invitamos a escribirnos en privado para revisar su caso con mucho gusto.${extraComp}`
         };
       } else {
         return {
-          evaluation: "Respuesta diseñada para asegurar la vuelta del cliente",
-          response: `¡Hola! Muchas gracias por visitarnos en ${bizName}. Queremos invitarte a regresar muy pronto para darte una atención aún mejor.${extraComp}`
+          evaluation: "Respuesta cariñosa para invitar al cliente a volver",
+          response: `¡Hola! Muchas gracias por visitarnos en ${bizName}. Queremos invitarte a regresar muy pronto para atenderte aún mejor. ¡Te esperamos!`
         };
       }
     }
@@ -990,7 +990,7 @@
     }
 
     function sendWhatsAppResult() {
-      const formattedMessage = `*Respuesta Diplomática de Armando Paz*:\n\n"${encodeURIComponent(currentResponseText)}"`;
+      const formattedMessage = `*Respuesta de Armando Paz*:\n\n"${encodeURIComponent(currentResponseText)}"`;
       const waUrl = `https://wa.me/?text=${formattedMessage}`;
       window.open(waUrl, '_blank');
     }
@@ -998,14 +998,14 @@
     function regenerateResultVariant() {
       const bizName = bizNameInput.value.trim() || "Tu Negocio";
       const variants = [
-        `Estimado cliente, en ${bizName} trabajamos diariamente con la meta de darte el mejor servicio posible. ¡Será un placer recibirte de nuevo!`,
-        `¡Muchas gracias por compartir tu experiencia con nosotros en ${bizName}! Tu satisfacción es nuestra mejor recompensa.`,
-        `Hola, valoramos enormemente tu opinión sobre ${bizName}. Quedamos totalmente a tu servicio para tu próxima visita.`
+        `Estimado cliente, en ${bizName} trabajamos todos los días para darte el mejor servicio posible. ¡Será un placer recibirte de nuevo!`,
+        `¡Muchas gracias por compartir tu experiencia en ${bizName}! Tu alegría es lo más importante para nosotros.`,
+        `Hola, valoramos enormemente tu mensaje sobre ${bizName}. Quedamos a tu entera disposición para cuando quieras volver.`
       ];
       const nextVariant = variants.find(v => v !== currentResponseText) || variants[0];
       responseTextDisplay.textContent = nextVariant;
       currentResponseText = nextVariant;
-      showToast('Nueva variante generada');
+      showToast('Nueva versión creada');
     }
   </script>
 </body>
