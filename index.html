@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Armando Paz - Responder Opiniones de Google Maps</title>
   
-  <meta name="description" content="Armando Paz - La herramienta sencilla para responder a cualquier reseña de tu negocio al instante.">
-  <meta property="og:title" content="Armando Paz - Responder Opiniones">
-  <meta property="og:description" content="Pega la reseña de tu cliente y obtén la respuesta perfecta de Armando Paz al instante.">
+  <meta name="description" content="Armando Paz - La herramienta estratégica para responder reseñas enfocadas en objetivos reales de negocio.">
+  <meta property="og:title" content="Armando Paz - Responder Opiniones por Objetivos">
+  <meta property="og:description" content="Pega la reseña de tu cliente y genera la respuesta perfecta orientada a tu objetivo de negocio.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#1d1d1f">
 
@@ -111,7 +111,7 @@
       max-width: 320px;
     }
 
-    /* MODAL DE NOTIFICACIÓN TIPO APPLE */
+    /* MODAL TIPO APPLE */
     #appleModalOverlay {
       display: none;
       position: fixed;
@@ -243,7 +243,7 @@
       transform: translateY(-2px);
     }
 
-    /* PANTALLA DE LA APLICACIÓN MINIMALISTA Y DIRECTA */
+    /* APLICACIÓN */
     #appScreen {
       display: none;
       width: 100%;
@@ -402,7 +402,7 @@
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
       
       <p class="cover-subtitle">
-        Pega la reseña de tu cliente y obtén la valoración y respuesta perfecta al instante.
+        Pega la reseña de tu cliente y genera la respuesta perfecta enfocada en tu objetivo de negocio.
       </p>
 
       <button class="enter-btn" onclick="enterApp()">
@@ -411,14 +411,14 @@
     </div>
   </div>
 
-  <!-- PANTALLA 2: LA APLICACIÓN (MINIMALISTA Y DIRECTA) -->
+  <!-- PANTALLA 2: LA APLICACIÓN ESTRATÉGICA POR OBJETIVOS -->
   <div id="appScreen">
     <header>
       <div style="display:flex; align-items:center; gap:0.75rem;">
         <img src="armando.png" alt="Armando Paz" style="height:38px; object-fit:contain;">
         <div>
           <h2 style="font-size:1.2rem; font-weight:800;">Armando Paz</h2>
-          <span style="font-size:0.75rem; color:var(--text-muted);">Generador Directo de Respuestas</span>
+          <span style="font-size:0.75rem; color:var(--text-muted);">Respuestas Estratégicas por Objetivos</span>
         </div>
       </div>
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
@@ -451,7 +451,7 @@
       </div>
     </div>
 
-    <!-- FORMULARIO DIRECTO: SOLAMENTE PEGAR LA RESEÑA Y ELEGIR TONO -->
+    <!-- FORMULARIO ORIENTADO A OBJETIVOS DE NEGOCIO -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
@@ -464,32 +464,34 @@
           <textarea id="reviewsInput" rows="4" placeholder="Ejemplo: 'Tardaron 40 minutos en atender y la comida llegó fría.'" required></textarea>
         </div>
 
+        <!-- SECTOR DE OBJETIVO ESTRATÉGICO -->
         <div class="form-group">
-          <label for="toneSelect">🎭 Tono de Respuesta</label>
-          <select id="toneSelect">
-            <option value="friendly">😊 Cercano y Amigable</option>
-            <option value="professional">🎩 Profesional y Corporativo</option>
-            <option value="short">⚡ Corto y Directo</option>
-            <option value="empathetic">🙏 Empático y Cuidado</option>
+          <label for="goalSelect">🎯 Objetivo Estratégico de la Respuesta</label>
+          <select id="goalSelect">
+            <option value="return">🔄 Conseguir que el cliente VUELVA (Fidelización)</option>
+            <option value="happy">😊 Dejar al cliente 100% CONTENTO (Calmar queja y compensar)</option>
+            <option value="share">📢 Lograr que el cliente nos RECOMIENDE y COMPARTA (Boca a boca)</option>
+            <option value="corporate">💼 Dar imagen 100% PROFESIONAL y Corporativa (Autoridad)</option>
+            <option value="quick">⚡ Respuesta RÁPIDA y Concisa (Ahorrar tiempo)</option>
           </select>
         </div>
 
         <button type="submit" class="btn" id="submitBtn">
           <span class="loader" id="loader"></span>
-          <span id="btnText">🚀 VALORAR RESEÑA Y GENERAR RESPUESTA</span>
+          <span id="btnText">🚀 GENERAR RESPUESTA CON ESTE OBJETIVO</span>
         </button>
       </form>
 
-      <!-- RESULTADO LIMPIO -->
+      <!-- RESULTADO CON OBJETIVO CUMPLIDO -->
       <div id="resultBox" class="result-box" style="display: none;">
         <div>
-          <span class="evaluation-badge" id="evalBadge">🎯 DIAGNÓSTICO DE LA RESEÑA</span>
+          <span class="evaluation-badge" id="evalBadge">🎯 OBJETIVO CUMPLIDO</span>
           <p id="evalText" style="font-size:0.9rem; font-weight:600; margin-top:0.5rem; color:var(--text-main);"></p>
         </div>
 
         <div>
           <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">
-            💬 RESPUESTA LISTA PARA ENVIAR (ARMANDO PAZ):
+            💬 RESPUESTA ESTRATÉGICA LISTA PARA ENVIAR (ARMANDO PAZ):
           </label>
           <div class="response-text" id="responseTextDisplay" style="margin-top:0.3rem;"></div>
         </div>
@@ -514,7 +516,7 @@
     const submitBtn = document.getElementById('submitBtn');
     const loader = document.getElementById('loader');
     const btnText = document.getElementById('btnText');
-    const toneSelect = document.getElementById('toneSelect');
+    const goalSelect = document.getElementById('goalSelect');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const bizNameInput = document.getElementById('bizNameInput');
     const reviewsInput = document.getElementById('reviewsInput');
@@ -703,13 +705,13 @@
       await processSingleReview();
     });
 
-    /* PROCESAMIENTO DIRECTO MINIMALISTA: PEGAR RESEÑA -> DIAGNÓSTICO + RESPUESTA */
+    /* PROCESAMIENTO ESTRATÉGICO ORIENTADO A OBJETIVOS */
     async function processSingleReview() {
       const bizName = bizNameInput.value.trim() || "Tu Negocio";
       const reviewText = reviewsInput.value.trim();
       const apiKey = apiKeyInput.value.trim();
       const provider = providerSelect.value;
-      const tone = toneSelect.value;
+      const goal = goalSelect.value;
 
       if (!reviewText) {
         showAppleAlert('💬', 'Reseña Requerida', 'Por favor pega la reseña del cliente.');
@@ -724,10 +726,10 @@
       isProcessing = true;
       submitBtn.disabled = true;
       loader.style.display = 'inline-block';
-      btnText.textContent = 'Generando respuesta de Armando Paz...';
+      btnText.textContent = 'Generando respuesta enfocada en tu objetivo...';
 
       try {
-        const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, tone);
+        const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, goal);
         
         evalText.textContent = result.evaluation;
         responseTextDisplay.textContent = result.response;
@@ -741,12 +743,19 @@
         isProcessing = false;
         submitBtn.disabled = false;
         loader.style.display = 'none';
-        btnText.textContent = '🚀 VALORAR RESEÑA Y GENERAR RESPUESTA';
+        btnText.textContent = '🚀 GENERAR RESPUESTA CON ESTE OBJETIVO';
       }
     }
 
-    async function generateDirectResponse(reviewText, bizName, apiKey, provider, tone) {
-      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nInstrucciones:\n1. Da una breve valoracion/diagnostico de 1 frase sobre la reseña (ej: "Cliente molesto por tiempo de espera - Atencion prioritaria").\n2. Escribe la respuesta diplomatica de Armando Paz segun el tono "${tone}".\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Valoracion breve","response":"Respuesta amigable de Armando Paz"}`;
+    async function generateDirectResponse(reviewText, bizName, apiKey, provider, goal) {
+      let goalDesc = "";
+      if (goal === "return") goalDesc = "Conseguir que el cliente VUELVA obligatoriamente invitandolo de nuevo de forma muy calida y ofreciendo una atención o bienvenida especial.";
+      else if (goal === "happy") goalDesc = "Dejar al cliente 100% CONTENTO y satisfecho, pidiendo una disculpa impecable si hubo queja y asegurando su plena satisfaccion.";
+      else if (goal === "share") goalDesc = "Lograr que el cliente nos RECOMIENDE y COMPARTA su experiencia con amigos, familiares y en redes sociales.";
+      else if (goal === "corporate") goalDesc = "Dar una imagen 100% PROFESIONAL, formal, corporativa e impecable de maxima autoridad.";
+      else goalDesc = "Respuesta RÁPIDA, concisa, directa y elegante para ahorrar tiempo.";
+
+      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nOBJETIVO ESTRATEGICO PRINCIPAL: ${goalDesc}\n\nInstrucciones:\n1. Da una breve explicacion de 1 frase de como la respuesta cumple el objetivo ("evaluation").\n2. Escribe la respuesta diplomatica de Armando Paz enfocada 100% en cumplir ese objetivo ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Explicacion breve","response":"Respuesta amigable de Armando Paz"}`;
 
       let rawContent = "";
 
@@ -760,12 +769,12 @@
           body: JSON.stringify({
             model: 'gpt-4o-mini',
             messages: [
-              { role: 'system', content: 'Eres un formateador JSON estricto. Responde UNICAMENTE con el objeto JSON pedido.' },
+              { role: 'system', content: 'Eres Armando Paz, experto en reputacion digital. Responde UNICAMENTE con el objeto JSON pedido.' },
               { role: 'user', content: prompt }
             ]
           })
         });
-        if (!res.ok) throw new Error('Clave API de OpenAI rechazada o sin saldo disponible (HTTP ' + res.status + ')');
+        if (!res.ok) throw new Error('Clave API de OpenAI rechazada (HTTP ' + res.status + ')');
         const data = await res.json();
         rawContent = data?.choices?.[0]?.message?.content || "";
       } else if (provider === 'claude') {
@@ -799,10 +808,10 @@
         rawContent = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
 
-      return parseDirectJson(rawContent, reviewText, bizName, tone);
+      return parseDirectJson(rawContent, reviewText, bizName, goal);
     }
 
-    function parseDirectJson(content, reviewText, bizName, tone) {
+    function parseDirectJson(content, reviewText, bizName, goal) {
       if (content && typeof content === 'string') {
         try {
           const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -815,14 +824,22 @@
         } catch (e) {}
       }
 
-      const isBad = reviewText.toLowerCase().includes('tard') || reviewText.toLowerCase().includes('mal') || reviewText.toLowerCase().includes('espera');
-
-      return {
-        evaluation: isBad ? "🚨 Cliente insatisfecho — Atención prioritaria recomendada" : "⭐ Cliente satisfecho — Respuesta de fidelización",
-        response: isBad 
-          ? `Hola, en ${bizName} lamentamos sinceramente los inconvenientes comentados. Nos tomamos muy en serio tu mensaje para solucionarlo de inmediato.`
-          : `¡Muchas gracias por tus amables palabras sobre ${bizName}! Nos alegra mucho saberlo y esperamos verte de nuevo pronto.`
-      };
+      if (goal === "return") {
+        return {
+          evaluation: "🔄 Respuesta diseñada para asegurar la vuelta del cliente",
+          response: `¡Hola! Muchas gracias por visitarnos en ${bizName}. Queremos invitarte a regresar muy pronto para darte una atención aún mejor. ¡Te esperamos!`
+        };
+      } else if (goal === "share") {
+        return {
+          evaluation: "📢 Respuesta enfocado en motivar la recomendación a amigos",
+          response: `¡Muchísimas gracias! Nos llena de orgullo que hayas disfrutado en ${bizName}. ¡Si te ha gustado, nos ayudaría muchísimo que nos recomiendes con tus amigos!`
+        };
+      } else {
+        return {
+          evaluation: "😊 Respuesta diseñada para garantizar la máxima satisfacción",
+          response: `Hola, en ${bizName} nuestra prioridad absoluta es tu satisfacción. Agradecemos mucho tu comentario y estamos siempre a tu disposición.`
+        };
+      }
     }
 
     function copyResultText(btn) {
@@ -832,7 +849,7 @@
     }
 
     function sendWhatsAppResult() {
-      const formattedMessage = `📲 *Respuesta de Armando Paz*:\n\n"${encodeURIComponent(currentResponseText)}"`;
+      const formattedMessage = `📲 *Respuesta Estratégica de Armando Paz*:\n\n"${encodeURIComponent(currentResponseText)}"`;
       const waUrl = `https://wa.me/?text=${formattedMessage}`;
       window.open(waUrl, '_blank');
     }
@@ -840,9 +857,9 @@
     function regenerateResultVariant() {
       const bizName = bizNameInput.value.trim() || "Tu Negocio";
       const variants = [
-        `Estimado cliente, agradecemos tu comentario sobre ${bizName}. Trabajamos diariamente para darte la mejor experiencia. ¡Un cordial saludo!`,
-        `¡Hola! Muchas gracias por compartir tu experiencia con nosotros en ${bizName}. Nos ayuda a seguir mejorando cada detalle.`,
-        `Hola, valoramos mucho el tiempo que dedicaste a dejar tu opinión sobre ${bizName}. Quedamos a tu entera disposición.`
+        `Estimado cliente, en ${bizName} trabajamos diariamente con la meta de darte el mejor servicio posible. ¡Será un placer recibirte de nuevo!`,
+        `¡Muchas gracias por compartir tu experiencia con nosotros en ${bizName}! Tu satisfacción es nuestra mejor recompensa.`,
+        `Hola, valoramos enormemente tu opinión sobre ${bizName}. Quedamos totalmente a tu servicio para tu próxima visita.`
       ];
       const nextVariant = variants.find(v => v !== currentResponseText) || variants[0];
       responseTextDisplay.textContent = nextVariant;
