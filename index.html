@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Armando Paz - El Pacificador de Reseñas</title>
   
-  <meta name="description" content="Armando Paz - Convierte las malas opiniones de tu negocio en clientes fieles.">
+  <meta name="description" content="Armando Paz - Le das una mala opinión de tu negocio y te la devuelve convertida en la respuesta perfecta para no perder clientes.">
   <meta property="og:title" content="Armando Paz - El Pacificador de Reseñas">
-  <meta property="og:description" content="Convierte las malas opiniones de tu negocio en clientes fieles.">
+  <meta property="og:description" content="Le das una mala opinión de tu negocio y te la devuelve convertida en la respuesta perfecta para no perder clientes.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#1d1d1f">
 
@@ -180,7 +180,7 @@
       letter-spacing: 0.02em;
     }
 
-    /* PANTALLA 1: PORTADA MINIMALISTA APPLE (FIT TO SCREEN) */
+    /* PANTALLA 1: PORTADA MINIMALISTA APPLE (1 FRASE + TRANSFORMACIÓN CLARA) */
     #coverScreen {
       width: 100%;
       flex: 1;
@@ -200,7 +200,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.1rem;
+      gap: 1.25rem;
     }
 
     .armando-photo-hero-large {
@@ -212,22 +212,17 @@
       background: transparent;
     }
 
+    /* UNA SOLA FRASE CLARA DE LO QUE HACE (ENTENDIBLE DE NIÑO A ABUELO) */
     .cover-headline {
-      font-size: 1.75rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: var(--text-main);
       letter-spacing: -0.03em;
-      line-height: 1.2;
-      max-width: 640px;
+      line-height: 1.3;
+      max-width: 660px;
     }
 
-    .cover-tagline {
-      font-size: 0.925rem;
-      color: var(--text-muted);
-      max-width: 580px;
-      line-height: 1.45;
-    }
-
+    /* TRANSFORMACIÓN VISUAL SENCILLA */
     .transformation-box {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -239,41 +234,41 @@
 
     .t-card {
       border: 1px solid var(--border-apple);
-      padding: 0.9rem 1rem;
+      padding: 1rem 1.1rem;
       background: var(--bg-surface);
     }
 
     .t-title-before {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 800;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       color: #de071c;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.35rem;
     }
 
     .t-title-after {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 800;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--text-main);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.35rem;
     }
 
     .t-card p {
-      font-size: 0.8rem;
+      font-size: 0.825rem;
       color: var(--text-muted);
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .enter-btn {
       background: var(--accent-black);
       color: var(--bg-main);
       border: 1px solid var(--accent-black);
-      padding: 1.1rem 2rem;
-      font-size: 1rem;
-      font-weight: 700;
+      padding: 1.15rem 2rem;
+      font-size: 1.05rem;
+      font-weight: 800;
       letter-spacing: 0.03em;
       cursor: pointer;
       width: 100%;
@@ -287,14 +282,14 @@
 
     @media (max-width: 680px) {
       #coverScreen { padding: 1rem 1rem; }
-      .cover-container { gap: 0.85rem; }
+      .cover-container { gap: 0.95rem; }
       .armando-photo-hero-large { max-height: 150px; }
-      .cover-headline { font-size: 1.3rem; }
+      .cover-headline { font-size: 1.25rem; }
       .transformation-box { grid-template-columns: 1fr; gap: 0.5rem; }
-      .enter-btn { padding: 0.95rem 1.25rem; font-size: 0.9rem; }
+      .enter-btn { padding: 1rem 1.25rem; font-size: 0.95rem; }
     }
 
-    /* PANTALLA 2: APLICACIÓN ESTILO APPLE MINIMALISTA */
+    /* PANTALLA 2: APLICACIÓN ESTILO APPLE CON DIFERENCIACIÓN DE COMPETENCIA */
     #appScreen {
       display: none;
       width: 100%;
@@ -449,44 +444,40 @@
 
   <div id="toast">Acción realizada correctamente</div>
 
-  <!-- PANTALLA 1: PORTADA MINIMALISTA APPLE (CABE EN 1 PANTALLA SIN SCROLL) -->
+  <!-- PANTALLA 1: PORTADA APPLE (1 FRASE + TRANSFORMACIÓN ENTENDIBLE POR UN NIÑO O UN ABUELO) -->
   <div id="coverScreen">
     <div class="cover-container">
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
       
       <h1 class="cover-headline">
-        El Pacificador de Reseñas de tu Negocio.
+        Pegas una mala opinión de tu negocio y te la devuelve convertida en la respuesta perfecta para no perder clientes.
       </h1>
-
-      <p class="cover-tagline">
-        Armando Paz es tu mediador personal. Convierte opiniones negativas en clientes fieles y protege la reputación de tu empresa.
-      </p>
 
       <div class="transformation-box">
         <div class="t-card">
-          <div class="t-title-before">ANTES DE ARMANDO</div>
-          <p>Estrés emocional respondiendo con rabia y perdiendo clientes que leen opiniones en Google Maps.</p>
+          <div class="t-title-before">ANTES DE USAR ARMANDO PAZ</div>
+          <p>Un cliente molesto te deja una mala opinión en Google y no sabes qué responder sin enfadarte o perder clientes.</p>
         </div>
         <div class="t-card">
-          <div class="t-title-after">DESPUÉS DE ARMANDO</div>
-          <p>Respuestas diplomáticas que calman al cliente molesto y atraen a nuevos vecinos a tu negocio.</p>
+          <div class="t-title-after">DESPUÉS DE USAR ARMANDO PAZ</div>
+          <p>La transforma al instante en una respuesta amable y profesional que calma al cliente y protege tu negocio.</p>
         </div>
       </div>
 
       <button class="enter-btn" onclick="enterApp()">
-        ENTRAR A LA APLICACIÓN →
+        PROBAR AHORA →
       </button>
     </div>
   </div>
 
-  <!-- PANTALLA 2: APLICACIÓN ESTILO APPLE -->
+  <!-- PANTALLA 2: APLICACIÓN ESTILO APPLE CON HERRAMIENTAS DIVERGENTES DE COMPETENCIA -->
   <div id="appScreen">
     <header>
       <div style="display:flex; align-items:center; gap:0.65rem;">
         <img src="armando.png" alt="Armando Paz" style="height:34px; object-fit:contain;">
         <div>
           <h2 style="font-size:1.1rem; font-weight:800;">Armando Paz</h2>
-          <span style="font-size:0.725rem; color:var(--text-muted);">Gestor Estratégico de Reputación</span>
+          <span style="font-size:0.725rem; color:var(--text-muted);">Pacificador Estratégico de Reseñas</span>
         </div>
       </div>
       <button class="btn-secondary" onclick="goCover()">← Inicio</button>
@@ -519,7 +510,7 @@
       </div>
     </div>
 
-    <!-- FORMULARIO PACIFICADOR POR OBJETIVOS -->
+    <!-- FORMULARIO PACIFICADOR EXCLUSIVO DIVERGENTE -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
@@ -532,9 +523,9 @@
           <textarea id="reviewsInput" rows="3" placeholder="Ejemplo: 'Tardaron 40 minutos en atender y la comida llegó fría.'" required></textarea>
         </div>
 
-        <!-- SECTOR DE OBJETIVO ESTRATÉGICO -->
+        <!-- ESTRATEGIA EXCLUSIVA DIVERGENTE DE ARMANDO PAZ -->
         <div class="form-group">
-          <label for="goalSelect">Objetivo Estratégico de la Respuesta</label>
+          <label for="goalSelect">Estrategia Pacificadora de Armando Paz</label>
           <select id="goalSelect">
             <option value="return">Conseguir que el cliente VUELVA (Fidelización)</option>
             <option value="happy">Dejar al cliente CONTENTO (Calmar queja y compensar)</option>
@@ -543,6 +534,12 @@
             <option value="corporate">Dar imagen PROFESIONAL y Corporativa (Autoridad)</option>
             <option value="quick">Respuesta RÁPIDA y Concisa (Ahorrar tiempo)</option>
           </select>
+        </div>
+
+        <!-- OPCIONAL DIVERGENTE: OFRECER COMPENSACIÓN PACIFICADORA -->
+        <div class="form-group" style="margin-bottom:1.25rem;">
+          <label for="compInput">Compensación Pacificadora Opcional (Diferenciador Único)</label>
+          <input type="text" id="compInput" placeholder="Ejemplo: Te invitamos al café en tu próxima visita / 10% de descuento">
         </div>
 
         <button type="submit" class="btn" id="submitBtn">
@@ -586,6 +583,7 @@
     const loader = document.getElementById('loader');
     const btnText = document.getElementById('btnText');
     const goalSelect = document.getElementById('goalSelect');
+    const compInput = document.getElementById('compInput');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const bizNameInput = document.getElementById('bizNameInput');
     const reviewsInput = document.getElementById('reviewsInput');
@@ -778,6 +776,7 @@
       const apiKey = apiKeyInput.value.trim();
       const provider = providerSelect.value;
       const goal = goalSelect.value;
+      const compOffer = compInput.value.trim();
 
       if (!reviewText) {
         showAppleAlert('Reseña Requerida', 'Por favor pega la reseña del cliente.');
@@ -795,7 +794,7 @@
       btnText.textContent = 'Generando respuesta de Armando Paz...';
 
       try {
-        const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, goal);
+        const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, goal, compOffer);
         
         evalText.textContent = result.evaluation;
         responseTextDisplay.textContent = result.response;
@@ -813,7 +812,7 @@
       }
     }
 
-    async function generateDirectResponse(reviewText, bizName, apiKey, provider, goal) {
+    async function generateDirectResponse(reviewText, bizName, apiKey, provider, goal, compOffer) {
       let goalDesc = "";
       if (goal === "return") goalDesc = "Conseguir que el cliente VUELVA invitandolo de nuevo de forma muy calida y ofreciendo una atención o bienvenida especial.";
       else if (goal === "happy") goalDesc = "Dejar al cliente 100% CONTENTO y satisfecho, pidiendo una disculpa impecable si hubo queja y asegurando su plena satisfaccion.";
@@ -822,7 +821,11 @@
       else if (goal === "corporate") goalDesc = "Dar una imagen 100% PROFESIONAL, formal, corporativa e impecable de maxima autoridad.";
       else goalDesc = "Respuesta RÁPIDA, concisa, directa y elegante para ahorrar tiempo.";
 
-      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nOBJETIVO ESTRATEGICO DIPLOMATICO: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Da una breve explicacion de 1 frase de la estrategia de pacificación utilizada ("evaluation").\n2. Escribe la respuesta diplomatica de Armando Paz enfocada 100% en cumplir ese objetivo ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Estrategia breve","response":"Respuesta de Armando Paz"}`;
+      if (compOffer) {
+        goalDesc += ` ADEMAS, incluye elegantemente la siguiente compensacion ofrecida por el negocio: "${compOffer}".`;
+      }
+
+      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nOBJETIVO ESTRATEGICO DIPLOMATICO: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Da una breve explicacion de 1 frase de la estrategia utilizada ("evaluation").\n2. Escribe la respuesta diplomatica de Armando Paz enfocada 100% en cumplir ese objetivo ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Estrategia breve","response":"Respuesta de Armando Paz"}`;
 
       let rawContent = "";
 
@@ -875,10 +878,10 @@
         rawContent = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
 
-      return parseDirectJson(rawContent, reviewText, bizName, goal);
+      return parseDirectJson(rawContent, reviewText, bizName, goal, compOffer);
     }
 
-    function parseDirectJson(content, reviewText, bizName, goal) {
+    function parseDirectJson(content, reviewText, bizName, goal, compOffer) {
       if (content && typeof content === 'string') {
         try {
           const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -891,20 +894,22 @@
         } catch (e) {}
       }
 
+      const extraComp = compOffer ? ` Además: ${compOffer}.` : '';
+
       if (goal === "attack") {
         return {
           evaluation: "Neutralización de ataque con elegancia y firmeza",
-          response: `Estimado visitante, en ${bizName} nos tomamos muy en serio el servicio pero no encontramos registros de su visita. Le invitamos a contactarnos por privado para verificar los detalles y atenderle como merece.`
+          response: `Estimado visitante, en ${bizName} nos tomamos muy en serio el servicio pero no encontramos registros de su visita. Le invitamos a contactarnos por privado para verificar los detalles.${extraComp}`
         };
       } else if (goal === "return") {
         return {
           evaluation: "Respuesta diseñada para asegurar la vuelta del cliente",
-          response: `¡Hola! Muchas gracias por visitarnos en ${bizName}. Queremos invitarte a regresar muy pronto para darte una atención aún mejor. ¡Te esperamos!`
+          response: `¡Hola! Muchas gracias por visitarnos en ${bizName}. Queremos invitarte a regresar muy pronto para darte una atención aún mejor.${extraComp}`
         };
       } else {
         return {
           evaluation: "Respuesta diseñada para garantizar la máxima satisfacción",
-          response: `Hola, en ${bizName} nuestra prioridad absoluta es tu satisfacción. Agradecemos mucho tu comentario y estamos siempre a tu disposición.`
+          response: `Hola, en ${bizName} nuestra prioridad absoluta es tu satisfacción. Agradecemos mucho tu comentario y estamos siempre a tu disposición.${extraComp}`
         };
       }
     }
