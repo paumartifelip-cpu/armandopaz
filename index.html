@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Armando Paz - Responder Opiniones de Google Maps</title>
+  <title>Armando Paz - El Pacificador de Reseñas de tu Negocio</title>
   
-  <meta name="description" content="Armando Paz - Convierte las malas reseñas de tu negocio en clientes fieles en 3 segundos.">
-  <meta property="og:title" content="Armando Paz - Responder Opiniones por Objetivos">
-  <meta property="og:description" content="Convierte las malas reseñas de tu negocio en clientes fieles en 3 segundos.">
+  <meta name="description" content="Armando Paz - El pacificador y escudo diplomático para el negocio local. Neutraliza malas opiniones y convierte quejas en clientes fieles.">
+  <meta property="og:title" content="Armando Paz - El Pacificador de Reseñas">
+  <meta property="og:description" content="Neutraliza malas opiniones y convierte quejas en clientes fieles en 3 segundos.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#1d1d1f">
 
@@ -183,7 +183,7 @@
       width: 100%;
     }
 
-    /* PANTALLA 1: PORTADA CON TRANSFORMACIÓN CLARA DEL PROBLEMA DE FONDO */
+    /* PORTADA CON POSICIONAMIENTO DIVERGENTE ÚNICO */
     #coverScreen {
       width: 100%;
       flex: 1;
@@ -224,6 +224,13 @@
       line-height: 1.25;
     }
 
+    .cover-tagline {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      line-height: 1.45;
+    }
+
     .transformation-box {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -261,6 +268,23 @@
       font-size: 0.85rem;
       color: var(--text-muted);
       line-height: 1.45;
+    }
+
+    .diff-badge-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 720px;
+    }
+
+    .diff-pill {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-apple);
+      padding: 0.4rem 0.8rem;
+      font-size: 0.775rem;
+      font-weight: 700;
+      color: var(--text-main);
     }
 
     .enter-btn {
@@ -444,23 +468,34 @@
 
   <div id="toast">✅ Acción realizada correctamente</div>
 
-  <!-- PANTALLA 1: PORTADA CON TRANSFORMACIÓN CLARA Y DIRECTA -->
+  <!-- PANTALLA 1: PORTADA CON POSICIONAMIENTO ÚNICO DE OCÉANO AZUL -->
   <div id="coverScreen">
     <div class="cover-container">
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
       
       <h1 class="cover-headline">
-        Convierte las Malas Reseñas de tu Negocio en Clientes Fieles en 3 Segundos.
+        El Pacificador y Escudo Diplomático para tu Negocio Local.
       </h1>
+
+      <p class="cover-tagline">
+        No vendas respuestas automáticas frías de software. Armando Paz es tu mediador personal que neutraliza ataques y convierte quejas en clientes fieles.
+      </p>
+
+      <div class="diff-badge-bar">
+        <span class="diff-pill">🛡️ 0% Discusiones Garantizadas</span>
+        <span class="diff-pill">🎁 Compensación Inteligente</span>
+        <span class="diff-pill">🚨 Modo Ataques o Reseña Falsa</span>
+        <span class="diff-pill">💳 0€ Suscripciones Mensuales</span>
+      </div>
 
       <div class="transformation-box">
         <div class="t-card">
-          <div class="t-title-before">❌ EL PROBLEMA DE FONDO</div>
-          <p>Sufrir estrés emocional respondiendo con rabia a una queja, dañando tu reputación y perdiendo clientes que leen Google Maps.</p>
+          <div class="t-title-before">❌ SOFTWARE DE LA COMPETENCIA</div>
+          <p>Plataformas frías de $300/mes con gráficos difíciles que dan respuestas automáticas robóticas e impersonales.</p>
         </div>
         <div class="t-card">
-          <div class="t-title-after">✅ LA SOLUCIÓN CON ARMANDO PAZ</div>
-          <p>Respuestas diplomáticas y profesionales que calman al cliente molesto, protegen tu imagen y atraen a más vecinos a tu negocio.</p>
+          <div class="t-title-after">✅ EL PACIFICADOR ARMANDO PAZ</div>
+          <p>Respuestas diplomáticas enfocadas en objetivos reales de negocio (hacer que el cliente vuelva y te recomiende) por 0€ de cuota.</p>
         </div>
       </div>
 
@@ -510,7 +545,7 @@
       </div>
     </div>
 
-    <!-- FORMULARIO ORIENTADO A OBJETIVOS DE NEGOCIO -->
+    <!-- FORMULARIO PACIFICADOR POR OBJETIVOS -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
@@ -523,12 +558,14 @@
           <textarea id="reviewsInput" rows="4" placeholder="Ejemplo: 'Tardaron 40 minutos en atender y la comida llegó fría.'" required></textarea>
         </div>
 
+        <!-- SECTOR DE OBJETIVO ESTRATÉGICO -->
         <div class="form-group">
-          <label for="goalSelect">🎯 Objetivo Estratégico de la Respuesta</label>
+          <label for="goalSelect">🎯 Objetivo Estratégico del Pacificador</label>
           <select id="goalSelect">
             <option value="return">🔄 Conseguir que el cliente VUELVA (Fidelización)</option>
             <option value="happy">😊 Dejar al cliente 100% CONTENTO (Calmar queja y compensar)</option>
             <option value="share">📢 Lograr que el cliente nos RECOMIENDE y COMPARTA (Boca a boca)</option>
+            <option value="attack">🚨 Neutralizar ATAQUE O RESEÑA FALSA (Desmontar con elegancia)</option>
             <option value="corporate">💼 Dar imagen 100% PROFESIONAL y Corporativa (Autoridad)</option>
             <option value="quick">⚡ Respuesta RÁPIDA y Concisa (Ahorrar tiempo)</option>
           </select>
@@ -536,20 +573,20 @@
 
         <button type="submit" class="btn" id="submitBtn">
           <span class="loader" id="loader"></span>
-          <span id="btnText">🚀 GENERAR RESPUESTA CON ESTE OBJETIVO</span>
+          <span id="btnText">🚀 GENERAR RESPUESTA PACIFICADORA CON ESTE OBJETIVO</span>
         </button>
       </form>
 
-      <!-- RESULTADO CON OBJETIVO CUMPLIDO -->
+      <!-- RESULTADO PACIFICADOR -->
       <div id="resultBox" class="result-box" style="display: none;">
         <div>
-          <span class="evaluation-badge" id="evalBadge">🎯 OBJETIVO CUMPLIDO</span>
+          <span class="evaluation-badge" id="evalBadge">🛡️ PACIFICACIÓN ESTRATÉGICA APLICADA</span>
           <p id="evalText" style="font-size:0.9rem; font-weight:600; margin-top:0.5rem; color:var(--text-main);"></p>
         </div>
 
         <div>
           <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">
-            💬 RESPUESTA ESTRATÉGICA LISTA PARA ENVIAR (ARMANDO PAZ):
+            💬 RESPUESTA DIPLOMÁTICA LISTA PARA ENVIAR (ARMANDO PAZ):
           </label>
           <div class="response-text" id="responseTextDisplay" style="margin-top:0.3rem;"></div>
         </div>
@@ -783,7 +820,7 @@
       isProcessing = true;
       submitBtn.disabled = true;
       loader.style.display = 'inline-block';
-      btnText.textContent = 'Generando respuesta enfocada en tu objetivo...';
+      btnText.textContent = 'Generando respuesta pacificadora de Armando Paz...';
 
       try {
         const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, goal);
@@ -800,19 +837,20 @@
         isProcessing = false;
         submitBtn.disabled = false;
         loader.style.display = 'none';
-        btnText.textContent = '🚀 GENERAR RESPUESTA CON ESTE OBJETIVO';
+        btnText.textContent = '🚀 GENERAR RESPUESTA PACIFICADORA CON ESTE OBJETIVO';
       }
     }
 
     async function generateDirectResponse(reviewText, bizName, apiKey, provider, goal) {
       let goalDesc = "";
-      if (goal === "return") goalDesc = "Conseguir que el cliente VUELVA obligatoriamente invitandolo de nuevo de forma muy calida y ofreciendo una atención o bienvenida especial.";
+      if (goal === "return") goalDesc = "Conseguir que el cliente VUELVA invitandolo de nuevo de forma muy calida y ofreciendo una atención o bienvenida especial.";
       else if (goal === "happy") goalDesc = "Dejar al cliente 100% CONTENTO y satisfecho, pidiendo una disculpa impecable si hubo queja y asegurando su plena satisfaccion.";
       else if (goal === "share") goalDesc = "Lograr que el cliente nos RECOMIENDE y COMPARTA su experiencia con amigos, familiares y en redes sociales.";
+      else if (goal === "attack") goalDesc = "Neutralizar una RESEÑA FALSA O ATAQUE de la competencia con elegancia, firmeza y total caballerosidad sin entrar en conflicto.";
       else if (goal === "corporate") goalDesc = "Dar una imagen 100% PROFESIONAL, formal, corporativa e impecable de maxima autoridad.";
       else goalDesc = "Respuesta RÁPIDA, concisa, directa y elegante para ahorrar tiempo.";
 
-      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nOBJETIVO ESTRATEGICO PRINCIPAL: ${goalDesc}\n\nInstrucciones:\n1. Da una breve explicacion de 1 frase de como la respuesta cumple el objetivo ("evaluation").\n2. Escribe la respuesta diplomatica de Armando Paz enfocada 100% en cumplir ese objetivo ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Explicacion breve","response":"Respuesta amigable de Armando Paz"}`;
+      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nOBJETIVO ESTRATEGICO DIPLOMATICO: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Da una breve explicacion de 1 frase de la estrategia de pacificación utilizada ("evaluation").\n2. Escribe la respuesta diplomatica de Armando Paz enfocada 100% en cumplir ese objetivo ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Estrategia breve","response":"Respuesta de Armando Paz"}`;
 
       let rawContent = "";
 
@@ -826,7 +864,7 @@
           body: JSON.stringify({
             model: 'gpt-4o-mini',
             messages: [
-              { role: 'system', content: 'Eres Armando Paz, experto en reputacion digital. Responde UNICAMENTE con el objeto JSON pedido.' },
+              { role: 'system', content: 'Eres Armando Paz, el mediador pacificador de negocios locales mas respetado. Responde UNICAMENTE con el objeto JSON pedido.' },
               { role: 'user', content: prompt }
             ]
           })
@@ -881,15 +919,15 @@
         } catch (e) {}
       }
 
-      if (goal === "return") {
+      if (goal === "attack") {
+        return {
+          evaluation: "🚨 Neutralización de ataque con elegancia y firmeza",
+          response: `Estimado visitante, en ${bizName} nos tomamos muy en serio el servicio pero no encontramos registros de su visita. Le invitamos a contactarnos por privado para verificar los detalles y atenderle como merece.`
+        };
+      } else if (goal === "return") {
         return {
           evaluation: "🔄 Respuesta diseñada para asegurar la vuelta del cliente",
           response: `¡Hola! Muchas gracias por visitarnos en ${bizName}. Queremos invitarte a regresar muy pronto para darte una atención aún mejor. ¡Te esperamos!`
-        };
-      } else if (goal === "share") {
-        return {
-          evaluation: "📢 Respuesta enfocada en motivar la recomendación a amigos",
-          response: `¡Muchísimas gracias! Nos llena de orgullo que hayas disfrutado en ${bizName}. ¡Si te ha gustado, nos ayudaría muchísimo que nos recomiendes con tus amigos!`
         };
       } else {
         return {
@@ -906,7 +944,7 @@
     }
 
     function sendWhatsAppResult() {
-      const formattedMessage = `📲 *Respuesta Estratégica de Armando Paz*:\n\n"${encodeURIComponent(currentResponseText)}"`;
+      const formattedMessage = `📲 *Respuesta Diplomática de Armando Paz*:\n\n"${encodeURIComponent(currentResponseText)}"`;
       const waUrl = `https://wa.me/?text=${formattedMessage}`;
       window.open(waUrl, '_blank');
     }
