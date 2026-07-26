@@ -639,20 +639,21 @@
       </div>
     </div>
 
-    <!-- FORMULARIO PRINCIPAL -->
+    <!-- FORMULARIO PRINCIPAL: ENTRADA DUAL DE ALTA SIMPLICIDAD -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
           <label for="bizNameInput">🏢 Nombre de tu Negocio</label>
-          <input type="text" id="bizNameInput" placeholder="Ejemplo: Bar Pepe / El Güero Alteño" required>
+          <input type="text" id="bizNameInput" placeholder="Ejemplo: Bar Pepe / Restaurante Los Olivos" required>
         </div>
 
         <div class="form-grid">
           <div class="form-group">
-            <label for="reviewsInput">📋 Pega aquí la reseña o reseñas reales de tus clientes (una por línea o copiadas de Google)</label>
-            <textarea id="reviewsInput" rows="4" placeholder="Ejemplo:
-Paco: Excelente servicio y muy rápido.
-Marta: Tardaron 40 minutos y la comida estaba fría." required></textarea>
+            <label for="reviewsInput">📋 Pega aquí las reseñas reales de tus clientes copiadas de Google Maps</label>
+            <textarea id="reviewsInput" rows="5" placeholder="Pega aquí el texto de las reseñas reales de tu negocio...
+Ejemplo:
+Paco: Excelente comida pero tardaron 30 min.
+Marta: El personal fue súper atento y simpático." required></textarea>
           </div>
 
           <div class="form-group">
@@ -995,7 +996,7 @@ Marta: Tardaron 40 minutos y la comida estaba fría." required></textarea>
       }
 
       if (!userReviewsText) {
-        showAppleAlert('📋', 'Reseñas Requeridas', 'Por favor pega la reseña o reseñas reales de tus clientes.');
+        showAppleAlert('📋', 'Reseñas Requeridas', 'Por favor pega las reseñas reales de tus clientes copiadas de Google Maps.');
         return;
       }
 
@@ -1043,7 +1044,6 @@ Marta: Tardaron 40 minutos y la comida estaba fría." required></textarea>
       }
     }
 
-    /* GENERACIÓN DE RESPUESTAS EXCLUSIVA PARA LAS RESEÑAS REALES PEGRADAS POR EL USUARIO */
     async function callAiApiDirect(userReviewsText, bizName, apiKey, provider, tone) {
       const prompt = `Negocio: "${bizName}". A continuacion se presentan las RESEÑAS REALES ingresadas por el usuario:\n"""\n${userReviewsText}\n"""\n\nTu UNICA tarea es responder a CADA UNA de estas reseñas reales. Asigna la valoracion (1 a 5 estrellas) correspondiente a cada una y genera la respuesta diplomatica de Armando Paz segun el tono "${tone}". Devuelve UNICAMENTE un array JSON en formato: [{"reviewer":"Nombre del cliente o Cliente #1","rating":"1 estrella","review":"Texto exacto de la reseña","response":"Respuesta amigable de Armando Paz"}]`;
 
@@ -1116,7 +1116,6 @@ Marta: Tardaron 40 minutos y la comida estaba fría." required></textarea>
         }
       }
 
-      // PARSER SECUNDARIO GARANTIZADO DE RESEÑAS PEGRADAS
       const lines = userReviewsText.split('\n').filter(l => l.trim().length > 3);
       return lines.map((line, idx) => {
         const parts = line.split(':');
