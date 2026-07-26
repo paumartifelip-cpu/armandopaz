@@ -287,7 +287,7 @@
       .enter-btn { padding: 1rem 1.25rem; font-size: 0.95rem; }
     }
 
-    /* PANTALLA 2: APLICACIÓN 100% CLARA SIN TECNICISMOS */
+    /* PANTALLA 2: APLICACIÓN */
     #appScreen {
       display: none;
       width: 100%;
@@ -342,7 +342,6 @@
       border-color: var(--accent-black);
     }
 
-    /* TARJETAS DE OPCIONES SENCILLAS SIN TECNICISMOS */
     .calm-strategy-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -484,7 +483,7 @@
 
   <div id="toast">Listo</div>
 
-  <!-- PANTALLA 1: PORTADA ENTENDIBLE DE UN NIÑO A UN ABUELO -->
+  <!-- PANTALLA 1: PORTADA -->
   <div id="coverScreen">
     <div class="cover-container">
       <img src="armando.png" alt="Armando Paz" class="armando-photo-hero-large">
@@ -510,7 +509,7 @@
     </div>
   </div>
 
-  <!-- PANTALLA 2: APLICACIÓN CON LENGUAJE ULTRA SENCILLO SIN TECNICISMOS -->
+  <!-- PANTALLA 2: APLICACIÓN CON NOMBRE DE NEGOCIO OPCIONAL TOTAL -->
   <div id="appScreen">
     <header>
       <div style="display:flex; align-items:center; gap:0.65rem;">
@@ -550,12 +549,12 @@
       </div>
     </div>
 
-    <!-- FORMULARIO 100% CLARO SIN TECNICISMOS -->
+    <!-- FORMULARIO CON CAMPO TOTALMENTE OPCIONAL DE NOMBRE -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
-          <label for="bizNameInput">Nombre de tu negocio (Opcional)</label>
-          <input type="text" id="bizNameInput" placeholder="Ejemplo: Bar Pepe / Mi Tienda">
+          <label for="bizNameInput">Nombre de tu negocio (Opcional - Puedes dejarlo en blanco)</label>
+          <input type="text" id="bizNameInput" placeholder="Ejemplo: Bar Pepe (O déjalo vacío)">
         </div>
 
         <div class="form-group">
@@ -563,7 +562,7 @@
           <textarea id="reviewsInput" rows="3" placeholder="Ejemplo: 'Tardaron mucho en atender y la comida llegó fría.'" required></textarea>
         </div>
 
-        <!-- OPCIONES EN LENGUAJE COTIDIANO ENTENDIBLE POR CUALQUIERA -->
+        <!-- OPCIONES DE RESPUESTA -->
         <div class="form-group">
           <label>¿Qué quieres conseguir con la respuesta?</label>
           <div class="calm-strategy-grid">
@@ -579,7 +578,7 @@
 
             <div class="strategy-card" onclick="selectStrategy('attack', this)">
               <div class="strategy-title">Defenderte si es mentira</div>
-              <div class="strategy-desc">Aclarar las cosas con mucha educación si el cliente inventó la queja o está mintiendo.</div>
+              <div class="strategy-desc">Aclarar las cosas con mucha educación si el cliente inventó la queja.</div>
             </div>
 
             <div class="strategy-card" onclick="selectStrategy('happy', this)">
@@ -611,7 +610,7 @@
         </button>
       </form>
 
-      <!-- RESULTADO CON LENGUAJE SENCILLO -->
+      <!-- RESULTADO -->
       <div id="resultBox" class="result-box" style="display: none;">
         <div>
           <span class="evaluation-badge" id="evalBadge">LO QUE HACE ESTA RESPUESTA</span>
@@ -840,7 +839,8 @@
     });
 
     async function processSingleReview() {
-      const bizName = bizNameInput.value.trim() || "Tu Negocio";
+      const rawBiz = bizNameInput.value.trim();
+      const bizName = rawBiz ? `"${rawBiz}"` : "nuestro negocio";
       const reviewText = reviewsInput.value.trim();
       const apiKey = apiKeyInput.value.trim();
       const provider = providerSelect.value;
@@ -863,7 +863,7 @@
       btnText.textContent = 'Creando la respuesta perfecta...';
 
       try {
-        const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, strategy, compOffer);
+        const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, strategy, compOffer, rawBiz);
         
         evalText.textContent = result.evaluation;
         responseTextDisplay.textContent = result.response;
@@ -881,7 +881,7 @@
       }
     }
 
-    async function generateDirectResponse(reviewText, bizName, apiKey, provider, strategy, compOffer) {
+    async function generateDirectResponse(reviewText, bizName, apiKey, provider, strategy, compOffer, rawBiz) {
       let goalDesc = "";
       if (strategy === "calm") goalDesc = "Calmarlo con cariño. Desarmar la rabia del cliente molesto con extrema educación y comprension sin discutir.";
       else if (strategy === "return") goalDesc = "Conseguir que vuelva. Invitar al cliente a regresar ofreciendo una gran acogida.";
@@ -894,7 +894,7 @@
         goalDesc += ` ADEMAS, incluye amablemente el siguiente regalo o detalle: "${compOffer}".`;
       }
 
-      const prompt = `Negocio: "${bizName}". Opinión del cliente:\n"${reviewText}"\n\nOBJETIVO: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Explica en 1 frase muy sencilla qué hace esta respuesta ("evaluation").\n2. Escribe la respuesta amable de Armando Paz para el cliente ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Explicacion sencilla","response":"Respuesta amable de Armando Paz"}`;
+      const prompt = `Negocio: ${bizName}. Opinión del cliente:\n"${reviewText}"\n\nOBJETIVO: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Explica en 1 frase muy sencilla qué hace esta respuesta ("evaluation").\n2. Escribe la respuesta amable de Armando Paz para el cliente ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Explicacion sencilla","response":"Respuesta amable de Armando Paz"}`;
 
       let rawContent = "";
 
@@ -947,10 +947,10 @@
         rawContent = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
 
-      return parseDirectJson(rawContent, reviewText, bizName, strategy, compOffer);
+      return parseDirectJson(rawContent, reviewText, bizName, strategy, compOffer, rawBiz);
     }
 
-    function parseDirectJson(content, reviewText, bizName, strategy, compOffer) {
+    function parseDirectJson(content, reviewText, bizName, strategy, compOffer, rawBiz) {
       if (content && typeof content === 'string') {
         try {
           const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -964,21 +964,22 @@
       }
 
       const extraComp = compOffer ? ` Además: ${compOffer}.` : '';
+      const bName = rawBiz ? rawBiz : "nuestro negocio";
 
       if (strategy === "calm") {
         return {
           evaluation: "Respuesta para calmar al cliente con mucho cariño y educación",
-          response: `Estimado cliente, en ${bizName} comprendemos perfectamente su malestar y le pedimos disculpas de corazón. Nos tomamos muy en serio su mensaje para que no vuelva a ocurrir.${extraComp}`
+          response: `Estimado cliente, en ${bName} comprendemos perfectamente su malestar y le pedimos disculpas de corazón. Nos tomamos muy en serio su mensaje para que no vuelva a ocurrir.${extraComp}`
         };
       } else if (strategy === "attack") {
         return {
           evaluation: "Respuesta educada para defenderte si la opinión es mentira",
-          response: `Estimado visitante, en ${bizName} cuidamos mucho a nuestros clientes pero no encontramos registro de su visita. Le invitamos a escribirnos en privado para revisar su caso con mucho gusto.${extraComp}`
+          response: `Estimado visitante, en ${bName} cuidamos mucho a nuestros clientes pero no encontramos registro de su visita. Le invitamos a escribirnos en privado para revisar su caso con mucho gusto.${extraComp}`
         };
       } else {
         return {
           evaluation: "Respuesta cariñosa para invitar al cliente a volver",
-          response: `¡Hola! Muchas gracias por visitarnos en ${bizName}. Queremos invitarte a regresar muy pronto para atenderte aún mejor. ¡Te esperamos!`
+          response: `¡Hola! Muchas gracias por visitarnos en ${bName}. Queremos invitarte a regresar muy pronto para atenderte aún mejor. ¡Te esperamos!`
         };
       }
     }
@@ -996,11 +997,12 @@
     }
 
     function regenerateResultVariant() {
-      const bizName = bizNameInput.value.trim() || "Tu Negocio";
+      const rawBiz = bizNameInput.value.trim();
+      const bName = rawBiz ? rawBiz : "nuestro negocio";
       const variants = [
-        `Estimado cliente, en ${bizName} trabajamos todos los días para darte el mejor servicio posible. ¡Será un placer recibirte de nuevo!`,
-        `¡Muchas gracias por compartir tu experiencia en ${bizName}! Tu alegría es lo más importante para nosotros.`,
-        `Hola, valoramos enormemente tu mensaje sobre ${bizName}. Quedamos a tu entera disposición para cuando quieras volver.`
+        `Estimado cliente, en ${bName} trabajamos todos los días para darte el mejor servicio posible. ¡Será un placer recibirte de nuevo!`,
+        `¡Muchas gracias por compartir tu experiencia en ${bName}! Tu alegría es lo más importante para nosotros.`,
+        `Hola, valoramos enormemente tu mensaje sobre ${bName}. Quedamos a tu entera disposición para cuando quieras volver.`
       ];
       const nextVariant = variants.find(v => v !== currentResponseText) || variants[0];
       responseTextDisplay.textContent = nextVariant;
