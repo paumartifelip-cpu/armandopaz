@@ -212,7 +212,6 @@
       background: transparent;
     }
 
-    /* UNA SOLA FRASE CLARA DE LO QUE HACE (ENTENDIBLE DE NIÑO A ABUELO) */
     .cover-headline {
       font-size: 1.65rem;
       font-weight: 800;
@@ -222,7 +221,6 @@
       max-width: 660px;
     }
 
-    /* TRANSFORMACIÓN VISUAL SENCILLA */
     .transformation-box {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -289,11 +287,11 @@
       .enter-btn { padding: 1rem 1.25rem; font-size: 0.95rem; }
     }
 
-    /* PANTALLA 2: APLICACIÓN ESTILO APPLE CON DIFERENCIACIÓN DE COMPETENCIA */
+    /* PANTALLA 2: APLICACIÓN ESTILO APPLE CON SELECTOR DE ESTRATEGIAS DE CALMA EN GRID */
     #appScreen {
       display: none;
       width: 100%;
-      max-width: 680px;
+      max-width: 760px;
       padding: 1.75rem 1.25rem;
       margin: 0 auto;
       flex-direction: column;
@@ -342,6 +340,48 @@
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--accent-black);
+    }
+
+    /* NUEVO SELECTOR VISUAL DE ESTRATEGIAS DE CALMA (REEMPLAZA EL DESPLEGABLE) */
+    .calm-strategy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-top: 0.35rem;
+    }
+
+    @media (max-width: 600px) {
+      .calm-strategy-grid { grid-template-columns: 1fr; }
+    }
+
+    .strategy-card {
+      border: 1px solid var(--border-apple);
+      background: var(--bg-surface);
+      padding: 0.85rem 1rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      text-align: left;
+    }
+
+    .strategy-card.active {
+      background: var(--accent-black);
+      color: var(--bg-main);
+      border-color: var(--accent-black);
+    }
+
+    .strategy-title {
+      font-size: 0.825rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .strategy-desc {
+      font-size: 0.725rem;
+      opacity: 0.8;
+      line-height: 1.35;
     }
 
     .btn {
@@ -470,7 +510,7 @@
     </div>
   </div>
 
-  <!-- PANTALLA 2: APLICACIÓN ESTILO APPLE CON HERRAMIENTAS DIVERGENTES DE COMPETENCIA -->
+  <!-- PANTALLA 2: APLICACIÓN CON MATRIZ VISUAL DE ESTRATEGIAS DE CALMA -->
   <div id="appScreen">
     <header>
       <div style="display:flex; align-items:center; gap:0.65rem;">
@@ -510,7 +550,7 @@
       </div>
     </div>
 
-    <!-- FORMULARIO PACIFICADOR EXCLUSIVO DIVERGENTE -->
+    <!-- FORMULARIO CON ESTRATEGIAS DE CALMA EN MATRIZ VISUAL -->
     <div class="card">
       <form id="urlForm">
         <div class="form-group">
@@ -523,22 +563,45 @@
           <textarea id="reviewsInput" rows="3" placeholder="Ejemplo: 'Tardaron 40 minutos en atender y la comida llegó fría.'" required></textarea>
         </div>
 
-        <!-- ESTRATEGIA EXCLUSIVA DIVERGENTE DE ARMANDO PAZ -->
+        <!-- MATRIZ DE ESTRATEGIAS DE CALMA VISUALES (SIN DESPLEGABLE) -->
         <div class="form-group">
-          <label for="goalSelect">Estrategia Pacificadora de Armando Paz</label>
-          <select id="goalSelect">
-            <option value="return">Conseguir que el cliente VUELVA (Fidelización)</option>
-            <option value="happy">Dejar al cliente CONTENTO (Calmar queja y compensar)</option>
-            <option value="share">Lograr que el cliente nos RECOMIENDE (Boca a boca)</option>
-            <option value="attack">Neutralizar ATAQUE O RESEÑA FALSA (Desmontar con elegancia)</option>
-            <option value="corporate">Dar imagen PROFESIONAL y Corporativa (Autoridad)</option>
-            <option value="quick">Respuesta RÁPIDA y Concisa (Ahorrar tiempo)</option>
-          </select>
+          <label>Selecciona la Estrategia de Calma de Armando Paz</label>
+          <div class="calm-strategy-grid">
+            <div class="strategy-card active" onclick="selectStrategy('calm', this)">
+              <div class="strategy-title">Calma Absoluta & Empatía</div>
+              <div class="strategy-desc">Desarma la rabia del cliente con máxima empatía y comprensión sin discutir.</div>
+            </div>
+            
+            <div class="strategy-card" onclick="selectStrategy('return', this)">
+              <div class="strategy-title">Garantía de Retorno</div>
+              <div class="strategy-desc">Invita al cliente a volver con un trato preferencial para recuperar su confianza.</div>
+            </div>
+
+            <div class="strategy-card" onclick="selectStrategy('attack', this)">
+              <div class="strategy-title">Escudo Ante Reseña Falsa</div>
+              <div class="strategy-desc">Desmonta ataques injustos o falsos con elegancia, firmeza y caballerosidad.</div>
+            </div>
+
+            <div class="strategy-card" onclick="selectStrategy('happy', this)">
+              <div class="strategy-title">Satisfacción & Disculpa</div>
+              <div class="strategy-desc">Acepta el error con humildad y ofrece una solución inmediata al cliente.</div>
+            </div>
+
+            <div class="strategy-card" onclick="selectStrategy('share', this)">
+              <div class="strategy-title">Recomendación & Boca a Boca</div>
+              <div class="strategy-desc">Motiva al cliente contento a compartir su buena experiencia con sus amigos.</div>
+            </div>
+
+            <div class="strategy-card" onclick="selectStrategy('corporate', this)">
+              <div class="strategy-title">Autoridad Corporativa</div>
+              <div class="strategy-desc">Respuesta elegante, formal e impecable de alta jerarquía empresarial.</div>
+            </div>
+          </div>
         </div>
 
-        <!-- OPCIONAL DIVERGENTE: OFRECER COMPENSACIÓN PACIFICADORA -->
+        <!-- COMPENSACIÓN PACIFICADORA -->
         <div class="form-group" style="margin-bottom:1.25rem;">
-          <label for="compInput">Compensación Pacificadora Opcional (Diferenciador Único)</label>
+          <label for="compInput">Compensación Pacificadora Opcional</label>
           <input type="text" id="compInput" placeholder="Ejemplo: Te invitamos al café en tu próxima visita / 10% de descuento">
         </div>
 
@@ -582,7 +645,6 @@
     const submitBtn = document.getElementById('submitBtn');
     const loader = document.getElementById('loader');
     const btnText = document.getElementById('btnText');
-    const goalSelect = document.getElementById('goalSelect');
     const compInput = document.getElementById('compInput');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const bizNameInput = document.getElementById('bizNameInput');
@@ -595,6 +657,7 @@
     const appleModalTitle = document.getElementById('appleModalTitle');
     const appleModalMsg = document.getElementById('appleModalMsg');
 
+    let selectedStrategy = 'calm';
     let currentResponseText = "";
     let isProcessing = false;
 
@@ -604,6 +667,12 @@
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark-mode');
       themeToggleBtn.textContent = 'MODO CLARO';
+    }
+
+    function selectStrategy(strategyKey, cardElem) {
+      document.querySelectorAll('.strategy-card').forEach(c => c.classList.remove('active'));
+      cardElem.classList.add('active');
+      selectedStrategy = strategyKey;
     }
 
     function showAppleAlert(title, message) {
@@ -775,7 +844,7 @@
       const reviewText = reviewsInput.value.trim();
       const apiKey = apiKeyInput.value.trim();
       const provider = providerSelect.value;
-      const goal = goalSelect.value;
+      const strategy = selectedStrategy;
       const compOffer = compInput.value.trim();
 
       if (!reviewText) {
@@ -794,7 +863,7 @@
       btnText.textContent = 'Generando respuesta de Armando Paz...';
 
       try {
-        const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, goal, compOffer);
+        const result = await generateDirectResponse(reviewText, bizName, apiKey, provider, strategy, compOffer);
         
         evalText.textContent = result.evaluation;
         responseTextDisplay.textContent = result.response;
@@ -812,20 +881,20 @@
       }
     }
 
-    async function generateDirectResponse(reviewText, bizName, apiKey, provider, goal, compOffer) {
+    async function generateDirectResponse(reviewText, bizName, apiKey, provider, strategy, compOffer) {
       let goalDesc = "";
-      if (goal === "return") goalDesc = "Conseguir que el cliente VUELVA invitandolo de nuevo de forma muy calida y ofreciendo una atención o bienvenida especial.";
-      else if (goal === "happy") goalDesc = "Dejar al cliente 100% CONTENTO y satisfecho, pidiendo una disculpa impecable si hubo queja y asegurando su plena satisfaccion.";
-      else if (goal === "share") goalDesc = "Lograr que el cliente nos RECOMIENDE y COMPARTA su experiencia con amigos, familiares y en redes sociales.";
-      else if (goal === "attack") goalDesc = "Neutralizar una RESEÑA FALSA O ATAQUE de la competencia con elegancia, firmeza y total caballerosidad sin entrar en conflicto.";
-      else if (goal === "corporate") goalDesc = "Dar una imagen 100% PROFESIONAL, formal, corporativa e impecable de maxima autoridad.";
-      else goalDesc = "Respuesta RÁPIDA, concisa, directa y elegante para ahorrar tiempo.";
+      if (strategy === "calm") goalDesc = "Calma Absoluta & Empatía Suprema. Desarmar la rabia del cliente molesto con extrema caballerosidad y comprension sin discutir.";
+      else if (strategy === "return") goalDesc = "Garantia de Retorno. Conseguir que el cliente VUELVA invitandolo de nuevo de forma muy calida y ofreciendo una atención o bienvenida especial.";
+      else if (strategy === "happy") goalDesc = "Satisfacción & Disculpa. Dejar al cliente 100% CONTENTO y satisfecho, pidiendo una disculpa impecable si hubo queja y asegurando su plena satisfaccion.";
+      else if (strategy === "share") goalDesc = "Recomendacion & Boca a boca. Lograr que el cliente nos RECOMIENDE y COMPARTA su experiencia con amigos, familiares y en redes sociales.";
+      else if (strategy === "attack") goalDesc = "Escudo ante Reseña Falsa. Neutralizar una RESEÑA FALSA O ATAQUE de la competencia con elegancia, firmeza y total caballerosidad sin entrar en conflicto.";
+      else goalDesc = "Autoridad Corporativa. Dar una imagen 100% PROFESIONAL, formal, corporativa e impecable de maxima autoridad.";
 
       if (compOffer) {
         goalDesc += ` ADEMAS, incluye elegantemente la siguiente compensacion ofrecida por el negocio: "${compOffer}".`;
       }
 
-      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nOBJETIVO ESTRATEGICO DIPLOMATICO: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Da una breve explicacion de 1 frase de la estrategia utilizada ("evaluation").\n2. Escribe la respuesta diplomatica de Armando Paz enfocada 100% en cumplir ese objetivo ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Estrategia breve","response":"Respuesta de Armando Paz"}`;
+      const prompt = `Negocio: "${bizName}". Reseña del cliente:\n"${reviewText}"\n\nESTRATEGIA PACIFICADORA: ${goalDesc}\n\nInstrucciones de Armando Paz:\n1. Da una breve explicacion de 1 frase de la estrategia utilizada ("evaluation").\n2. Escribe la respuesta diplomatica de Armando Paz enfocada 100% en cumplir ese objetivo ("response").\nDevuelve UNICAMENTE un JSON en formato: {"evaluation":"Estrategia breve","response":"Respuesta de Armando Paz"}`;
 
       let rawContent = "";
 
@@ -878,10 +947,10 @@
         rawContent = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
 
-      return parseDirectJson(rawContent, reviewText, bizName, goal, compOffer);
+      return parseDirectJson(rawContent, reviewText, bizName, strategy, compOffer);
     }
 
-    function parseDirectJson(content, reviewText, bizName, goal, compOffer) {
+    function parseDirectJson(content, reviewText, bizName, strategy, compOffer) {
       if (content && typeof content === 'string') {
         try {
           const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -896,20 +965,20 @@
 
       const extraComp = compOffer ? ` Además: ${compOffer}.` : '';
 
-      if (goal === "attack") {
+      if (strategy === "calm") {
+        return {
+          evaluation: "Estrategia de Calma Absoluta & Empatía desarmando la queja",
+          response: `Estimado cliente, en ${bizName} comprendemos perfectamente su malestar y le pedimos disculpas sinceras. Nos tomamos muy en serio su testimonio para corregirlo hoy mismo.${extraComp}`
+        };
+      } else if (strategy === "attack") {
         return {
           evaluation: "Neutralización de ataque con elegancia y firmeza",
           response: `Estimado visitante, en ${bizName} nos tomamos muy en serio el servicio pero no encontramos registros de su visita. Le invitamos a contactarnos por privado para verificar los detalles.${extraComp}`
         };
-      } else if (goal === "return") {
+      } else {
         return {
           evaluation: "Respuesta diseñada para asegurar la vuelta del cliente",
           response: `¡Hola! Muchas gracias por visitarnos en ${bizName}. Queremos invitarte a regresar muy pronto para darte una atención aún mejor.${extraComp}`
-        };
-      } else {
-        return {
-          evaluation: "Respuesta diseñada para garantizar la máxima satisfacción",
-          response: `Hola, en ${bizName} nuestra prioridad absoluta es tu satisfacción. Agradecemos mucho tu comentario y estamos siempre a tu disposición.${extraComp}`
         };
       }
     }
